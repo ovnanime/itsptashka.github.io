@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Илья Пушкин (Феофилакт Птахен) - Портфолио</title>
+
+  <link rel="shortcut icon" href="./assets/images/logo.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="./assets/css/style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <main>
+
+    <!-- ЛЕВАЯ ПАНЕЛЬ (САЙДБАР) -->
+    <aside class="sidebar" data-sidebar>
+
+      <div class="sidebar-info">
+
+        <!-- Кликабельное фото с лупой -->
+        <figure class="avatar-box" id="avatar-zoom-btn" title="Увеличить фото">
+          <img src="./assets/images/avatar_ptaxen.png" alt="Илья Пушкин" width="80" id="profile-pic">
+          <ion-icon name="search-outline" class="zoom-icon"></ion-icon>
+        </figure>
+
+        <div class="info-content">
+          <h1 class="name" title="Илья Сергеевич Пушкин">Илья Пушкин</h1>
+          
+          <!-- Псевдонимы столбиком -->
+          <div class="pseudonyms-box">
+            <span class="pseudo-label">Псевдонимы:</span>
+            <span class="pseudo-name">Феофилакт Птахен</span>
+            <span class="pseudo-name">Камергер Пушкин</span>
+          </div>
+
+          <!-- Специализация в виде плашек (теперь их 3) -->
+          <div class="badges-wrapper">
+            <span class="title">Актёр озвучивания</span>
+            <span class="title">Звукорежиссер</span>
+            <span class="title">Сонграйтер</span>
+          </div>
+        </div>
+
+        <button class="info_more-btn" data-sidebar-btn>
+          <span>Контакты</span>
+          <ion-icon name="chevron-down"></ion-icon>
+        </button>
+
+      </div>
+
+      <div class="sidebar-info_more">
+
+        <div class="separator"></div>
+
+        <!-- Заголовок секции -->
+        <p class="sidebar-section-title">Контакты</p>
+
+        <!-- АКТУАЛЬНЫЕ КОНТАКТЫ -->
+        <ul class="contacts-list slim-list">
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="logo-vk"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title">ВКонтакте</p>
+              <a href="https://vk.com/itsptashka" target="_blank" class="contact-link truncate-text">@itsptashka</a>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="paper-plane-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title">Telegram</p>
+              <a href="https://t.me/itsptashka" target="_blank" class="contact-link truncate-text">@itsptashka</a>
+            </div>
+          </li>
+
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="mail-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <p class="contact-title">Почта</p>
+              <a href="mailto:itsptashka@gmail.com" class="contact-link truncate-text" title="itsptashka@gmail.com">itsptashka@gmail.com</a>
+            </div>
+          </li>
+        </ul>
+
+        <div class="separator"></div>
+
+        <!-- Заголовок секции -->
+        <p class="sidebar-section-title">Сотрудничество</p>
+        
+        <!-- БЛОК "ГДЕ РАБОТАЮ" -->
+        <ul class="contacts-list slim-list">
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="mic-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <a href="https://donghuaworld.online/" target="_blank" class="contact-link truncate-text" title="MDA">MDA</a>
+            </div>
+          </li>
+          
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="film-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <a href="https://vk.com/goltfilmpro" target="_blank" class="contact-link truncate-text" title="GoLTFilm">GoLTFilm</a>
+            </div>
+          </li>
+          
+          <li class="contact-item">
+            <div class="icon-box">
+              <ion-icon name="headset-outline"></ion-icon>
+            </div>
+            <div class="contact-info">
+              <a href="#" target="_blank" class="contact-link truncate-text" title="MK Studio">MK Studio</a>
+            </div>
+          </li>
+        </ul>
+
+      </div>
+
+    </aside>
+
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ФОТО -->
+    <div class="photo-modal" id="photo-modal">
+      <div class="photo-overlay" id="photo-overlay"></div>
+      <div class="photo-modal-content">
+        <button class="photo-close-btn" id="photo-close-btn">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
+        <img src="./assets/images/avatar_ptaxen.png" alt="Илья Пушкин">
+      </div>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ (Справа) -->
+    <div class="main-content">
+
+      <nav class="navbar">
+        <ul class="navbar-list">
+          <li class="navbar-item">
+            <button class="navbar-link active" data-nav-link data-target="about">Обо мне</button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link data-target="resume">Резюме</button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link data-target="portfolio">Портфолио</button>
+          </li>
+          <li class="navbar-item">
+            <button class="navbar-link" data-nav-link data-target="contact">Контакты</button>
+          </li>
+        </ul>
+      </nav>
+
+      <article class="about active" data-page="about">
+        <header>
+          <h2 class="h2 article-title">Обо мне</h2>
+        </header>
+
+        <section class="about-text">
+          <p style="font-size: 16px; color: var(--white-1); border-left: 3px solid var(--jet); padding-left: 15px; margin-bottom: 30px;">
+            <strong>Пу́шкин Илья́ Серге́евич</strong> (псевдонимы: Феофила́кт Птахе́н, Камергер Пу́шкин; род. 3 июня 2004 года, г. Гагарин, Смоленская область) — актёр озвучивания, звукорежиссёр и основатель неформального творческого объединения «ОВН» (Объект всеобщей ненависти).
+          </p>
+
+          <h3 class="h3 about-subtitle">Озвучивание и звукорежиссура</h3>
+          <p>
+            Мой путь в работе со звуком начался более трёх лет назад. Сейчас я нахожусь на этапе уверенного перехода с любительского уровня в профессиональную индустрию. В дистанционном формате я сотрудничаю с такими командами, как MDA (Мир Дунхуа) и MK Studio.
+          </p>
+          <p>
+            К звукорежиссуре я подхожу академично: постоянно изучаю профильную литературу по сведению (Пол Уайт, Боб Овсински, В. Кузнецов, Е. Попова-Эванс) и работаю в оборудованной домашней студии. Мой сетап позволяет стабильно выдавать чистый и качественный звук.
+          </p>
+
+          <h3 class="h3 about-subtitle">Творчество и дизайн</h3>
+          <p>
+            Я не только работаю с материалом заказчиков, но и создаю свой: увлекаюсь написанием стихов и песен, с удовольствием играю на гитаре (что отлично прокачивает музыкальный слух и чувство интонации, помогая у микрофона). Кроме того, я занимаюсь графическим дизайном — создаю постеры и локализую визуальный текст для различных релизов.
+          </p>
+        </section>
+
+        <section class="service">
+          <h3 class="h3 service-title">Чем я занимаюсь</h3>
+
+          <ul class="service-list">
+            <li class="service-item">
+              <div class="service-icon-box">
+                <ion-icon name="mic-outline" style="font-size: 40px; color: var(--orange-yellow-crayola);"></ion-icon>
+              </div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Актёр озвучивания</h4>
+                <p class="service-item-text">
+                  Запись закадровых голосов для анимации (в т.ч. дунхуа) и грамотная передача атмосферы зрителям.
+                </p>
+              </div>
+            </li>
+
+            <li class="service-item">
+              <div class="service-icon-box">
+                <ion-icon name="options-outline" style="font-size: 40px; color: var(--orange-yellow-crayola);"></ion-icon>
+              </div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Звукорежиссура</h4>
+                <p class="service-item-text">
+                  Академичный подход к сведению, эквализации и компрессии. Выдача чистого звука из домашней студии.
+                </p>
+              </div>
+            </li>
+
+            <li class="service-item">
+              <div class="service-icon-box">
+                <ion-icon name="color-palette-outline" style="font-size: 40px; color: var(--orange-yellow-crayola);"></ion-icon>
+              </div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Оформление и дизайн</h4>
+                <p class="service-item-text">
+                  Создание эстетичных постеров, клинап и локализация визуального текста для релизов.
+                </p>
+              </div>
+            </li>
+
+            <!-- НОВАЯ КАРТОЧКА: АВТОРСТВО ПЕСЕН -->
+            <li class="service-item">
+              <div class="service-icon-box">
+                <ion-icon name="musical-notes-outline" style="font-size: 40px; color: var(--orange-yellow-crayola);"></ion-icon>
+              </div>
+              <div class="service-content-box">
+                <h4 class="h4 service-item-title">Авторство песен</h4>
+                <p class="service-item-text">
+                  Написание авторских стихов и музыки, игра на гитаре. Прокачка слуха и чувства интонации.
+                </p>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </article>
+
+      <article class="resume" data-page="resume">
+        <header>
+          <h2 class="h2 article-title">Резюме</h2>
+        </header>
+
+        <!-- ОПЫТ РАБОТЫ -->
+        <section class="timeline">
+          <div class="title-wrapper">
+            <div class="icon-box">
+              <ion-icon name="briefcase-outline"></ion-icon>
+            </div>
+            <h3 class="h3">Опыт и сотрудничество</h3>
+          </div>
+
+          <ol class="timeline-list">
+            <li class="timeline-item">
+              <h4 class="h4 timeline-item-title">Дистанционная работа со звуком</h4>
+              <span>Более 3 лет опыта</span>
+              <p class="timeline-text">
+                Полный цикл работы со звуком: от записи закадра/дубляжа, сведения диалога с оригинальной фонограммой до саунд-дизайна.
+              </p>
+            </li>
+          </ol>
+        </section>
+
+        <!-- ОБОРУДОВАНИЕ (Сетка с картинками) -->
+        <section class="equipment-section" style="margin-top: 40px;">
+          <div class="title-wrapper" style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
+            <div class="icon-box">
+              <ion-icon name="hardware-chip-outline"></ion-icon>
+            </div>
+            <h3 class="h3">Студийное оборудование</h3>
+          </div>
+
+          <ul class="equipment-list">
+            <!-- Микрофон -->
+            <li class="equipment-item">
+              <!-- Добавили data-zoom-img и иконку лупы -->
+              <figure class="equip-img-box" data-zoom-img title="Увеличить фото">
+                <img src="./assets/images/wa87.png" alt="Warm Audio WA-87R2B" loading="lazy">
+                <ion-icon name="search-outline" class="zoom-icon"></ion-icon>
+              </figure>
+              <div class="equip-content">
+                <h4 class="h4">Warm Audio WA-87R2B</h4>
+                <p>Студийный конденсаторный микрофон профессионального класса.</p>
+              </div>
+            </li>
+
+            <!-- Аудиоинтерфейс -->
+            <li class="equipment-item">
+              <figure class="equip-img-box" data-zoom-img title="Увеличить фото">
+                <img src="./assets/images/minifuse.png" alt="Arturia MiniFuse" loading="lazy">
+                <ion-icon name="search-outline" class="zoom-icon"></ion-icon>
+              </figure>
+              <div class="equip-content">
+                <h4 class="h4">Arturia MiniFuse</h4>
+                <p>Надежная звуковая карта для чистой записи с минимальными задержками.</p>
+              </div>
+            </li>
+
+            <!-- Мониторы -->
+            <li class="equipment-item">
+              <figure class="equip-img-box" data-zoom-img title="Увеличить фото">
+                <img src="./assets/images/eris.png" alt="Presonus Eris 3.5" loading="lazy">
+                <ion-icon name="search-outline" class="zoom-icon"></ion-icon>
+              </figure>
+              <div class="equip-content">
+                <h4 class="h4">Presonus Eris 3.5</h4>
+                <p>Студийные мониторы 2-го поколения для детального контроля микса.</p>
+              </div>
+            </li>
+
+            <!-- Наушники -->
+            <li class="equipment-item">
+              <figure class="equip-img-box" data-zoom-img title="Увеличить фото">
+                <img src="./assets/images/sony7506.png" alt="Sony MDR-7506" loading="lazy">
+                <ion-icon name="search-outline" class="zoom-icon"></ion-icon>
+              </figure>
+              <div class="equip-content">
+                <h4 class="h4">Sony MDR-7506</h4>
+                <p>Закрытые студийные наушники, стандарт индустрии для мониторинга.</p>
+              </div>
+            </li>
+
+            <!-- Кабели / Аксессуары -->
+            <li class="equipment-item">
+              <figure class="equip-img-box" data-zoom-img title="Увеличить фото">
+                <img src="./assets/images/cable.png" alt="Коммутация и акустика" loading="lazy">
+                <ion-icon name="search-outline" class="zoom-icon"></ion-icon>
+              </figure>
+              <div class="equip-content">
+                <h4 class="h4">Акустика и коммутация</h4>
+                <p>Качественные балансные кабели, поп-фильтры и акустическая обработка помещения.</p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+
+        <!-- НОВЫЙ БЛОК: СОФТ (Вместо процентов) -->
+        <!-- <section class="tools-section" style="margin-top: 40px;"> -->
+          <!-- <div class="title-wrapper" style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;"> -->
+            <!-- <div class="icon-box"> -->
+              <!-- <ion-icon name="apps-outline"></ion-icon> -->
+            <!-- </div> -->
+            <!-- <h3 class="h3">Рабочий софт и инструменты</h3> -->
+          <!-- </div> -->
+
+          <!-- Здесь можете поменять названия программ на те, что реально используете -->
+          <!-- <ul class="tools-list"> -->
+            <!-- <li class="tool-item">Reaper</li> -->
+            <!-- <li class="tool-item">iZotope RX</li> -->
+            <!-- <li class="tool-item">Adobe Audition</li> -->
+            <!-- <li class="tool-item">FabFilter Plugins</li> -->
+            <!-- <li class="tool-item">Python</li> -->
+            <!-- <li class="tool-item">Photoshop</li> -->
+          <!-- </ul> -->
+        <!-- </section> -->
+
+      </article>
+
+      <article class="portfolio" data-page="portfolio">
+        <header>
+          <h2 class="h2 article-title">Портфолио</h2>
+        </header>
+
+        <section class="projects">
+
+          <ul class="filter-list">
+            <li class="filter-item"><button class="active" data-filter-btn>Демо</button></li>
+            <!-- <li class="filter-item"><button data-filter-btn>ОВН</button></li> -->
+            <li class="filter-item"><button data-filter-btn>MDA</button></li>
+            <li class="filter-item"><button data-filter-btn>GoLTFilm</button></li>
+            <li class="filter-item"><button data-filter-btn>AniMaunt</button></li>
+          </ul>
+
+          <div class="portfolio-content">
+
+            <!-- ===================== ВКЛАДКА: ДЕМО ===================== -->
+            <div class="portfolio-group active" data-filter-item data-category="демо">
+              <h3 class="portfolio-category-title">Мои демо-записи</h3>
+              
+              <div class="demo-container">
+                
+                <!-- 1. ДЕМО ГОЛОСА (Аудио) -->
+                <div class="demo-card audio-demo">
+                  <div class="demo-header">
+                    <ion-icon name="mic-outline"></ion-icon>
+                    <h4 class="demo-title">Голосовое демо (Озвучивание)</h4>
+                  </div>
+                  <audio controls class="custom-audio">
+                    <source src="./assets/audio/voice_demo.mp3" type="audio/mpeg">
+                  </audio>
+                </div>
+
+                <!-- 2. САУНД-ДИЗАЙН (Видео) -->
+                <div class="demo-card video-demo">
+                  <div class="demo-header">
+                    <ion-icon name="musical-notes-outline"></ion-icon>
+                    <h4 class="demo-title">Саунд-дизайн и работа со звуком</h4>
+                  </div>
+                  
+                  <!-- Блок с видео -->
+                  <div class="demo-video-box">
+                    <video controls class="demo-video" poster="./assets/images/video-preview.jpg">
+                      <!-- Путь к вашему видео-файлу -->
+                      <source src="./assets/video/sound_design_demo.mp4" type="video/mp4">
+                      Ваш браузер не поддерживает видео.
+                    </video>
+                  </div>
+                  
+                  <p class="demo-desc">
+                    Демонстрация создания звукового ландшафта: финальное сведения атмосферы и эффектов.
+                  </p>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- ===================== ВКЛАДКА: MDA ===================== -->
+            <div class="portfolio-group" data-filter-item data-category="mda">
+              
+              <h3 class="portfolio-category-title">Озвучивание</h3>
+              
+              <!-- НАШ НОВЫЙ СЛАЙДЕР СО СТРЕЛОЧКАМИ -->
+              <div class="portfolio-slider">
+                <button class="slider-arrow prev-arrow"><ion-icon name="chevron-back-outline"></ion-icon></button>
+                
+                <div class="slider-viewport">
+                  <div class="slider-track">
+                    
+                    <!-- СТРАНИЦА 1 (Здесь помещается до 10 постеров: 2 ряда по 5 штук) -->
+                    <div class="slider-page">
+                      <div class="movie-card"><a href="https://donghuaworld.online/anime/osvobodite-etu-vedmu" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Освободите эту ведьму.png" alt="2" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Освободите эту ведьму</h4></div>
+                      <div class="movie-card"><a href="https://donghuaworld.online/anime/put-vybora-2026" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Путь Выбора 2026.png" alt="3" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Путь Выбора 2026</h4></div>
+                      <div class="movie-card"><a href="https://donghuaworld.online/anime/ocerki-prikliucenii-vo-vremena-dinastii-tan" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Очерки приключений во времена династии Тан.png" alt="4" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Очерки приключений</div>
+                      <div class="movie-card"><a href="#" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Призрачный Наньтин.png" alt="5" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Призрачный Наньтин</h4></div>
+                      <div class="movie-card"><a href="#" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Повелитель тайн Клоун.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Повелитель тайн Клоун</h4></div>
+					  <div class="movie-card"><a href="#" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Повесть о герое меча 3.png" alt="6" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Повесть о герое меча 3</h4></div>
+                      <div class="movie-card"><a href="#" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Под тремя реками.png" alt="7" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Под тремя реками</h4></div>
+                      <div class="movie-card"><a href="#" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Воинственный бог девяти солнц.png" alt="8" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Воинственный бог</h4></div>
+                      <div class="movie-card"><a href="#" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Я из секты меча.png" alt="9" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Я из секты меча</h4></div>
+                      <div class="movie-card"><a href="#" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Сказание о пастухе богов.png" alt="10" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Сказание о пастухе</h4></div>
+                    </div>
+                    
+                    <!-- СТРАНИЦА 2 (Сюда упадут 11-й, 12-й постеры и т.д., и к ним можно пролистать стрелочкой) -->
+                    <!-- <div class="slider-page">
+                           СЮДА ВСТАВЛЯТЬ СЛЕДУЮЩИЕ 10 ПОСТЕРОВ 
+                         </div> -->
+
+                  </div>
+                </div>
+
+                <button class="slider-arrow next-arrow"><ion-icon name="chevron-forward-outline"></ion-icon></button>
+              </div>
+
+              <!-- БЛОК: ЗВУКОРЕЖИССУРА (1 ряд) -->
+              <h3 class="portfolio-category-title">Звукорежиссура</h3>
+              <div class="portfolio-slider">
+                <button class="slider-arrow prev-arrow"><ion-icon name="chevron-back-outline"></ion-icon></button>
+                <div class="slider-viewport">
+                  <div class="slider-track">
+                    <!-- СТРАНИЦА 1 (Вмещает до 5 постеров, поэтому будет строго 1 ряд) -->
+                    <div class="slider-page">
+                      <div class="movie-card"><a href="https://donghuaworld.online/anime/osvobodite-etu-vedmu" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Освободите эту ведьму.png" alt="2" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Освободите эту ведьму</h4></div>
+                      <div class="movie-card"><a href="https://donghuaworld.online/anime/put-vybora-2026" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Путь Выбора 2026.png" alt="3" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Путь Выбора 2026</h4></div>
+                      <div class="movie-card"><a href="https://donghuaworld.online/anime/ocerki-prikliucenii-vo-vremena-dinastii-tan" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Очерки приключений во времена династии Тан.png" alt="4" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Очерки приключений</div>
+                      <div class="movie-card"><a href="#" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Повелитель тайн Клоун.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Повелитель тайн Клоун</h4></div>
+					  <div class="movie-card"><a href="#" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Призрачный Наньтин.png" alt="5" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Призрачный Наньтин</h4></div>
+                    </div>
+					<div class="slider-page">
+                      <div class="movie-card"><a href="#" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Повесть о герое меча 3.png" alt="6" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Повесть о герое меча 3</h4></div>
+                      <div class="movie-card"><a href="#" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/mda/Под тремя реками.png" alt="7" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Под тремя реками</h4></div>
+                    </div>
+                  </div>
+                </div>
+                <button class="slider-arrow next-arrow"><ion-icon name="chevron-forward-outline"></ion-icon></button>
+              </div>
+
+            </div>
+
+            <!-- ===================== ВКЛАДКА: GoLTFilm ===================== -->
+            <div class="portfolio-group" data-filter-item data-category="goltfilm">
+              
+              <h3 class="portfolio-category-title">Озвучивание</h3>
+              
+              <!-- НАШ НОВЫЙ СЛАЙДЕР СО СТРЕЛОЧКАМИ -->
+              <div class="portfolio-slider">
+                <button class="slider-arrow prev-arrow"><ion-icon name="chevron-back-outline"></ion-icon></button>
+                
+                <div class="slider-viewport">
+                  <div class="slider-track">
+                    
+                    <!-- СТРАНИЦА 1 (Здесь помещается до 10 постеров: 2 ряда по 5 штук) -->
+                    <div class="slider-page">
+                      <div class="movie-card"><a href="https://vk.com/wall-187803582_5991" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/gf/Йеллоустоун Маршалы.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Йеллоустоун: Маршалы</h4></div>
+                      <div class="movie-card"><a href="https://vk.com/wall-187803582_5880" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/gf/Миллиардер в трущобах.png" alt="2" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Миллиардер в трущобах</h4></div>
+                      <div class="movie-card"><a href="https://vk.com/wall-187803582_5904" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/gf/Вечно богатый.png" alt="2" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Вечно богатый</h4></div>
+					  <div class="movie-card"><a href="https://vk.com/wall-187803582_5950" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/gf/28 лет спустя Храм костей.png" alt="3" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">28 лет спустя: Храм костей</h4></div>
+                      <div class="movie-card"><a href="https://vk.com/wall-187803582_5682" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/gf/28 лет спустя.png" alt="4" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">28 лет спустя</div>
+                      <div class="movie-card"><a href="https://vk.com/wall-187803582_5250" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/gf/Рождение Китаро.png" alt="5" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Рождение Китаро</h4></div>
+                    </div>
+                    
+                    <!-- СТРАНИЦА 2 (Сюда упадут 11-й, 12-й постеры и т.д., и к ним можно пролистать стрелочкой) -->
+                    <!-- <div class="slider-page">
+                           СЮДА ВСТАВЛЯТЬ СЛЕДУЮЩИЕ 10 ПОСТЕРОВ 
+                         </div> -->
+
+                  </div>
+                </div>
+
+                <button class="slider-arrow next-arrow"><ion-icon name="chevron-forward-outline"></ion-icon></button>
+              </div>
+
+          </div>
+		  
+		  <!-- ===================== ВКЛАДКА: GoLTFilm ===================== -->
+            <div class="portfolio-group" data-filter-item data-category="animaunt">
+              
+              <h3 class="portfolio-category-title">Озвучивание</h3>
+              
+              <!-- НАШ НОВЫЙ СЛАЙДЕР СО СТРЕЛОЧКАМИ -->
+              <div class="portfolio-slider">
+                <button class="slider-arrow prev-arrow"><ion-icon name="chevron-back-outline"></ion-icon></button>
+                
+                <div class="slider-viewport">
+                  <div class="slider-track">
+                    
+                    <!-- СТРАНИЦА 1 (Здесь помещается до 10 постеров: 2 ряда по 5 штук) -->
+                    <div class="slider-page">
+                      <div class="movie-card"><a href="https://animaunt.org/16253-goumon-baito-kun-no-nichijou.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Повседневная жизнь стажёра-мучителя.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Повседневная жизнь стажёра-мучителя</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/15837-medalistka-2.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Медалистка 2.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Медалистка 2</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/14964-sosednemu-korolevstvu-prodali-svyatuyu-pomolvku-kotoroy-razorvali-iz-za-togo-chto-ona-stala-slishkom-sovershennoy.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Соседнему королевству продали.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Соседнему королевству продали святую, помолвку которой разорвали из-за того, что она стала слишком совершенной</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/15366-hibi-wa-sugiredo-meshi-umashi.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Дни проходят, а еда по-прежнему хороша.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Дни проходят, а еда по-прежнему хороша</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/14534-lycoris-recoil-short-movie.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Ликорис Рикоил Друзья похитители времени.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Ликорис Рикоил Друзья похитители времени</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/11355-stat-silnee-novaya-saga.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Стать сильнее! Новая сага.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Стать сильнее! Новая сага</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/11966-utagoe-wa-mille-feuille.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Гармония Милле-Фея.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Гармония Милле-Фея</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/11530-eta-farforovaya-kukla-vlyubilas-2.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Эта фарфоровая кукла влюбилась 2 сезон.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Эта фарфоровая кукла влюбилась 2 сезон</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/14862-vozmezdie-ranenoy-svyatoy.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Возмездие раненой святой.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Возмездие раненой святой</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/14470-devushka-na-chas-4.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Девушка на час 4.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Девушка на час 4</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/14953-tam-net-drugogo.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Там нет другого.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Там нет другого</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/14377-apokalipsis-minogry-pokorenie-drugogo-mira-nachinaetsya-s-razrushennoy-civilizacii.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Апокалипсис Миногры.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Апокалипсис Миногры: Покорение другого мира начинается с разрушенной цивилизации</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/15664-ne-trogay-menya-kotesasi.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Не трогай меня, Котэсаси.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Не трогай меня, Котэсаси</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/15590-no-ya-ubiyca-a-ne-geroy.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Мой статус убийцы очевидно превосходит геройский.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Мой статус убийцы очевидно превосходит геройский</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/14708-odin-tanec.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Один танец.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Один танец</h4></div>
+                    </div>
+					
+                    <!-- СТРАНИЦА 2 (Здесь помещается до 10 постеров: 2 ряда по 5 штук) -->
+                    <div class="slider-page">
+                      <div class="movie-card"><a href="https://animaunt.org/8837-zabludshiy-putnik.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Заблудший путник.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Заблудший путник</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/15720-restoran-ho.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Ресторан Хо.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Ресторан Хо</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/15719-strahovka-na-sluchay-razvoda.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Страховка от развода.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Страховка от развода</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/15340-vozvraschenie-vo-dvorec.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Возвращение во дворец.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Возвращение во дворец</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/16327-poprobuyte-my-stanovimsya-chudesami.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Попробуйте Мы становимся чудесами.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Попробуйте: Мы становимся чудесами</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/16558-priyatnogo-appetita-vashe-velichestvo-bon-appetit-your-majesty.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Приятного аппетита, Ваше Величество.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Приятного аппетита, Ваше Величество</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/16631-sotnya-vospominaniy.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Сотня воспоминаний.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Сотня воспоминаний</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/17077-nash-sosedskiy-specnaz.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Наш соседский спецназ.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Наш соседский спецназ</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/17155-advokat-aydola.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Адвокат айдола.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Адвокат айдола</h4></div>
+                      <div class="movie-card"><a href="https://animaunt.org/17564-boyazn-lyubvi.html" target="_blank" class="movie-poster-link"><img src="./assets/images/posters/am/Боязнь любви.png" alt="1" loading="lazy"><div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div></a><h4 class="movie-title">Боязнь любви</h4></div>
+                    </div>
+                    
+
+                  </div>
+                </div>
+
+                <button class="slider-arrow next-arrow"><ion-icon name="chevron-forward-outline"></ion-icon></button>
+              </div>
+
+          </div>
+		  
+		  
+		  
+		  
+		  
+        </section>
+      </article>
+
+      <article class="contact" data-page="contact">
+        <header>
+          <h2 class="h2 article-title">Контакты</h2>
+        </header>
+
+        <!-- 1. СТАТУС И ВВОДНЫЙ ТЕКСТ -->
+        <section class="contact-intro" style="margin-bottom: 35px;">
+          <p style="color: var(--light-gray); font-size: 15px; line-height: 1.6; margin-top: 15px;">
+            Открыт для сотрудничества с релиз-группами, студиями и частными заказчиками. 
+            Пишите в удобный мессенджер — обсудим ваш проект!
+          </p>
+        </section>
+
+        <!-- 2. КАРТОЧКИ СВЯЗИ -->
+        <section class="contact-messengers-box" style="margin-bottom: 50px;">
+          <div class="messenger-cards-grid">
+            <a href="https://t.me/itsptashka" target="_blank" class="messenger-card">
+              <div class="messenger-icon"><ion-icon name="paper-plane-outline"></ion-icon></div>
+              <div class="messenger-info">
+                <h4 class="messenger-title">Telegram</h4>
+                <p class="messenger-text">@itsptashka</p>
+              </div>
+              <ion-icon name="arrow-forward-outline" class="messenger-arrow"></ion-icon>
+            </a>
+
+            <a href="https://vk.com/itsptashka" target="_blank" class="messenger-card">
+              <div class="messenger-icon"><ion-icon name="logo-vk"></ion-icon></div>
+              <div class="messenger-info">
+                <h4 class="messenger-title">ВКонтакте</h4>
+                <p class="messenger-text">@itsptashka</p>
+              </div>
+              <ion-icon name="arrow-forward-outline" class="messenger-arrow"></ion-icon>
+            </a>
+
+            <a href="mailto:itsptashka@gmail.com" class="messenger-card">
+              <div class="messenger-icon"><ion-icon name="mail-outline"></ion-icon></div>
+              <div class="messenger-info">
+                <h4 class="messenger-title">Email</h4>
+                <p class="messenger-text">itsptashka@gmail.com</p>
+              </div>
+              <ion-icon name="arrow-forward-outline" class="messenger-arrow"></ion-icon>
+            </a>
+          </div>
+        </section>
+
+        <!-- 3. БЛОК: ЭТАПЫ РАБОТЫ -->
+        <section class="work-process" style="margin-bottom: 50px;">
+          <h3 class="h3 section-title" style="margin-bottom: 25px; text-transform: none;">Как проходит работа</h3>
+          <ul class="process-list">
+            <li class="process-item">
+              <div class="process-number">01</div>
+              <div class="process-content">
+                <h4 class="h4">Обсуждение ТЗ</h4>
+                <p>Вы присылаете техническое задание. Согласовываем работу.</p>
+              </div>
+            </li>
+            <li class="process-item">
+              <div class="process-number">02</div>
+              <div class="process-content">
+                <h4 class="h4">Запись и монтаж</h4>
+                <p>Записываю материал. Провожу первичную чистку фонограммы при необходимости.</p>
+              </div>
+            </li>
+            <li class="process-item">
+              <div class="process-number">03</div>
+              <div class="process-content">
+                <h4 class="h4">Сведение и правки</h4>
+                <p>Вы получаете демо или полный файл. При необходимости вносим правки.</p>
+              </div>
+            </li>
+            <li class="process-item">
+              <div class="process-number">04</div>
+              <div class="process-content">
+                <h4 class="h4">Финальный результат</h4>
+                <p>Вы получаете готовую работу в нужном формате (WAV/FLAC). Проект закрыт!</p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <!-- 4. БЛОК: FAQ -->
+        <section class="faq">
+          <h3 class="h3 section-title" style="margin-bottom: 25px; text-transform: none;">Частые вопросы</h3>
+          <div class="faq-list">
+            <div class="faq-item">
+              <h4 class="h4 faq-question">В какие сроки выполняется запись?</h4>
+              <p class="faq-answer">Обычно от 1 до 7 рабочих дней в зависимости от объема и моей загрузки.</p>
+            </div>
+            <div class="faq-item">
+              <h4 class="h4 faq-question">Делаете ли вы тестовое аудио?</h4>
+              <p class="faq-answer">Да, я могу записать небольшой фрагмент вашего текста (до 300 сек), чтобы вы оценили тембр и подачу.</p>
+            </div>
+            <div class="faq-item">
+              <h4 class="h4 faq-question">В каком формате отдаете материал?</h4>
+              <p class="faq-answer">Стандартно — WAV\FLAC (48kHz, 24bit, Mono). Могу подстроиться под ваши требования.</p>
+            </div>
+          </div>
+        </section>
+
+      </article>
+
+    </div>
+
+  </main>
+
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  
+  <!-- ПОДКЛЮЧЕНИЕ ФАЙЛА СКРИПТОВ -->
+  <script src="./assets/js/script.js"></script>
+
+</body>
+</html>
