@@ -387,39 +387,61 @@
             <!-- ===================== ВКЛАДКА: ДЕМО ===================== -->
             <div class="portfolio-group active" data-filter-item data-category="демо">
               <h3 class="portfolio-category-title">Мои демо-записи</h3>
-              
+
+              <!-- Мини-переключатель внутри Демо -->
+              <ul class="sub-filter-list">
+                <li>
+                  <button class="sub-filter-btn active" data-sub-filter-btn="voice">Озвучивание</button>
+                </li>
+                <li>
+                  <button class="sub-filter-btn" data-sub-filter-btn="sound">Саунд-дизайн</button>
+                </li>
+              </ul>
+
               <div class="demo-container">
-                
-                <!-- 1. ДЕМО ГОЛОСА (Аудио) -->
-                <div class="demo-card audio-demo">
-                  <div class="demo-header">
-                    <ion-icon name="mic-outline"></ion-icon>
-                    <h4 class="demo-title">Голосовое демо (Озвучивание)</h4>
+
+                <!-- ГРУППА 1: ОЗВУЧИВАНИЕ (Голос + Видео персонажей) -->
+                <div class="demo-content-group active" data-sub-demo="voice">
+                  <!-- 1. ДЕМО ГОЛОСА (Аудио) -->
+                  <div class="demo-card audio-demo">
+                    <div class="demo-header">
+                      <ion-icon name="mic-outline"></ion-icon>
+                      <h4 class="demo-title">Голосовое демо (Общее)</h4>
+                    </div>
+                    <audio controls class="custom-audio">
+                      <source src="./assets/audio/voice_demo.flac" type="audio/mpeg">
+                    </audio>
                   </div>
-                  <audio controls class="custom-audio">
-                    <source src="./assets/audio/voice_demo.flac" type="audio/mpeg">
-                  </audio>
+
+                  <!-- 2. Демо (Видео персонажей) -->
+                  <div class="demo-card video-demo" style="margin-top: 20px;">
+                    <div class="demo-header">
+                      <ion-icon name="mic-outline"></ion-icon>
+                      <h4 class="demo-title">Озвучивание персонажей</h4>
+                    </div>
+                    <div class="demo-video-box">
+                      <video controls class="demo-video" poster="./assets/images/video-demo.png">
+                        <source src="./assets/video/video-demo.mp4" type="video/mp4">
+                      </video>
+                    </div>
+                    <p class="demo-desc">Примеры различных тембров и актерской игры в озвучивании анимации (всех представленных персонажей).</p>
+                  </div>
                 </div>
 
-                <!-- 2. САУНД-ДИЗАЙН (Видео) -->
-                <div class="demo-card video-demo">
-                  <div class="demo-header">
-                    <ion-icon name="musical-notes-outline"></ion-icon>
-                    <h4 class="demo-title">Саунд-дизайн и работа со звуком</h4>
+                <!-- ГРУППА 2: САУНД-ДИЗАЙН (Видео) -->
+                <div class="demo-content-group" data-sub-demo="sound">
+                  <div class="demo-card video-demo">
+                    <div class="demo-header">
+                      <ion-icon name="musical-notes-outline"></ion-icon>
+                      <h4 class="demo-title">Саунд-дизайн и работа со звуком</h4>
+                    </div>
+                    <div class="demo-video-box">
+                      <video controls class="demo-video" poster="./assets/images/video-preview.png">
+                        <source src="./assets/video/sound_design_demo.mp4" type="video/mp4">
+                      </video>
+                    </div>
+                    <p class="demo-desc">Демонстрация создания звукового ландшафта: финальное сведение атмосферы и эффектов.</p>
                   </div>
-                  
-                  <!-- Блок с видео -->
-                  <div class="demo-video-box">
-                    <video controls class="demo-video" poster="./assets/images/video-preview.jpg">
-                      <!-- Путь к вашему видео-файлу -->
-                      <source src="./assets/video/sound_design_demo.mp4" type="video/mp4">
-                      Ваш браузер не поддерживает видео.
-                    </video>
-                  </div>
-                  
-                  <p class="demo-desc">
-                    Демонстрация создания звукового ландшафта: финальное сведения атмосферы и эффектов.
-                  </p>
                 </div>
 
               </div>
