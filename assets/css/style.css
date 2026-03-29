@@ -2147,50 +2147,7 @@ textarea.form-input::-webkit-resizer { display: none; }
    РЕДИЗАЙН МЕНЮ: ЭФФЕКТ "МАТОВОГО СТЕКЛА" (Glassmorphism)
 ============================================================ */
 
-/* Подменю в Демо */
-.sub-filter-list {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 25px;
-  border-bottom: 1px solid var(--jet);
-  padding-bottom: 10px;
-}
 
-.sub-filter-btn {
-  color: var(--light-gray);
-  font-size: 15px;
-  font-weight: 500;
-  padding: 5px 10px;
-  transition: 0.3s ease;
-  background: none;
-  border: none;
-}
-
-.sub-filter-btn.active {
-  color: var(--white-1);
-  position: relative;
-}
-
-/* Линия под активной кнопкой */
-.sub-filter-btn.active::after {
-  content: "";
-  position: absolute;
-  bottom: -11px;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--white-1);
-}
-
-/* Логика скрытия групп */
-.demo-content-group {
-  display: none;
-  animation: fade 0.5s ease;
-}
-
-.demo-content-group.active {
-  display: block;
-}
 
 @media (min-width: 1024px) {
   .navbar {
@@ -2254,6 +2211,50 @@ textarea.form-input::-webkit-resizer { display: none; }
   }
 }
 
+/* Подменю в Демо */
+.sub-filter-list {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid var(--jet);
+  padding-bottom: 10px;
+}
+
+.sub-filter-btn {
+  color: var(--light-gray);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 5px 10px;
+  transition: 0.3s ease;
+  background: none;
+  border: none;
+}
+
+.sub-filter-btn.active {
+  color: var(--white-1);
+  position: relative;
+}
+
+/* Линия под активной кнопкой */
+.sub-filter-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: -11px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--white-1);
+}
+
+/* Логика скрытия групп */
+.demo-content-group {
+  display: none;
+  animation: fade 0.5s ease;
+}
+
+.demo-content-group.active {
+  display: block;
+}
 
 /* ============================================================
    УВЕЛИЧЕНИЕ РАЗМЕРА АВАТАРА (ФОТО ПРОФИЛЯ)
