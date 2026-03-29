@@ -165,3 +165,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// Переключение под-вкладок в разделе ДЕМО
+document.addEventListener('DOMContentLoaded', () => {
+  const subFilterBtns = document.querySelectorAll('[data-sub-filter-btn]');
+  const subDemoGroups = document.querySelectorAll('[data-sub-demo]');
+
+  subFilterBtns.forEach(btn => {
+    btn.addEventListener('click', function() {
+      const target = this.dataset.subFilterBtn;
+
+      // Убираем активный класс у кнопок
+      subFilterBtns.forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+
+      // Показываем нужную группу контента
+      subDemoGroups.forEach(group => {
+        if (group.dataset.subDemo === target) {
+          group.classList.add('active');
+        } else {
+          group.classList.remove('active');
+        }
+      });
+    });
+  });
+});
