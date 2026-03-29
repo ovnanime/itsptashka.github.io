@@ -516,10 +516,18 @@ main {
 
 .service-title { margin-bottom: 20px; }
 
+/* По умолчанию (для телефонов) оставляем одну колонку */
 .service-list {
   display: grid;
   grid-template-columns: 1fr;
   gap: 20px;
+}
+
+/* Начиная с планшетов (ширина экрана от 768px) делаем две колонки */
+@media (min-width: 768px) {
+  .service-list {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 .service-item {
@@ -1726,8 +1734,13 @@ textarea.form-input::-webkit-resizer { display: none; }
   /* service */
 
   .service-list {
-    grid-template-columns: 1fr 1fr;
-    gap: 20px 25px;
+    display: grid; /* Включаем сетку */
+  
+    /* Создаем две колонки одинаковой ширины (1fr) */
+    grid-template-columns: 1fr 1fr; 
+  
+    /* Расстояние между блоками */
+    gap: 20px; 
   }
 
   /* testimonials */
@@ -2969,4 +2982,184 @@ textarea.form-input {
   line-height: 1.6;
   padding-left: 20px;
   border-left: 1px solid var(--jet);
+}
+
+
+/* ============================================================
+   ОБОРУДОВАНИЕ: АДАПТИВНАЯ СЕТКА
+============================================================ */
+
+/* 1. ДЛЯ МОБИЛОК И ПЛАНШЕТОВ (До 1024px) — СТРОГО 2 РЯДА */
+@media (max-width: 1023px) {
+  .equipment-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr) !important; /* Ровно 2 колонки */
+    gap: 15px;
+  }
+  
+  .equip-img-box {
+    width: 100px !important; /* Меньше фото на мобилках */
+    height: 100px !important;
+  }
+  
+  .equip-content .h4 { font-size: 14px !important; }
+  .equip-content p { font-size: 12px !important; }
+}
+
+/* 2. ДЛЯ ПК (От 1024px) — ВОЗВРАЩАЕМ 3 КОЛОНКИ */
+@media (min-width: 1024px) {
+  .equipment-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) !important; /* 3 колонки, как было */
+    gap: 25px;
+  }
+  
+  .equip-img-box {
+    width: 140px;
+    height: 140px;
+  }
+}
+
+/* Общие стили карточек (не меняются) */
+.equipment-item {
+  background: var(--eerie-black-2);
+  border: 1px solid var(--jet);
+  border-radius: 20px;
+  padding: 15px;
+  text-align: center;
+}
+.equip-img-box {
+  position: relative;
+  margin: 0 auto 10px;
+  cursor: zoom-in;
+}
+.equip-img-box img { width: 100%; height: 100%; object-fit: contain; }
+
+
+/* ============================================================
+   ПОРТФОЛИО: ВКЛАДКИ В СТИЛЕ МОБИЛЬНОГО ПРИЛОЖЕНИЯ (APP STYLE)
+============================================================ */
+
+@media (max-width: 768px) {
+  /* Категории теперь листаются пальцем по горизонтали */
+  .filter-list {
+    display: flex !important;
+    overflow-x: auto;
+    gap: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 25px;
+    scrollbar-width: none; /* Прячем скроллбар */
+    border-bottom: 1px solid var(--jet);
+  }
+  
+  .filter-list::-webkit-scrollbar { display: none; }
+
+  .filter-item button {
+    white-space: nowrap; /* Чтобы названия не переносились */
+    font-size: 15px;
+    color: var(--light-gray-70);
+    padding: 8px 0;
+    position: relative;
+    background: transparent;
+    text-transform: none;
+  }
+
+  /* Активная вкладка с ярким подчеркиванием, как в приложении */
+  .filter-item button.active {
+    color: var(--white-1);
+    font-weight: 600;
+  }
+
+  .filter-item button.active::after {
+    content: "";
+    position: absolute;
+    bottom: -11px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--white-1);
+    border-radius: 2px;
+    box-shadow: 0 0 8px rgba(255,255,255,0.5);
+  }
+}
+
+/* На ПК вкладки остаются стандартными */
+@media (min-width: 769px) {
+  .filter-list {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 30px;
+  }
+  .filter-item button.active {
+    color: var(--white-1);
+    border-bottom: 2px solid var(--white-1);
+    padding-bottom: 5px;
+  }
+}
+
+
+/* ============================================================
+   ПОРТФОЛИО: АДАПТИВ ПОСТЕРОВ (Кинотеатр)
+============================================================ */
+
+/* На мобилках делаем постеры чуть крупнее, чтобы по 2 в ряд влезали красиво */
+@media (max-width: 580px) {
+  .slider-page {
+    grid-template-columns: 1fr 1fr 1fr !important; /* Всегда 2 постера в ряд */
+    gap: 15px !important;
+  }
+  
+  .movie-title { font-size: 12px; }
+}
+
+@media (max-width: 580px) {
+  /* 1. Главный контейнер карточки */
+  .service-item {
+    display: flex;
+    flex-direction: column; /* Иконка над текстом */
+    align-items: center;    /* Центрируем все вложенные блоки */
+    text-align: center;     /* Центрируем текст внутри */
+    padding: 20px !important;
+  }
+
+  /* 2. Блок, в котором лежит сама иконка */
+  .service-icon-box {
+    display: flex;          /* Включаем флекс для самого бокса */
+    justify-content: center; /* Горизонтальный центр для иконки */
+    align-items: center;     /* Вертикальный центр */
+    width: 100%;             /* Растягиваем на всю ширину, чтобы было от чего центровать */
+    margin-bottom: 10px;     /* Отступ снизу до заголовка */
+  }
+
+  /* 3. На всякий случай сбрасываем стандартные отступы иконки из шаблона */
+  .service-icon-box img, 
+  .service-icon-box ion-icon {
+    margin: 0 auto !important;
+  }
+
+  /* 4. Контейнер с текстом */
+  .service-content-box {
+    text-align: center;
+    width: 100%;
+  }
+}
+
+/* ============================================================
+   САЙДБАР: МИНИМАЛЬНЫЕ ПРАВКИ ДЛЯ МОБИЛОК (НЕ ДЛЯ ПК!)
+============================================================ */
+@media (max-width: 1023px) {
+  .sidebar {
+    max-height: 220px; /* Свернутый вид на мобилках */
+    transition: 0.5s ease-in-out;
+  }
+  
+  .sidebar.active {
+    max-height: 1000px; /* Развернутый вид */
+  }
+
+  /* Чтобы аватарка на мобилках не была гигантской */
+  .avatar-box {
+    width: 160px !important;
+    height: 160px !important;
+  }
 }
