@@ -2002,44 +2002,85 @@ textarea.form-input::-webkit-resizer { display: none; }
   visibility: hidden;
   opacity: 0;
   transition: 0.3s ease-in-out;
+  padding: 20px; /* Отступ от краев экрана на мобилках */
 }
+
 .photo-modal.active {
   visibility: visible;
   opacity: 1;
 }
+
 .photo-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(5px);
+  background: rgba(0, 0, 0, 0.9); /* Сделали фон чуть темнее для акцента */
+  backdrop-filter: blur(8px);
   cursor: zoom-out;
 }
+
 .photo-modal-content {
   position: relative;
   z-index: 2;
-  max-width: 90%;
-  max-height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Чтобы клик пролетал сквозь контейнер на оверлей */
 }
+
 .photo-modal-content img {
-  border-radius: 20px;
-  max-height: 85vh;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  pointer-events: auto; /* Возвращаем кликабельность самой картинке */
+  border-radius: 12px;
+  /* ГЛАВНЫЕ ПРАВКИ ДЛЯ АДАПТИВА: */
+  max-width: 100%;   /* Не шире экрана */
+  max-height: 80vh;  /* Не выше 80% высоты экрана (оставляем место под кнопку) */
+  width: auto;
+  height: auto;
   object-fit: contain;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.7);
 }
+
 .photo-close-btn {
   position: absolute;
-  top: -45px; 
-  right: -5px;
+  /* Переносим кнопку в правый верхний угол экрана, а не картинки */
+  top: 20px; 
+  right: 20px;
   color: var(--white-1);
-  font-size: 32px;
-  background: transparent;
-  padding: 5px;
+  font-size: 35px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   transition: 0.2s;
+  pointer-events: auto;
+  z-index: 10;
 }
+
 .photo-close-btn:hover { 
+  background: rgba(255, 255, 255, 0.2);
   color: var(--orange-yellow-crayola);
-  transform: scale(1.1);
 }
+
+/* Адаптив кнопки для маленьких телефонов */
+@media (max-width: 580px) {
+  .photo-close-btn {
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    font-size: 28px;
+  }
+  
+  .photo-modal-content img {
+    max-height: 70vh; /* Еще чуть меньше на мобилках, чтобы точно влезло */
+  }
+}
+
+
 
 /* Адаптив для ПК (центрирование в левой панели) */
 @media (min-width: 1250px) {
