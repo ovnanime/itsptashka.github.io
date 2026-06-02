@@ -1,0 +1,82 @@
+/* ==========================================================================
+   =============== НАВИГАЦИОННАЯ ПАНЕЛЬ (NAVBAR) ===============
+   ========================================================================== */
+.navbar {
+  position: absolute;
+  top: -20px;            
+  right: 25px;           
+  bottom: auto;
+  left: auto;
+  width: max-content;    
+  background: rgba(24, 24, 24, 0.85) !important; 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--jet) !important;     
+  border-radius: 14px !important;              
+  padding: 0 10px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6); 
+  z-index: 20;                                 
+}
+
+.navbar-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;              
+  width: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar-item { flex-grow: 0; }
+
+.navbar-link {
+  color: var(--light-gray);
+  font-size: 14px;       
+  font-weight: var(--fw-500);
+  padding: 14px 18px;    
+  display: block;
+  position: relative;
+  background: none !important;
+  border: none;
+  cursor: pointer;
+  text-transform: none !important; 
+  transition: color 0.25s ease;
+}
+
+.navbar-link:hover,
+.navbar-link:focus { color: var(--white-1); }
+.navbar-link.active { color: var(--white-1) !important; background: none !important; }
+
+.navbar-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;             
+  left: 18px;            
+  right: 18px;
+  height: 2.5px;         
+  background-color: var(--white-1); 
+  border-radius: 10px !important; 
+}
+
+/* --- Адаптивность --- */
+@media (min-width: 580px) {
+  .navbar { border-radius: 20px 20px 0 0; }
+  .navbar-list { gap: 20px; }
+  .navbar-link { font-size: 14px; }
+}
+
+@media (min-width: 1024px) {
+  .navbar {
+    position: absolute; top: 50px !important; transform: translateY(-50%) !important; right: 30px !important; bottom: auto !important; left: auto !important;
+    width: max-content !important;    
+    background: rgba(24, 24, 24, 0.85) !important; backdrop-filter: blur(10px) !important; -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid var(--jet) !important; border-radius: 24px !important;              
+    padding: 0 10px !important; box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6) !important; z-index: 20 !important; transition: 0.3s ease;
+  }
+  .navbar-list { display: flex; gap: 30px; padding: 0 20px; }
+  .navbar-link { font-weight: var(--fw-500); color: var(--light-gray); padding: 20px 7px; }
+  .navbar-link:hover { color: var(--light-gray-70); }
+  .navbar-link.active { color: var(--white-1); }
+}
