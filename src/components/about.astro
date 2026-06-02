@@ -1,0 +1,394 @@
+<article class="about active" data-page="about">
+    <header>
+        <h2 class="h2 article-title">Обо мне</h2>
+    </header>
+
+    <section class="about-modern-layout">
+        
+        <div class="bento-card full-width">
+            <div class="status-badge">
+                <div class="pulse-dot"></div>
+                <span>Открыт к проектам</span>
+            </div>
+            <p class="bento-text">
+                <strong class="white-highlight">Пу́шкин Илья́ Серге́евич (псевд.: Феофила́кт Птахе́н, Камергер Пу́шкин; род. 3 июня 2004 года, г. Гагарин, Смоленская область)</strong> — актёр озвучивания, звукорежиссёр и основатель неформального творческого объединения «ОВН» (Объект всеобщей ненависти).
+                Более 3 лет непрерывной практики. Мой подход — это симбиоз творческого чутья и медицинской дисциплины. Я не просто читаю, я конструирую звук.
+            </p>
+        </div>
+
+        <div class="bento-card full-width player-block">
+            <div class="demo-header" style="margin-bottom: 10px;">
+                <ion-icon name="mic-outline"></ion-icon>
+                <h3 class="h3">Мой голос и качество исходника</h3>
+            </div>
+            <p class="demo-desc" style="margin-bottom: 25px; margin-top: 0;">Оцените разницу между чистой записью (RAW) и финальной обработкой (STUDIO) без прерывания звука.</p>
+            
+            <div class="custom-waveform-player">
+                <div class="player-controls">
+                    <button id="wave-play-btn" class="wave-play-btn">
+                        <ion-icon name="play" id="wave-play-icon"></ion-icon>
+                    </button>
+                    <div id="waveform" style="flex-grow: 1; cursor: pointer;"></div>
+                    <div class="volume-wrapper">
+                        <ion-icon name="volume-high-outline" id="volume-icon"></ion-icon>
+                        <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="1">
+                    </div>
+                </div>
+                
+                <div class="processing-toggle">
+                    <span class="toggle-text" id="label-raw">RAW</span>
+                    <label class="switch">
+                        <input type="checkbox" id="audio-switch" checked>
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="toggle-text active" id="label-processed">STUDIO</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bento-card full-width presentation-block" id="main-presentation-block">
+            <div class="presentation-header">
+                <h3 class="slide-main-title" id="slide-title-text">Биомеханика озвучки</h3>
+                <div class="slide-controls">
+                    <button class="slide-nav-btn" id="prev-slide">
+                        <ion-icon name="chevron-back-outline"></ion-icon>
+                    </button>
+                    <span class="slide-counter" id="slide-counter-el">1 / 4</span>
+                    <button class="slide-nav-btn" id="next-slide">
+                        <ion-icon name="chevron-forward-outline"></ion-icon>
+                    </button>
+                    <button class="slide-nav-btn" id="fullscreen-btn" title="На весь экран" style="margin-left: 5px; border-left: 1px solid rgba(255,255,255,0.1); padding-left: 10px;">
+                        <ion-icon name="expand-outline" id="fullscreen-icon"></ion-icon>
+                    </button>
+                </div>
+            </div>
+
+            <div class="presentation-content-viewport" id="presentation-content-area">
+                
+                <div class="inner-slide" data-slide="1">
+                    <div class="manifesto-stacked-layout">
+                        <div class="manifesto-top-row">
+                            <div class="manifesto-text-block">
+                                <p class="manifesto-large-text">
+                                    Для меня озвучка — это игра и биологический процесс.
+                                    Я не имитирую хрипы или одышку — <strong class="white-highlight font-weight-600">я реконструирую физиологические механизмы.</strong>
+                                </p>
+                                <div class="manifesto-inline-divider"></div>
+                                <p class="manifesto-mid-text">
+                                    Как студент-медик, я строю звук через физиологию: зная анатомию связок, я настраиваю естественную биомеханику.
+                                </p>
+                            </div>
+                            <div class="manifesto-quote-block">
+                                <div class="custom-quote-box">
+                                    <p class="quote-paragraph">«Старики в Дунхуа могут быть всемогущими, но силы не вылечивают болезни полностью. В их голосе всё равно должна быть слышима старость».</p>
+                                    <span class="quote-author">// ПТАХЕН О КЛИНИЧЕСКОЙ ЛОГИКЕ</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inner-slide" data-slide="2">
+                    <div class="manifesto-bottom-row">
+                        <img src="/assets/images/presentation_1.png" alt="Визуализация метода" class="presentation-main-img" id="lightbox-trigger-img" title="Увеличить схему" />
+                        <div class="manifesto-caption">
+                            <p class="manifesto-mid-text">Каждое колебание звуковой волны поддается анатомическому контролю.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inner-slide" data-slide="3">
+                    <div class="manifesto-stacked-layout">
+                        <div class="manifesto-top-row">
+                            <div class="manifesto-text-block">
+                                <p class="manifesto-large-text">
+                                    Бескомпромиссный студийный тракт — это <strong class="white-highlight font-weight-600">гарантия честного звука.</strong>
+                                </p>
+                                <div class="manifesto-inline-divider"></div>
+                                <p class="manifesto-mid-text">
+                                    Линейный отклик всей цепи позволяет фиксировать глубокие обертоны без шумов.
+                                </p>
+                            </div>
+                            
+                            <div class="manifesto-quote-block">
+                                <div class="spatial-card-container">
+                                    <div class="hardware-list">
+                                        <div class="hardware-item">
+                                            <span class="hardware-label">Микрофон:</span> 
+                                            <span class="hardware-highlight">WA-87R2B</span>
+                                        </div>
+                                        <div class="hardware-item">
+                                            <span class="hardware-label">Интерфейс:</span> 
+                                            <span class="hardware-highlight">Arturia MiniFuse</span>
+                                        </div>
+                                        <div class="hardware-item">
+                                            <span class="hardware-label">Наушники:</span> 
+                                            <span class="hardware-highlight">Sony MDR-7506</span>
+                                        </div>
+                                    </div>
+                                    <div class="spatial-footer-quote">
+                                        <p>«Техника должна честно передавать физиологию звука».</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inner-slide" data-slide="4">
+                    <div class="manifesto-stacked-layout">
+                        <div class="manifesto-top-row">
+                            <div class="manifesto-text-block">
+                                <p class="manifesto-large-text">
+                                    Понимание пайплайна — <strong class="white-highlight font-weight-600">это предсказуемый результат.</strong>
+                                </p>
+                                <div class="manifesto-inline-divider"></div>
+                                <p class="manifesto-mid-text">
+                                    Отдаю 100% сырой исходник (WAV 24-bit) для полной свободы звукорежиссера.
+                                </p>
+                            </div>
+                            
+                            <div class="manifesto-quote-block">
+                                <div class="spatial-card-container">
+                                    <div class="hardware-list">
+                                        <div class="hardware-item">
+                                            <span class="hardware-label">Формат:</span> 
+                                            <span class="hardware-highlight">WAV 24-bit / 48kHz</span>
+                                        </div>
+                                        <div class="hardware-item">
+                                            <span class="hardware-label">Обработка:</span> 
+                                            <span class="hardware-highlight">Спектральная чистка</span>
+                                        </div>
+                                        <div class="hardware-item">
+                                            <span class="hardware-label">Сведение:</span> 
+                                            <span class="hardware-highlight">3D-планы и акустика</span>
+                                        </div>
+                                    </div>
+                                    <div class="spatial-footer-quote">
+                                        <p>«Весь инжиниринг — на этапе сведения».</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</article>
+
+<script type="module">
+    import WaveSurfer from 'https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.esm.js';
+
+    function initAboutPage() {
+        // --- 1. ПЛЕЕР (Обновленный код из портфолио) ---
+        const waveformEl = document.getElementById('waveform');
+        if (waveformEl && waveformEl.dataset.initialized !== 'true') {
+            const playBtn = document.getElementById('wave-play-btn');
+            const playIcon = document.getElementById('wave-play-icon');
+            const audioSwitch = document.getElementById('audio-switch');
+            const volumeSlider = document.getElementById('volume-slider');
+            const labelRaw = document.getElementById('label-raw');
+            const labelProcessed = document.getElementById('label-processed');
+            
+            const wavesurfer = WaveSurfer.create({
+                container: '#waveform',
+                waveColor: '#4b5563',
+                progressColor: '#ffffff',
+                height: 45,
+                barWidth: 2,
+                normalize: true,
+            });
+
+            wavesurfer.load('/assets/audio/voice_demo.flac');
+            waveformEl.dataset.initialized = 'true';
+
+            playBtn.addEventListener('click', () => wavesurfer.playPause());
+            wavesurfer.on('play', () => playIcon.setAttribute('name', 'pause'));
+            wavesurfer.on('pause', () => playIcon.setAttribute('name', 'play'));
+            
+            volumeSlider.addEventListener('input', (e) => {
+                wavesurfer.setVolume(parseFloat(e.target.value));
+            });
+
+            audioSwitch.addEventListener('change', (e) => {
+                const isProcessed = e.target.checked;
+                const time = wavesurfer.getCurrentTime();
+                const playing = wavesurfer.isPlaying();
+                
+                if (isProcessed) {
+                    labelProcessed.classList.add('active');
+                    labelRaw.classList.remove('active');
+                } else {
+                    labelRaw.classList.add('active');
+                    labelProcessed.classList.remove('active');
+                }
+
+                wavesurfer.load(isProcessed ? '/assets/audio/voice_demo.flac' : '/assets/audio/voice_demo_raw.flac');
+                
+                wavesurfer.once('ready', () => {
+                    wavesurfer.setTime(time);
+                    if (playing) wavesurfer.play();
+                });
+            });
+        }
+
+        // --- 2. ЛОГИКА СЛАЙДОВ ---
+        const slides = document.querySelectorAll('.inner-slide');
+        const prevBtn = document.getElementById('prev-slide');
+        const nextBtn = document.getElementById('next-slide');
+        const counterEl = document.getElementById('slide-counter-el');
+        const titleEl = document.getElementById('slide-title-text');
+
+        const slideTitles = [
+            "Биомеханика озвучки", 
+            "Физиология и контроль", 
+            "Студийный тракт", 
+            "Стандарты и качество"
+        ];
+
+        if (slides.length > 0) {
+            let currentSlideIdx = 0;
+
+            function updateSlides() {
+                slides.forEach((slide, idx) => {
+                    if (idx === currentSlideIdx) {
+                        slide.style.display = 'flex';
+                        slide.classList.add('active');
+                    } else {
+                        slide.style.display = 'none';
+                        slide.classList.remove('active');
+                    }
+                });
+                
+                if(counterEl) {
+                    counterEl.innerText = `${currentSlideIdx + 1} / ${slides.length}`;
+                }
+                
+                if(titleEl) {
+                    titleEl.innerText = slideTitles[currentSlideIdx];
+                }
+            }
+            
+            prevBtn?.addEventListener('click', () => { 
+                currentSlideIdx = (currentSlideIdx - 1 + slides.length) % slides.length; 
+                updateSlides(); 
+            });
+
+            nextBtn?.addEventListener('click', () => { 
+                currentSlideIdx = (currentSlideIdx + 1) % slides.length; 
+                updateSlides(); 
+            });
+
+            updateSlides();
+        }
+
+        // --- 3. ФУЛЛСКРИН (С поддержкой History API) ---
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        const presentationBlock = document.getElementById('main-presentation-block');
+        const fullscreenIcon = document.getElementById('fullscreen-icon');
+
+        const closeFullscreen = () => {
+            if (!presentationBlock?.classList.contains('is-fullscreen')) return;
+
+            presentationBlock.style.transition = 'opacity 0.2s ease-out';
+            presentationBlock.style.opacity = '0'; 
+            
+            setTimeout(() => {
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+                presentationBlock.classList.remove('is-fullscreen');
+                fullscreenIcon?.setAttribute('name', 'expand-outline');
+                presentationBlock.style.opacity = '1'; 
+            }, 200);
+        };
+
+        const openFullscreen = () => {
+            if (presentationBlock?.classList.contains('is-fullscreen')) return;
+
+            presentationBlock.style.transition = 'opacity 0.2s ease-out';
+            presentationBlock.style.opacity = '0'; 
+            
+            setTimeout(() => {
+                const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+                document.body.style.overflow = 'hidden';
+                document.body.style.paddingRight = `${scrollbarWidth}px`; 
+                presentationBlock.classList.add('is-fullscreen');
+                fullscreenIcon?.setAttribute('name', 'contract-outline');
+                presentationBlock.style.opacity = '1'; 
+            }, 200);
+        };
+
+        fullscreenBtn?.addEventListener('click', () => {
+            const isFullscreen = presentationBlock?.classList.contains('is-fullscreen');
+            
+            if (!isFullscreen) {
+                history.pushState({ modal: 'fullscreen' }, '');
+                openFullscreen();
+            } else {
+                if (history.state && history.state.modal === 'fullscreen') {
+                    history.back(); 
+                } else {
+                    closeFullscreen();
+                }
+            }
+        });
+
+        // --- 4. ЗУМ КАРТИНКИ (Lightbox) ---
+        const photoModal = document.getElementById('photo-modal');
+
+        if (photoModal && photoModal.parentNode !== document.body) {
+            document.body.appendChild(photoModal);
+        }
+
+        const modalImg = photoModal?.querySelector('img');
+
+        document.addEventListener('click', (e) => {
+            const target = e.target.closest('#lightbox-trigger-img');
+            
+            if (target && photoModal && modalImg) {
+                modalImg.src = target.src;
+                photoModal.classList.add('active');
+                history.pushState({ modal: 'photo' }, ''); 
+            }
+        });
+
+        // --- 5. ЗАКРЫТИЕ ЗУМА ---
+        const closeBtn = document.getElementById('photo-close-btn');
+        const overlay = document.getElementById('photo-overlay');
+        
+        const closePhotoModal = () => {
+            if (photoModal?.classList.contains('active')) {
+                if (history.state && history.state.modal === 'photo') {
+                    history.back(); 
+                } else {
+                    photoModal.classList.remove('active');
+                }
+            }
+        };
+        
+        closeBtn?.addEventListener('click', closePhotoModal);
+        overlay?.addEventListener('click', closePhotoModal);
+
+        // --- 6. ОБРАБОТКА СВАЙПА НАЗАД ---
+        window.addEventListener('popstate', (e) => {
+            let modalClosed = false;
+
+            if (photoModal?.classList.contains('active')) {
+                photoModal.classList.remove('active');
+                modalClosed = true;
+            }
+            
+            if (!modalClosed && presentationBlock?.classList.contains('is-fullscreen')) {
+                closeFullscreen();
+            }
+        });
+    }
+
+    if (document.readyState === 'loading') { 
+        document.addEventListener('DOMContentLoaded', initAboutPage); 
+    } else { 
+        initAboutPage(); 
+    }
+</script>

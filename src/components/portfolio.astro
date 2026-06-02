@@ -1,0 +1,491 @@
+---
+// Типизация для TypeScript
+interface Project {
+  title: string;
+  link: string;
+  img: string;
+  roles: ('voice' | 'sound')[];
+}
+
+// ==========================================
+// БАЗА ДАННЫХ РЕЛИЗОВ
+// ==========================================
+
+const mdaProjects: Project[] = [
+  { title: "Освободите эту ведьму", link: "https://donghuaworld.online/anime/osvobodite-etu-vedmu", img: "/assets/images/posters/mda/Освободите эту ведьму.png", roles: ['voice', 'sound'] },
+  { title: "Путь Выбора 2026", link: "https://donghuaworld.online/anime/put-vybora-2026", img: "/assets/images/posters/mda/Путь Выбора 2026.png", roles: ['voice', 'sound'] },
+  { title: "Очерки приключений", link: "https://donghuaworld.online/anime/ocerki-prikliucenii-vo-vremena-dinastii-tan", img: "/assets/images/posters/mda/Очерки приключений во времена династии Тан.png", roles: ['voice', 'sound'] },
+  { title: "Призрачный Наньтин", link: "#", img: "/assets/images/posters/mda/Призрачный Наньтин.png", roles: ['voice', 'sound'] },
+  { title: "Повелитель тайн Клоун", link: "#", img: "/assets/images/posters/mda/Повелитель тайн Клоун.png", roles: ['voice', 'sound'] },
+  { title: "Повесть о герое меча 3", link: "#", img: "/assets/images/posters/mda/Повесть о герое меча 3.png", roles: ['voice', 'sound'] },
+  { title: "Под тремя реками", link: "#", img: "/assets/images/posters/mda/Под тремя реками.png", roles: ['voice', 'sound'] },
+  { title: "Воинственный бог", link: "#", img: "/assets/images/posters/mda/Воинственный бог nine солнц.png", roles: ['voice'] },
+  { title: "Я из секты меча", link: "#", img: "/assets/images/posters/mda/Я из секты меча.png", roles: ['voice'] },
+  { title: "Сказание о пастухе", link: "#", img: "/assets/images/posters/mda/Сказание о пастухе богов.png", roles: ['voice'] }
+];
+
+const goltfilmProjects: Project[] = [
+  { title: "Йеллоустоун: Маршалы", link: "https://vk.com/wall-187803582_5991", img: "/assets/images/posters/gf/Йеллоустоун Маршалы.png", roles: ['voice'] },
+  { title: "Миллиардер в трущобах", link: "https://vk.com/wall-187803582_5880", img: "/assets/images/posters/gf/Миллиардер в трущобах.png", roles: ['voice'] },
+  { title: "Вечно богатый", link: "https://vk.com/wall-187803582_5904", img: "/assets/images/posters/gf/Вечно богатый.png", roles: ['voice'] },
+  { title: "28 лет спустя: Храм костей", link: "https://vk.com/wall-187803582_5950", img: "/assets/images/posters/gf/28 лет спустя Храм костей.png", roles: ['voice'] },
+  { title: "28 лет спустя", link: "https://vk.com/wall-187803582_5682", img: "/assets/images/posters/gf/28 лет спустя.png", roles: ['voice'] },
+  { title: "Рождение Китаро", link: "https://vk.com/wall-187803582_5250", img: "/assets/images/posters/gf/Рождение Китаро.png", roles: ['voice'] }
+];
+
+const animauntProjects: Project[] = [
+  { title: "Повседневная жизнь стажёра-мучителя", link: "https://animaunt.org/16253-goumon-baito-kun-no-nichijou.html", img: "/assets/images/posters/am/Повседневная жизнь стажёра-мучителя.png", roles: ['voice'] },
+  { title: "Медалистка 2", link: "https://animaunt.org/15837-medalistka-2.html", img: "/assets/images/posters/am/Медалистка 2.png", roles: ['voice'] },
+  { title: "Соседнему королевству продали...", link: "https://animaunt.org/14964-sosednemu-korolevstvu-prodali-svyatuyu-pomolvku-kotoroy-razorvali-iz-za-togo-chto-ona-stala-slishkom-sovershennoy.html", img: "/assets/images/posters/am/Соседнему королевству продали.png", roles: ['voice'] },
+  { title: "Дни проходят, а еда хороша", link: "https://animaunt.org/15366-hibi-wa-sugiredo-meshi-umashi.html", img: "/assets/images/posters/am/Дни проходят, а еда по-прежнему хороша.png", roles: ['voice'] },
+  { title: "Ликорис Рикоил Друзья", link: "https://animaunt.org/14534-lycoris-recoil-short-movie.html", img: "/assets/images/posters/am/Ликорис Рикоил Друзья похитители времени.png", roles: ['voice'] },
+  { title: "Стать сильнее! Новая сага", link: "https://animaunt.org/11355-stat-silnee-novaya-saga.html", img: "/assets/images/posters/am/Стать сильнее! Новая сага.png", roles: ['voice'] },
+  { title: "Гармония Милле-Фея", link: "https://animaunt.org/11966-utagoe-wa-mille-feuille.html", img: "/assets/images/posters/am/Гармония Милле-Фея.png", roles: ['voice'] },
+  { title: "Эта фарфоровая кукла 2", link: "https://animaunt.org/11530-eta-farforovaya-kukla-vlyubilas-2.html", img: "/assets/images/posters/am/Эта фарфоровая кукла влюбилась 2 сезон.png", roles: ['voice'] },
+  { title: "Возмездие раненой святой", link: "https://animaunt.org/14862-vozmezdie-ranenoy-svyatoy.html", img: "/assets/images/posters/am/Возмездие раненой святой.png", roles: ['voice'] },
+  { title: "Девушка на час 4", link: "https://animaunt.org/14470-devushka-na-chas-4.html", img: "/assets/images/posters/am/Девушка на час 4.png", roles: ['voice'] },
+  { title: "Там нет другого", link: "https://animaunt.org/14953-tam-net-drugogo.html", img: "/assets/images/posters/am/Там нет другого.png", roles: ['voice'] },
+  { title: "Апокалипсис Миногры", link: "https://animaunt.org/14377-apokalipsis-minogry-pokorenie-drugogo-mira-nachinaetsya-s-razrushennoy-civilizacii.html", img: "/assets/images/posters/am/Апокалипсис Миногры.png", roles: ['voice'] },
+  { title: "Не трогай меня, Котэсаси", link: "https://animaunt.org/15664-ne-trogay-menya-kotesasi.html", img: "/assets/images/posters/am/Не трогай меня, Котэсаси.png", roles: ['voice'] },
+  { title: "Мой статус убийцы...", link: "https://animaunt.org/15590-no-ya-ubiyca-a-ne-geroy.html", img: "/assets/images/posters/am/Мой статус убийцы очевидно превосходит геройский.png", roles: ['voice'] },
+  { title: "Один танец", link: "https://animaunt.org/14708-odin-tanec.html", img: "/assets/images/posters/am/Один танец.png", roles: ['voice'] },
+  { title: "Заблудший путник", link: "https://animaunt.org/8837-zabludshiy-putnik.html", img: "/assets/images/posters/am/Заблудший путник.png", roles: ['voice'] },
+  { title: "Ресторан Хо", link: "https://animaunt.org/15720-restoran-ho.html", img: "/assets/images/posters/am/Ресторан Хо.png", roles: ['voice'] },
+  { title: "Страховка от развода", link: "https://animaunt.org/15719-strahovka-na-sluchay-razvoda.html", img: "/assets/images/posters/am/Страховка от развода.png", roles: ['voice'] },
+  { title: "Возвращение во дворец", link: "https://animaunt.org/15340-vozvraschenie-vo-dvorec.html", img: "/assets/images/posters/am/Возвращение во дворец.png", roles: ['voice'] },
+  { title: "Попробуйте: Мы чудеса", link: "https://animaunt.org/16327-poprobuyte-my-stanovimsya-chudesami.html", img: "/assets/images/posters/am/Попробуйте Мы становимся чудесами.png", roles: ['voice'] },
+  { title: "Приятного аппетита", link: "https://animaunt.org/16558-priyatnogo-appetita-vashe-velichestvo-bon-appetit-your-majesty.html", img: "/assets/images/posters/am/Приятного аппетита, Ваше Величество.png", roles: ['voice'] },
+  { title: "Сотня воспоминаний", link: "https://animaunt.org/16631-sotnya-vospominaniy.html", img: "/assets/images/posters/am/Сотня воспоминаний.png", roles: ['voice'] },
+  { title: "Наш соседский спецназ", link: "https://animaunt.org/17077-nash-sosedskiy-specnaz.html", img: "/assets/images/posters/am/Наш соседский спецназ.png", roles: ['voice'] },
+  { title: "Адвокат айдола", link: "https://animaunt.org/17155-advokat-aydola.html", img: "/assets/images/posters/am/Адвокат айдола.png", roles: ['voice'] },
+  { title: "Боязнь любви", link: "https://animaunt.org/17564-boyazn-lyubvi.html", img: "/assets/images/posters/am/Боязнь любви.png", roles: ['voice'] }
+];
+
+// ==========================================
+// АВТОРСКИЙ УГОЛОК (АВТОМАТИЧЕСКИЙ ПАРСИНГ .txt)
+// ==========================================
+
+const poetryFiles = import.meta.glob('/src/data/poetry/*.txt', { as: 'raw', eager: true });
+
+const poetryList = Object.entries(poetryFiles).map(([path, rawContent]) => {
+  const fileName = path.split('/').pop();
+  const title = fileName.substring(0, fileName.lastIndexOf('.'));
+
+  const lines = rawContent.split(/\r?\n/);
+  let badge = "Стихотворение";
+  let dateStr = "";
+  let timestamp = 0;
+  
+  const cleanLines = lines.filter(line => {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('#')) {
+      if (trimmed.toLowerCase().includes('песня')) {
+        badge = "Текст песни";
+      }
+      
+      // Ищем регулярным выражением дату в формате #DD.MM.YYYY
+      const dateMatch = trimmed.match(/#(\d{2})\.(\d{2})\.(\d{4})/);
+      if (dateMatch) {
+        dateStr = `${dateMatch[1]}.${dateMatch[2]}.${dateMatch[3]}`;
+        // Создаем timestamp (месяцы в JS идут с 0, поэтому вычитаем 1)
+        timestamp = new Date(Number(dateMatch[3]), Number(dateMatch[2]) - 1, Number(dateMatch[1])).getTime();
+      }
+      return false; // Убираем коммент из текста
+    }
+    return true; // Оставляем куплеты
+  });
+
+  return {
+    title,
+    badge,
+    dateStr,
+    timestamp,
+    text: cleanLines.join('\n').trim()
+  };
+});
+
+// Умная сортировка от свежих к старым
+poetryList.sort((a, b) => b.timestamp - a.timestamp);
+---
+
+<article class="portfolio" data-page="portfolio">
+  <header>
+    <h2 class="h2 article-title">Портфолио</h2>
+  </header>
+
+  <section class="projects">
+    <ul class="filter-list">
+      <li class="filter-item"><button class="active" data-filter-btn>Шоурил</button></li>
+      <li class="filter-item"><button data-filter-btn>Релизы</button></li>
+      <li class="filter-item"><button data-filter-btn>Авторский уголок</button></li>
+    </ul>
+
+    <div class="portfolio-content">
+      
+      <div class="portfolio-group active" data-filter-item data-category="шоурил">
+        
+        <div class="bento-card player-block">
+          <div class="demo-header" style="margin-bottom: 10px;">
+            <ion-icon name="mic-outline"></ion-icon>
+            <h3 class="h3">Мой голос и качество исходника</h3>
+          </div>
+          <p class="demo-desc" style="margin-bottom: 25px; margin-top: 0;">Оцените разницу между чистой записью (RAW) и финальной обработкой (STUDIO) без прерывания звука.</p>
+          
+          <div class="custom-waveform-player">
+            <div class="player-controls">
+              <button id="wave-play-btn" class="wave-play-btn">
+                <ion-icon name="play" id="wave-play-icon"></ion-icon>
+              </button>
+              <div id="waveform-portfolio" style="flex-grow: 1; cursor: pointer;"></div>
+              <div class="volume-wrapper">
+                <ion-icon name="volume-high-outline" id="volume-icon"></ion-icon>
+                <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="1">
+              </div>
+            </div>
+            
+            <div class="processing-toggle">
+              <span class="toggle-text" id="label-raw">RAW</span>
+              <label class="switch">
+                <input type="checkbox" id="audio-switch" checked>
+                <span class="slider round"></span>
+              </label>
+              <span class="toggle-text active" id="label-processed">STUDIO</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bento-card video-playlist-card">
+          <div class="demo-header" style="margin-bottom: 25px;">
+            <ion-icon name="film-outline"></ion-icon>
+            <h3 class="h3">Работы в кадре и звуке</h3>
+          </div>
+          
+          <div class="playlist-layout">
+            <div class="main-video-section">
+              <div class="demo-video-box">
+                <video id="main-showreel-video" controls class="demo-video" poster="/assets/images/video-demo.png">
+                  <source id="main-video-source" src="/assets/video/video-demo.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+
+            <div class="playlist-sidebar">
+              <button class="playlist-item active" data-video="/assets/video/video-demo.mp4" data-poster="/assets/images/video-demo.png">
+                <div class="playlist-icon"><ion-icon name="mic"></ion-icon></div>
+                <div class="playlist-text">
+                  <h5>Озвучивание</h5>
+                  <span>Актёрская игра и дубляж</span>
+                </div>
+              </button>
+              
+              <button class="playlist-item" data-video="/assets/video/sd_demo1.mp4" data-poster="/assets/images/sd_poster1.png">
+                <div class="playlist-icon"><ion-icon name="volume-high"></ion-icon></div>
+                <div class="playlist-text">
+                  <h5>Саунд-дизайн #1</h5>
+                  <span>Пример работы со звуком</span>
+                </div>
+              </button>
+
+              <button class="playlist-item" data-video="/assets/video/sd_demo2.mp4" data-poster="/assets/images/sd_poster2.png">
+                <div class="playlist-icon"><ion-icon name="volume-high"></ion-icon></div>
+                <div class="playlist-text">
+                  <h5>Саунд-дизайн #2</h5>
+                  <span>Пример работы со звуком</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="portfolio-group" data-filter-item data-category="релизы">
+        
+        <div class="roles-legend">
+          <span><ion-icon name="mic"></ion-icon> — Озвучивание</span>
+          <span><ion-icon name="volume-high"></ion-icon> — Звукорежиссура</span>
+        </div>
+
+        <h3 class="portfolio-category-title" style="margin-top: 0;">MDA</h3>
+        <div class="paginated-grid-wrapper">
+          <div class="projects-grid">
+            {mdaProjects.map((project) => (
+              <div class="movie-card">
+                <div class="role-badges">
+                  {project.roles.includes('voice') && (
+                    <span class="role-badge" data-tooltip="Озвучивание персонажей"><ion-icon name="mic" style="pointer-events: none;"></ion-icon></span>
+                  )}
+                  {project.roles.includes('sound') && (
+                    <span class="role-badge" data-tooltip="Звукорежиссура и сведение"><ion-icon name="volume-high" style="pointer-events: none;"></ion-icon></span>
+                  )}
+                </div>
+                <a href={project.link} target="_blank" class="movie-poster-link">
+                  <img src={project.img} alt={project.title} loading="lazy" />
+                  <div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div>
+                </a>
+                <h4 class="movie-title">{project.title}</h4>
+              </div>
+            ))}
+          </div>
+          <div class="pagination-controls"></div>
+        </div>
+
+        <h3 class="portfolio-category-title">MK Studio</h3>
+        <div class="nda-card" style="margin-bottom: 50px;">
+          <ion-icon name="lock-closed-outline" class="nda-icon"></ion-icon>
+          <div class="nda-text">
+            <h4 style="color: var(--white-1); font-size: 16px; margin-bottom: 8px;">Коммерческие проекты под NDA</h4>
+            <p style="color: var(--light-gray); font-size: 14px; line-height: 1.5;">Коммерческие релизы защищены соглашением о неразглашении. Портфолио для данной студии находится в процессе подготовки.</p>
+          </div>
+        </div>
+
+        <h3 class="portfolio-category-title">GoLTFilm</h3>
+        <div class="paginated-grid-wrapper">
+          <div class="projects-grid">
+            {goltfilmProjects.map((project) => (
+              <div class="movie-card">
+                <div class="role-badges">
+                  {project.roles.includes('voice') && (
+                    <span class="role-badge" data-tooltip="Озвучивание персонажей"><ion-icon name="mic" style="pointer-events: none;"></ion-icon></span>
+                  )}
+                </div>
+                <a href={project.link} target="_blank" class="movie-poster-link">
+                  <img src={project.img} alt={project.title} loading="lazy" />
+                  <div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div>
+                </a>
+                <h4 class="movie-title">{project.title}</h4>
+              </div>
+            ))}
+          </div>
+          <div class="pagination-controls"></div>
+        </div>
+
+        <h3 class="portfolio-category-title">AniMaunt</h3>
+        <div class="paginated-grid-wrapper">
+          <div class="projects-grid">
+            {animauntProjects.map((project) => (
+              <div class="movie-card">
+                <div class="role-badges">
+                  {project.roles.includes('voice') && (
+                    <span class="role-badge" data-tooltip="Озвучивание персонажей"><ion-icon name="mic" style="pointer-events: none;"></ion-icon></span>
+                  )}
+                </div>
+                <a href={project.link} target="_blank" class="movie-poster-link">
+                  <img src={project.img} alt={project.title} loading="lazy" />
+                  <div class="poster-overlay"><ion-icon name="link-outline"></ion-icon></div>
+                </a>
+                <h4 class="movie-title">{project.title}</h4>
+              </div>
+            ))}
+          </div>
+          <div class="pagination-controls"></div>
+        </div>
+
+      </div>
+
+      <div class="portfolio-group" data-filter-item data-category="авторский уголок">
+        
+        <div class="demo-header" style="margin-bottom: 25px;">
+          <ion-icon name="create-outline"></ion-icon>
+          <h3 class="h3">Мои тексты и стихи</h3>
+        </div>
+        <p class="demo-desc" style="margin-bottom: 35px;">Здесь собраны мои авторские стихотворения и тексты песен. Музыкальные версии пока находятся в закрытом архиве, но слова уже готовы звучать.</p>
+
+        <div class="poetry-grid">
+          {poetryList.length === 0 ? (
+            <p style="color: var(--light-gray); font-style: italic;">
+              Произведений пока нет. Добавьте текстовые файлы в папку <strong>/src/data/poetry/</strong>
+            </p>
+          ) : (
+            poetryList.map((poem) => (
+              <div class="bento-card poetry-card">
+                <div class="poetry-badge">{poem.badge}</div>
+                
+                <div class="poetry-header">
+                  <h4 class="poetry-title">{poem.title}</h4>
+                  {poem.dateStr && (
+                    <time class="poetry-date">
+                      <ion-icon name="calendar-outline"></ion-icon>
+                      {poem.dateStr}
+                    </time>
+                  )}
+                </div>
+
+                <div class="poetry-text">{poem.text}</div>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+    </div>
+  </section>
+</article>
+
+<script type="module">
+  import WaveSurfer from 'https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.esm.js';
+  document.addEventListener('DOMContentLoaded', () => {
+    const waveformEl = document.getElementById('waveform-portfolio');
+    
+    if (waveformEl && waveformEl.dataset.initialized !== 'true') {
+      const playBtn = document.getElementById('wave-play-btn');
+      const playIcon = document.getElementById('wave-play-icon');
+      const audioSwitch = document.getElementById('audio-switch');
+      const volumeSlider = document.getElementById('volume-slider');
+      const labelRaw = document.getElementById('label-raw');
+      const labelProcessed = document.getElementById('label-processed');
+      
+      const wavesurfer = WaveSurfer.create({
+        container: '#waveform-portfolio',
+        waveColor: '#4b5563',
+        progressColor: '#ffffff',
+        height: 45,
+        barWidth: 2,
+        normalize: true,
+      });
+
+      wavesurfer.load('/assets/audio/voice_demo.flac');
+      waveformEl.dataset.initialized = 'true';
+
+      playBtn.addEventListener('click', () => wavesurfer.playPause());
+      wavesurfer.on('play', () => playIcon.setAttribute('name', 'pause'));
+      wavesurfer.on('pause', () => playIcon.setAttribute('name', 'play'));
+      volumeSlider.addEventListener('input', (e) => {
+        wavesurfer.setVolume(parseFloat(e.target.value));
+      });
+      audioSwitch.addEventListener('change', (e) => {
+        const isProcessed = e.target.checked;
+        const time = wavesurfer.getCurrentTime();
+        const playing = wavesurfer.isPlaying();
+        
+        if (isProcessed) {
+          labelProcessed.classList.add('active');
+          labelRaw.classList.remove('active');
+        } else {
+          labelRaw.classList.add('active');
+          labelProcessed.classList.remove('active');
+        }
+
+        wavesurfer.load(isProcessed ? '/assets/audio/voice_demo.flac' : '/assets/audio/voice_demo_raw.flac');
+        
+        wavesurfer.once('ready', () => {
+          wavesurfer.setTime(time);
+          if (playing) wavesurfer.play();
+        });
+      });
+    }
+  });
+</script>
+
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    
+    const checkActiveFilter = () => {
+      const activeBtn = document.querySelector('.filter-list [data-filter-btn].active');
+      if (!activeBtn) {
+        const firstBtn = document.querySelector('.filter-list [data-filter-btn]');
+        if (firstBtn) firstBtn.classList.add('active');
+      }
+    };
+    checkActiveFilter();
+    document.querySelectorAll('.navbar-link').forEach(link => {
+      link.addEventListener('click', () => setTimeout(checkActiveFilter, 50));
+    });
+
+    const video = document.getElementById('main-showreel-video');
+    const sourceEl = document.getElementById('main-video-source');
+    const playlistItems = document.querySelectorAll('.playlist-item');
+
+    if (video && playlistItems.length > 0) {
+      playlistItems.forEach(item => {
+        item.addEventListener('click', () => {
+          playlistItems.forEach(btn => btn.classList.remove('active'));
+          item.classList.add('active');
+
+          const newVideo = item.getAttribute('data-video');
+          const newPoster = item.getAttribute('data-poster');
+
+          video.pause();
+          sourceEl.setAttribute('src', newVideo);
+          video.setAttribute('poster', newPoster);
+          video.load();
+        });
+      });
+    }
+
+    const grids = document.querySelectorAll('.paginated-grid-wrapper');
+    grids.forEach(wrapper => {
+      const grid = wrapper.querySelector('.projects-grid');
+      const cards = Array.from(grid.querySelectorAll('.movie-card'));
+      const paginationContainer = wrapper.querySelector('.pagination-controls');
+      let currentPage = 1;
+
+      function getItemsPerPage() {
+        const width = window.innerWidth;
+        if (width >= 1024) return 10; 
+        if (width >= 768) return 8;   
+        return 4;                      
+      }
+
+      function updatePagination() {
+        const itemsPerPage = getItemsPerPage();
+        const totalPages = Math.ceil(cards.length / itemsPerPage);
+
+        wrapper.querySelectorAll('.ghost-card').forEach(el => el.remove());
+
+        if (totalPages <= 1) {
+          paginationContainer.style.display = 'none';
+          wrapper.style.marginBottom = '50px';
+          cards.forEach(card => card.style.display = 'block');
+          return;
+        }
+
+        paginationContainer.style.display = 'flex';
+        wrapper.style.marginBottom = '0';
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        let visibleCount = 0;
+        cards.forEach((card, index) => {
+          if (index >= start && index < end) {
+            card.style.display = 'block';
+            visibleCount++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        const emptySlots = itemsPerPage - visibleCount;
+        for (let i = 0; i < emptySlots; i++) {
+          const ghost = document.createElement('div');
+          ghost.className = 'movie-card ghost-card';
+          ghost.innerHTML = `
+            <div class="movie-poster-link ghost-poster"></div>
+            <h4 class="movie-title" style="visibility: hidden;">&nbsp;<br>&nbsp;</h4>
+          `;
+          grid.appendChild(ghost);
+        }
+
+        paginationContainer.innerHTML = '';
+        for (let i = 1; i <= totalPages; i++) {
+          const btn = document.createElement('button');
+          btn.className = `page-num-btn ${i === currentPage ? 'active' : ''}`;
+          btn.textContent = i;
+          btn.addEventListener('click', () => {
+            currentPage = i;
+            updatePagination(); 
+          });
+          paginationContainer.appendChild(btn);
+        }
+      }
+
+      updatePagination();
+      
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(updatePagination, 150);
+      });
+    });
+  });
+</script>

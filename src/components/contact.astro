@@ -1,0 +1,204 @@
+---
+// src/components/Contact.astro
+---
+
+<article class="contact active" data-page="contact">
+  <header>
+    <h2 class="h2 article-title">Контакты</h2>
+  </header>
+
+  <!-- Интро -->
+  <section class="contact-intro bento-card">
+    <p class="bento-text" style="margin: 0;">
+      Готов обсудить озвучивание, саунд-дизайн или локализацию вашего проекта. 
+      Пишите в любой удобный мессенджер — отвечаю быстро.
+    </p>
+  </section>
+
+  <!-- Интерактивные мессенджеры -->
+  <section class="contact-messengers-box">
+    <div class="messenger-cards-grid">
+      
+      <!-- Telegram (Главный) -->
+      <div class="messenger-card premium-hover">
+        <a href="https://t.me/itsptashka" target="_blank" class="messenger-link-area">
+          <div class="messenger-icon"><ion-icon name="paper-plane"></ion-icon></div>
+          <div class="messenger-info">
+            <h4 class="messenger-title">Telegram</h4>
+            <p class="messenger-text">@itsptashka</p>
+          </div>
+        </a>
+        <button class="copy-btn" data-copy="@itsptashka" title="Скопировать">
+          <ion-icon name="copy-outline"></ion-icon>
+        </button>
+      </div>
+
+      <!-- ВКонтакте -->
+      <div class="messenger-card premium-hover">
+        <a href="https://vk.com/itsptashka" target="_blank" class="messenger-link-area">
+          <div class="messenger-icon"><ion-icon name="logo-vk"></ion-icon></div>
+          <div class="messenger-info">
+            <h4 class="messenger-title">ВКонтакте</h4>
+            <p class="messenger-text">@itsptashka</p>
+          </div>
+        </a>
+        <button class="copy-btn" data-copy="https://vk.com/itsptashka" title="Скопировать">
+          <ion-icon name="copy-outline"></ion-icon>
+        </button>
+      </div>
+
+      <!-- Email -->
+      <div class="messenger-card premium-hover">
+        <a href="mailto:itsptashka@gmail.com" class="messenger-link-area">
+          <div class="messenger-icon"><ion-icon name="mail"></ion-icon></div>
+          <div class="messenger-info">
+            <h4 class="messenger-title">Email</h4>
+            <p class="messenger-text">itsptashka@gmail.com</p>
+          </div>
+        </a>
+        <button class="copy-btn" data-copy="itsptashka@gmail.com" title="Скопировать">
+          <ion-icon name="copy-outline"></ion-icon>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ (Аккордеон) ПЕРЕНЕСЕН ВЫШЕ -->
+  <section class="faq bento-card">
+    <div class="demo-header" style="margin-bottom: 25px;">
+      <ion-icon name="help-buoy-outline"></ion-icon>
+      <h3 class="h3">Частые вопросы</h3>
+    </div>
+    
+    <div class="faq-accordion">
+      
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>В какие сроки выполняется запись?</span>
+          <ion-icon name="chevron-down-outline" class="faq-icon"></ion-icon>
+        </button>
+        <div class="faq-answer">
+          <p>Обычно от 1 до 7 рабочих дней в зависимости от объема текста, сложности саунд-дизайна и моей текущей загрузки.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>Делаете ли вы тестовое аудио?</span>
+          <ion-icon name="chevron-down-outline" class="faq-icon"></ion-icon>
+        </button>
+        <div class="faq-answer">
+          <p>Да, я могу бесплатно записать небольшой фрагмент вашего текста (до 1-2 минут), чтобы вы оценили тембр, попадание в образ и качество тракта.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          <span>В каком формате отдаете материал?</span>
+          <ion-icon name="chevron-down-outline" class="faq-icon"></ion-icon>
+        </button>
+        <div class="faq-answer">
+          <p>Стандартный индустриальный формат: чистый WAV (48kHz, 24bit, Mono или Stereo в зависимости от задачи). По запросу могу подготовить любой другой формат.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Пайплайн (Этапы работы) ПЕРЕНЕСЕН НИЖЕ -->
+  <section class="work-process bento-card" style="margin-bottom: 0;">
+    <div class="demo-header" style="margin-bottom: 25px;">
+      <ion-icon name="git-network-outline"></ion-icon>
+      <h3 class="h3">Как проходит работа</h3>
+    </div>
+    
+    <div class="process-grid">
+      <div class="process-bento-item">
+        <div class="bg-number">01</div>
+        <h4 class="h4">ТЗ и Согласование</h4>
+        <p>Вы присылаете текст, референсы или видеоряд. Обсуждаем задачу, тайминги и стоимость.</p>
+      </div>
+      
+      <div class="process-bento-item">
+        <div class="bg-number">02</div>
+        <h4 class="h4">Запись и Дубляж</h4>
+        <p>Пишу чистовой материал в студии. Провожу спектральную чистку от шумов, вздохов и кликов.</p>
+      </div>
+      
+      <div class="process-bento-item">
+        <div class="bg-number">03</div>
+        <h4 class="h4">Сведение (STUDIO)</h4>
+        <p>Эквализация, компрессия, саунд-дизайн и интеграция голоса в ваше пространство. Отправка демо.</p>
+      </div>
+      
+      <div class="process-bento-item">
+        <div class="bg-number">04</div>
+        <h4 class="h4">Финальный рендер</h4>
+        <p>Внесение правок (при необходимости). Отдача готового материала в формате WAV 24-bit / 48kHz.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Тост-уведомление о копировании -->
+  <div id="copy-toast" class="copy-toast">
+    <ion-icon name="checkmark-circle"></ion-icon>
+    <span>Скопировано</span>
+  </div>
+
+</article>
+
+<!-- СКРИПТ: Копирование и Аккордеон -->
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', () => {
+    
+    // 1. Копирование в буфер обмена
+    const copyBtns = document.querySelectorAll('.copy-btn');
+    const toast = document.getElementById('copy-toast');
+    let toastTimeout;
+
+    copyBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const textToCopy = btn.getAttribute('data-copy');
+        
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          const icon = btn.querySelector('ion-icon');
+          const originalName = icon.getAttribute('name');
+          icon.setAttribute('name', 'checkmark-outline');
+          btn.classList.add('success');
+          
+          toast.classList.add('show');
+          clearTimeout(toastTimeout);
+          toastTimeout = setTimeout(() => {
+            toast.classList.remove('show');
+            icon.setAttribute('name', originalName);
+            btn.classList.remove('success');
+          }, 2000);
+        });
+      });
+    });
+
+    // 2. FAQ Аккордеон
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach(item => {
+      const question = item.querySelector('.faq-question');
+      
+      question.addEventListener('click', () => {
+        const isOpen = item.classList.contains('active');
+        
+        faqItems.forEach(faq => {
+          faq.classList.remove('active');
+          faq.querySelector('.faq-answer').style.maxHeight = null;
+        });
+
+        if (!isOpen) {
+          item.classList.add('active');
+          const answer = item.querySelector('.faq-answer');
+          answer.style.maxHeight = answer.scrollHeight + "px";
+        }
+      });
+    });
+  });
+</script>

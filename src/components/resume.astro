@@ -1,0 +1,182 @@
+---
+// src/components/Resume.astro
+---
+
+<article class="resume" data-page="resume">
+  <header>
+    <h2 class="h2 article-title">Резюме</h2>
+  </header>
+
+  <!-- Безопасная зона для кнопки PDF -->
+  <div class="resume-actions">
+    <a href="/assets/pdf/resume_pushkin.pdf" download class="download-pdf-btn" title="Скачать PDF-резюме">
+      <div class="icon-box-btn"><ion-icon name="document-text-outline"></ion-icon></div>
+      <span>Скачать PDF-версию</span>
+    </a>
+  </div>
+
+  <div class="resume-bento-layout">
+    
+    <!-- КАРТОЧКА 1: ОПЫТ, ПРОЕКТЫ И СТЕК -->
+    <section class="resume-wide-card">
+      <div class="card-title-wrapper">
+        <div class="icon-box">
+          <ion-icon name="briefcase-outline"></ion-icon>
+        </div>
+        <h3 class="h3">Опыт и сотрудничество</h3>
+      </div>
+
+      <ol class="timeline-list">
+        
+        <!-- Пункт: Фриланс -->
+        <li class="timeline-item">
+          <div class="timeline-item-header">
+            <h4 class="h4 timeline-item-title">Фриланс, Актёр озвучивания и звукорежиссёр</h4>
+            <span class="timeline-date">2023 — Наст. время</span>
+          </div>
+          
+          <ul class="custom-task-list">
+            <li class="task-item">
+              <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
+              <p>Озвучивание персонажей различных возрастов, характеров и архетипов.</p>
+            </li>
+            <li class="task-item">
+              <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
+              <p>Работа в форматах дубляжа, липсинка и закадрового озвучивания.</p>
+            </li>
+            <li class="task-item">
+              <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
+              <p>Запись, монтаж и техническая подготовка голосового материала.</p>
+            </li>
+            <li class="task-item">
+              <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
+              <p>Сведение и обработка аудио для локализационных проектов.</p>
+            </li>
+            <li class="task-item">
+              <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
+              <p>Подготовка исходников и финальных дорожек в соответствии с требованиями проекта.</p>
+            </li>
+          </ul>
+        </li>
+        
+        <!-- Пункт: НТО «ОВН» -->
+        <li class="timeline-item">
+          <div class="timeline-item-header">
+            <h4 class="h4 timeline-item-title">НТО «ОВН», Основатель и руководитель</h4>
+            <span class="timeline-date">2023 — Наст. время</span>
+          </div>
+
+          <ul class="custom-task-list">
+            <li class="task-item">
+              <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
+              <p>Создал и развиваю независимое объединение, занимающееся озвучиванием и локализацией медиаконтента.</p>
+            </li>
+            <li class="task-item">
+              <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
+              <p>Координирую работу участников команды и распределяю задачи между этапами производства.</p>
+            </li>
+            <li class="task-item">
+              <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
+              <p>Контролирую качество готового материала как с творческой, так и с технической стороны.</p>
+            </li>
+            <li class="task-item">
+              <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
+              <p>Принимаю непосредственное участие в записи, монтаже и сведении проектов.</p>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Пункт: Проекты (Кликабельные) -->
+        <li class="timeline-item">
+          <h4 class="h4 timeline-item-title" style="margin-bottom: 12px;">Сотрудничество с проектами</h4>
+          <div class="integrated-skills">
+            <a href="https://vk.com/ovnanime" target="_blank" class="tool-tag project-tag" title="НТО «ОВН»">НТО «ОВН»</a>
+            <a href="https://vk.com/donghuaworld" target="_blank" class="tool-tag project-tag" title="Сайт MDA">MDA</a>
+            <a href="https://vk.com/goltfilmpro" target="_blank" class="tool-tag project-tag" title="Группа GoLTFilm">GoLTFilm</a>
+            <a href="https://vk.com/mkstudio_art" target="_blank" class="tool-tag project-tag">MK Studio</a>
+          </div>
+        </li>
+
+        <!-- Пункт: Форматы работы и стек (Перенесен сюда) -->
+        <li class="timeline-item">
+          <h4 class="h4 timeline-item-title" style="margin-bottom: 12px;">Форматы работы и стек</h4>
+          <div class="integrated-skills">
+            <span class="tool-tag">VO - Закадровое озвучивание</span>
+            <span class="tool-tag">NLSD - Липсинк</span>
+            <span class="tool-tag">Дубляж</span>
+            <span class="tool-tag">Запись дикторского текста</span>
+          </div>
+        </li>
+
+      </ol>
+    </section>
+
+    <!-- КАРТОЧКА 2: ОБОРУДОВАНИЕ -->
+    <section class="resume-wide-card equipment-section">
+      <div class="card-title-wrapper" style="margin-bottom: 25px;">
+        <div class="icon-box">
+          <ion-icon name="hardware-chip-outline"></ion-icon>
+        </div>
+        <h3 class="h3">Студийное оборудование</h3>
+      </div>
+
+      <ul class="equipment-list">
+        <li class="equipment-item">
+          <figure class="equip-img-box" data-zoom-img title="Увеличить фото">
+            <img src="/assets/images/wa87.png" alt="Warm Audio WA-87R2B" loading="lazy">
+            <ion-icon name="search-outline" class="zoom-icon"></ion-icon>
+          </figure>
+          <div class="equip-content">
+            <h4 class="h4">Warm Audio WA-87R2B</h4>
+            <p>Студийный конденсаторный микрофон профессионального класса.</p>
+          </div>
+        </li>
+
+        <li class="equipment-item">
+          <figure class="equip-img-box" data-zoom-img title="Увеличить фото">
+            <img src="/assets/images/minifuse.png" alt="Arturia MiniFuse" loading="lazy">
+            <ion-icon name="search-outline" class="zoom-icon"></ion-icon>
+          </figure>
+          <div class="equip-content">
+            <h4 class="h4">Arturia MiniFuse</h4>
+            <p>Надежная звуковая карта для чистой записи с минимальными задержками.</p>
+          </div>
+        </li>
+
+        <li class="equipment-item">
+          <figure class="equip-img-box" data-zoom-img title="Увеличить фото">
+            <img src="/assets/images/eris.png" alt="Presonus Eris 3.5 2nd Gen" loading="lazy">
+            <ion-icon name="search-outline" class="zoom-icon"></ion-icon>
+          </figure>
+          <div class="equip-content">
+            <h4 class="h4">Presonus Eris 3.5 2nd Gen</h4>
+            <p>Студийные мониторы 2-го поколения для детального контроля микса.</p>
+          </div>
+        </li>
+
+        <li class="equipment-item">
+          <figure class="equip-img-box" data-zoom-img title="Увеличить фото">
+            <img src="/assets/images/sony7506.png" alt="Sony MDR-7506" loading="lazy">
+            <ion-icon name="search-outline" class="zoom-icon"></ion-icon>
+          </figure>
+          <div class="equip-content">
+            <h4 class="h4">Sony MDR-7506</h4>
+            <p>Закрытые студийные наушники, стандарт индустрии для мониторинга.</p>
+          </div>
+        </li>
+
+        <li class="equipment-item">
+          <figure class="equip-img-box" data-zoom-img title="Увеличить фото">
+            <img src="/assets/images/cable.png" alt="Коммутация и акустика" loading="lazy">
+            <ion-icon name="search-outline" class="zoom-icon"></ion-icon>
+          </figure>
+          <div class="equip-content">
+            <h4 class="h4">Акустика и коммутация</h4>
+            <p>Качественные балансные кабели, поп-фильтры и акустическая обработка помещения.</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+  </div>
+</article>
