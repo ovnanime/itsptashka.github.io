@@ -1,0 +1,279 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('poetry');
+
+  return entries
+    .filter((entry) => !entry.data.draft)
+    .map((entry) => ({
+      params: { slug: entry.slug },
+      props: { entry },
+    }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const label = entry.data.type === 'song' ? 'Песня' : 'Стихотворение';
+---
+
+<BaseLayout title={`${entry.data.title} — Авторский уголок`}>
+  <main class="poetry-page">
+    <article class="shell poetry-shell">
+      <a class="back-link" href="/works#author">← Авторский уголок</a>
+
+      <header class="poetry-header">
+        <div>
+          <p class="eyebrow">АВТОРСКИЙ УГОЛОК</p>
+          <h1>{entry.data.title}</h1>
+        </div>
+
+        <div class="poetry-meta">
+          <span>{label}</span>
+          <time datetime={entry.data.date.toISOString()}>
+            {entry.data.date.toLocaleDateString('ru-RU')}
+          </time>
+        </div>
+      </header>
+
+      <section class="poetry-content">
+        <Content />
+      </section>
+    </article>
+  </main>
+
+  <style>
+    .poetry-page {
+      padding: 34px 0 58px;
+    }
+
+    .poetry-shell {
+      max-width: 880px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      margin-bottom: 24px;
+      color: var(--muted);
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      color: var(--text);
+    }
+
+    .poetry-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 28px;
+      align-items: end;
+      padding-bottom: 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .poetry-header .eyebrow {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 12px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .poetry-header h1 {
+      max-width: 680px;
+      margin: 0;
+      color: #fff;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 36px;
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.045em;
+    }
+
+    .poetry-meta {
+      display: grid;
+      justify-items: end;
+      gap: 9px;
+      color: var(--muted);
+      font-family: Roboto, Arial, sans-serif;
+      white-space: nowrap;
+    }
+
+    .poetry-meta span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 92px;
+      height: 30px;
+      padding: 0 12px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 9px;
+      background: rgba(255, 255, 255, 0.045);
+      color: #f1f1f1;
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 850;
+    }
+
+    .poetry-meta time {
+      color: #aeb5bc;
+      font-size: 13px;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .poetry-content {
+      max-width: 680px;
+      margin-top: 28px;
+      color: var(--text);
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 18px;
+      line-height: 1.68;
+      font-weight: 500;
+      letter-spacing: -0.006em;
+      white-space: pre-wrap;
+    }
+
+    .poetry-content :global(p) {
+      margin: 0 0 1em;
+    }
+
+    .poetry-content :global(p:last-child) {
+      margin-bottom: 0;
+    }
+
+    .poetry-content :global(hr) {
+      width: 96px;
+      margin: 24px 0;
+      border: none;
+      border-top: 1px solid var(--line);
+    }
+
+    .poetry-content :global(sup) {
+      font-size: 0.7em;
+    }
+
+    @media (max-width: 720px) {
+      .poetry-page {
+        padding-top: 30px;
+      }
+
+      .poetry-header {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        align-items: start;
+      }
+
+      .poetry-meta {
+        justify-items: start;
+      }
+
+      .poetry-header h1 {
+        font-size: 34px;
+      }
+
+      .poetry-content {
+        max-width: none;
+        margin-top: 24px;
+        font-size: 18px;
+        line-height: 1.62;
+      }
+    }
+
+    /* Poetry meta compact card alignment */
+    .poetry-meta {
+      min-width: 132px !important;
+      gap: 8px !important;
+      justify-items: center !important;
+      align-self: end !important;
+      padding: 10px 12px !important;
+      border: 1px solid rgba(255, 255, 255, 0.09) !important;
+      border-radius: 12px !important;
+      background: rgba(255, 255, 255, 0.025) !important;
+    }
+
+    .poetry-meta span {
+      min-width: 0 !important;
+      height: 26px !important;
+      padding: 0 10px !important;
+      border-radius: 8px !important;
+      font-size: 12px !important;
+      font-weight: 850 !important;
+    }
+
+    .poetry-meta time {
+      color: #b8c0c8 !important;
+      font-size: 13px !important;
+      font-weight: 850 !important;
+      text-align: center !important;
+    }
+
+    @media (max-width: 720px) {
+      .poetry-meta {
+        justify-items: start !important;
+        min-width: 0 !important;
+      }
+    }
+
+
+    /* Poetry meta: no outer frame */
+    .poetry-meta {
+      min-width: 112px !important;
+      gap: 8px !important;
+      justify-items: center !important;
+      align-self: end !important;
+      padding: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+    }
+
+    .poetry-meta span {
+      min-width: 0 !important;
+      height: 28px !important;
+      padding: 0 12px !important;
+      border-radius: 8px !important;
+      border: 1px solid rgba(255, 255, 255, 0.16) !important;
+      background: rgba(255, 255, 255, 0.045) !important;
+      color: #f1f1f1 !important;
+      font-size: 12px !important;
+      font-weight: 850 !important;
+    }
+
+    .poetry-meta time {
+      color: #b8c0c8 !important;
+      font-size: 13px !important;
+      font-weight: 850 !important;
+      text-align: center !important;
+    }
+
+
+    /* Poetry meta: bigger badge and date */
+    .poetry-meta {
+      min-width: 128px !important;
+      gap: 10px !important;
+    }
+
+    .poetry-meta span {
+      height: 32px !important;
+      padding: 0 14px !important;
+      border-radius: 9px !important;
+      font-size: 14px !important;
+      font-weight: 900 !important;
+    }
+
+    .poetry-meta time {
+      font-size: 15px !important;
+      font-weight: 900 !important;
+    }
+
+  </style>
+</BaseLayout>
