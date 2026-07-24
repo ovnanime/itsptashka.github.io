@@ -29,8 +29,27 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
         Мой подход построен на чистой практике и реальных проектах.
       </p>
 
+      <div class="hero-visual hero-visual--mobile" aria-hidden="true">
+        <div class="portrait-frame">
+          <img
+            src="/assets/images/avatar_ptaxen.webp"
+            alt=""
+            width="1308"
+            height="1086"
+            loading="eager"
+            decoding="async"
+          />
+          <span class="portrait-caption">
+            Илья Пушкин<br />
+            псевд. Феофилакт Птахен
+          </span>
+        </div>
+
+        <div class="vertical-note">Актёр озвучивания / Звукорежиссёр / Писатель</div>
+      </div>
+
       <div class="hero-actions">
-        <a class="button light" href="#voice">Слушать голос</a>
+        <button class="button light" type="button" data-scroll-to="voice">Слушать голос</button>
         <a class="button ghost" href="/works">Портфолио</a>
       </div>
 
@@ -41,7 +60,7 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
       </div>
     </div>
 
-    <div class="hero-visual">
+    <div class="hero-visual hero-visual--desktop">
       <div class="portrait-frame">
         <img
           src="/assets/images/avatar_ptaxen.webp"
@@ -110,7 +129,7 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
     </div>
   </section>
 
-  <section class="shell section">
+  <section id="journal" class="shell section">
     <div class="section-head section-head--compact">
       <div>
         <p class="eyebrow">Блог</p>
@@ -574,5 +593,19 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
     }
 
   </style>
+
+
+  <script is:inline>
+    document.querySelector('[data-scroll-to="voice"]')?.addEventListener('click', () => {
+      const target = document.getElementById('voice');
+      if (!target) return;
+
+      target.scrollIntoView({
+        block: 'start',
+        inline: 'nearest',
+        behavior: 'auto'
+      });
+    });
+  </script>
 
 </BaseLayout>

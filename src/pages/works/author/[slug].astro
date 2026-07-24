@@ -21,7 +21,7 @@ const label = entry.data.type === 'song' ? 'Песня' : 'Стихотворе�
 <BaseLayout title={`${entry.data.title} — Авторский уголок`}>
   <main class="poetry-page">
     <article class="shell poetry-shell">
-      <a class="back-link" href="/works#author">← Авторский уголок</a>
+      <a class="back-link" href="/works" data-return-works-tab="author">← Авторский уголок</a>
 
       <header class="poetry-header">
         <div>
@@ -275,5 +275,331 @@ const label = entry.data.type === 'song' ? 'Песня' : 'Стихотворе�
       font-weight: 900 !important;
     }
 
+  
+    /* ======================================================================
+       POETRY / SONG — MOBILE HEADER POLISH
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .poetry-page {
+        padding-bottom: 72px !important;
+      }
+
+      .poetry-header {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        grid-template-areas:
+          "corner badge"
+          "title  date" !important;
+        gap: 10px 16px !important;
+        align-items: center !important;
+        padding-bottom: 18px !important;
+      }
+
+      .poetry-header > div:first-child,
+      .poetry-meta {
+        display: contents !important;
+      }
+
+      .poetry-header .eyebrow {
+        grid-area: corner !important;
+        margin: 0 !important;
+        font-size: 10px !important;
+        line-height: 1.2 !important;
+        letter-spacing: 0.14em !important;
+      }
+
+      .poetry-header h1 {
+        grid-area: title !important;
+        max-width: none !important;
+        font-size: clamp(25px, 7vw, 31px) !important;
+        line-height: 1.08 !important;
+      }
+
+      .poetry-meta span {
+        grid-area: badge !important;
+        justify-self: end !important;
+        height: 27px !important;
+        padding: 0 10px !important;
+        font-size: 12px !important;
+      }
+
+      .poetry-meta time {
+        grid-area: date !important;
+        justify-self: end !important;
+        align-self: center !important;
+        font-size: 13px !important;
+        white-space: nowrap !important;
+      }
+
+      .poetry-content {
+        margin-top: 24px !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .poetry-header {
+        gap: 9px 10px !important;
+      }
+
+      .poetry-header h1 {
+        font-size: clamp(23px, 6.8vw, 28px) !important;
+      }
+
+      .poetry-meta span,
+      .poetry-meta time {
+        font-size: 11px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       POETRY / SONG MOBILE V2 — restore independent right meta column
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .poetry-header {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        grid-template-areas: none !important;
+        gap: 18px !important;
+        align-items: end !important;
+        padding-bottom: 18px !important;
+      }
+
+      .poetry-header > div:first-child,
+      .poetry-meta {
+        display: block !important;
+      }
+
+      .poetry-header > div:first-child {
+        min-width: 0 !important;
+      }
+
+      .poetry-header .eyebrow {
+        margin: 0 0 10px !important;
+        font-size: 10px !important;
+        line-height: 1.2 !important;
+        letter-spacing: 0.14em !important;
+      }
+
+      .poetry-header h1 {
+        max-width: none !important;
+        margin: 0 !important;
+        font-size: clamp(25px, 6.8vw, 30px) !important;
+        line-height: 1.08 !important;
+      }
+
+      .poetry-meta {
+        min-width: 112px !important;
+        justify-self: end !important;
+        align-self: end !important;
+        padding: 8px 10px !important;
+        text-align: right !important;
+      }
+
+      .poetry-meta span {
+        display: inline-flex !important;
+        margin: 0 0 8px auto !important;
+        min-width: 0 !important;
+        height: 25px !important;
+        padding: 0 9px !important;
+        font-size: 11px !important;
+      }
+
+      .poetry-meta time {
+        display: block !important;
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+        text-align: right !important;
+      }
+
+      .poetry-content {
+        max-width: none !important;
+        margin-top: 18px !important;
+        font-size: 16px !important;
+        line-height: 1.5 !important;
+      }
+
+      .poetry-content :global(p) {
+        margin-bottom: 0.72em !important;
+      }
+
+      .poetry-content :global(hr) {
+        margin: 18px 0 !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .poetry-header {
+        gap: 12px !important;
+      }
+
+      .poetry-header h1 {
+        font-size: clamp(23px, 6.4vw, 27px) !important;
+      }
+
+      .poetry-meta {
+        min-width: 100px !important;
+        padding: 7px 8px !important;
+      }
+
+      .poetry-content {
+        font-size: 15px !important;
+        line-height: 1.48 !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       POETRY / SONG MOBILE — pin badge and date to the right edge
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .poetry-header {
+        position: relative !important;
+        display: block !important;
+        width: 100% !important;
+        min-height: 92px !important;
+        padding-right: 142px !important;
+        box-sizing: border-box !important;
+      }
+
+      .poetry-header > div:first-child {
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      .poetry-header h1 {
+        width: 100% !important;
+        max-width: none !important;
+      }
+
+      .poetry-meta {
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+        width: auto !important;
+        min-width: 118px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: grid !important;
+        justify-items: end !important;
+        gap: 10px !important;
+        text-align: right !important;
+      }
+
+      .poetry-meta span {
+        margin: 0 !important;
+      }
+
+      .poetry-meta time {
+        margin: 0 !important;
+        text-align: right !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .poetry-header {
+        min-height: 86px !important;
+        padding-right: 124px !important;
+      }
+
+      .poetry-meta {
+        min-width: 108px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       POETRY / SONG MOBILE V3 — badge above date, no overlap
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .poetry-header {
+        min-height: 104px !important;
+        padding-right: 142px !important;
+      }
+
+      .poetry-meta {
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+        width: 126px !important;
+        min-width: 126px !important;
+        height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-end !important;
+        justify-content: flex-start !important;
+        gap: 12px !important;
+      }
+
+      .poetry-meta span {
+        position: static !important;
+        display: inline-flex !important;
+        flex: 0 0 auto !important;
+        width: auto !important;
+        height: 27px !important;
+        margin: 0 !important;
+        padding: 0 10px !important;
+      }
+
+      .poetry-meta time {
+        position: static !important;
+        display: block !important;
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        line-height: 1.2 !important;
+        text-align: right !important;
+        white-space: nowrap !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .poetry-header {
+        min-height: 98px !important;
+        padding-right: 124px !important;
+      }
+
+      .poetry-meta {
+        width: 112px !important;
+        min-width: 112px !important;
+        gap: 10px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       POETRY / SONG MOBILE V4 — comfortable side padding
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .poetry-page {
+        width: 100% !important;
+        padding-left: 18px !important;
+        padding-right: 18px !important;
+        box-sizing: border-box !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .poetry-page {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+      }
+    }
+
   </style>
+
+  <script is:inline>
+    document.querySelector('[data-return-works-tab="author"]')?.addEventListener('click', () => {
+      sessionStorage.setItem('ptahen-works-active-tab', 'author');
+    });
+  </script>
+
 </BaseLayout>

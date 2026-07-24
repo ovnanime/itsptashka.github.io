@@ -222,5 +222,161 @@ const nav = [
       })();
     </script>
 
-  </body>
+  
+<script is:inline>
+  (() => {
+    const viewerSelectors = [
+      '[data-image-viewer]',
+      '.image-viewer',
+      '.fullscreen-viewer',
+      '.media-viewer',
+      '.lightbox',
+      '.viewer',
+      'dialog[open]'
+    ];
+
+    const closeSelectors = [
+      '[data-image-viewer-close]',
+      '[data-viewer-close]',
+      '.image-viewer-close',
+      '.fullscreen-viewer-close',
+      '.media-viewer-close',
+      '.lightbox-close',
+      '.viewer-close',
+      'button[aria-label="Закрыть"]',
+      'button[aria-label="Close"]'
+    ];
+
+    let pushedViewerState = false;
+    let closingFromPop = false;
+
+    const isVisible = (el) => {
+      if (!el) return false;
+      if (el instanceof HTMLDialogElement) return el.open;
+      const style = window.getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      return style.display !== 'none' &&
+        style.visibility !== 'hidden' &&
+        style.opacity !== '0' &&
+        rect.width > 0 &&
+        rect.height > 0;
+    };
+
+    const getOpenViewer = () => {
+      for (const selector of viewerSelectors) {
+        const nodes = Array.from(document.querySelectorAll(selector));
+        const found = nodes.find(isVisible);
+        if (found) return found;
+      }
+
+      const fixedNodes = Array.from(document.querySelectorAll('body *')).filter((el) => {
+        const style = window.getComputedStyle(el);
+        const rect = el.getBoundingClientRect();
+        return style.position === 'fixed' &&
+          Number(style.zIndex || 0) >= 50 &&
+          rect.width >= window.innerWidth * 0.75 &&
+          rect.height >= window.innerHeight * 0.75 &&
+          isVisible(el);
+      });
+
+      return fixedNodes[0] || null;
+    };
+
+    const closeViewer = () => {
+      const viewer = getOpenViewer();
+      if (!viewer) return false;
+
+      const closeButton = closeSelectors
+        .map((selector) => viewer.querySelector(selector) || document.querySelector(selector))
+        .find(Boolean);
+
+      if (closeButton) {
+        closeButton.click();
+        return true;
+      }
+
+      if (viewer instanceof HTMLDialogElement) {
+        viewer.close();
+        return true;
+      }
+
+      viewer.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'Escape',
+        code: 'Escape',
+        bubbles: true
+      }));
+
+      document.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'Escape',
+        code: 'Escape',
+        bubbles: true
+      }));
+
+      window.dispatchEvent(new KeyboardEvent('keydown', {
+        key: 'Escape',
+        code: 'Escape',
+        bubbles: true
+      }));
+
+      viewer.classList.remove('is-open', 'open', 'active', 'visible');
+      viewer.setAttribute('aria-hidden', 'true');
+      viewer.hidden = true;
+      document.documentElement.classList.remove('viewer-open', 'lightbox-open');
+      document.body.classList.remove('viewer-open', 'lightbox-open', 'no-scroll');
+
+      return true;
+    };
+
+    const armViewerHistory = () => {
+      if (closingFromPop) return;
+
+      const viewer = getOpenViewer();
+
+      if (viewer && !pushedViewerState) {
+        pushedViewerState = true;
+        history.pushState({ ptahenViewerOpen: true }, '', location.href);
+      }
+
+      if (!viewer && pushedViewerState) {
+        pushedViewerState = false;
+      }
+    };
+
+    document.addEventListener('click', () => {
+      requestAnimationFrame(() => setTimeout(armViewerHistory, 40));
+    }, true);
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        pushedViewerState = false;
+      }
+    }, true);
+
+    window.addEventListener('popstate', () => {
+      const viewer = getOpenViewer();
+
+      if (viewer || pushedViewerState) {
+        closingFromPop = true;
+        closeViewer();
+        pushedViewerState = false;
+        requestAnimationFrame(() => {
+          closingFromPop = false;
+        });
+      }
+    });
+
+    const observer = new MutationObserver(() => {
+      requestAnimationFrame(armViewerHistory);
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'style', 'open', 'hidden', 'aria-hidden']
+    });
+  })();
+</script>
+
+</body>
 </html>

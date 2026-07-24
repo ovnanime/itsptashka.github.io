@@ -3976,3 +3976,1164 @@ body.image-viewer-open {
     max-height: calc(100vh - 104px) !important;
   }
 }
+
+
+/* ========================================================================== 
+   HOME PAGE — MOBILE AND TABLET LAYOUT, FINAL OVERRIDE
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+  .site-header {
+    position: relative !important;
+    z-index: 200 !important;
+  }
+
+  .site-header nav {
+    z-index: 210 !important;
+  }
+
+  .hero {
+    min-height: 0 !important;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.72fr) !important;
+    align-items: center !important;
+    gap: clamp(34px, 5vw, 64px) !important;
+    padding: 42px 0 64px !important;
+  }
+
+  .hero-copy,
+  .hero-visual {
+    min-width: 0 !important;
+  }
+
+  .hero-visual {
+    order: 0 !important;
+    width: 100% !important;
+  }
+
+  .portrait-frame {
+    width: 100% !important;
+    max-height: none !important;
+    aspect-ratio: 4 / 5 !important;
+  }
+
+  .portrait-frame img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .hero h1,
+  .hero h1[style] {
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    hyphens: none !important;
+  }
+
+  .voice-inner {
+    grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr) !important;
+    gap: 54px !important;
+  }
+
+  .coming-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .manifesto-grid {
+    grid-template-columns: minmax(120px, 0.42fr) minmax(0, 1.15fr) minmax(240px, 0.8fr) !important;
+    gap: 36px !important;
+  }
+
+  .split-callout {
+    grid-template-columns: minmax(240px, 0.75fr) minmax(0, 1.25fr) !important;
+    gap: 56px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  html {
+    scrollbar-gutter: auto !important;
+  }
+
+  .shell,
+  .site-header,
+  body > footer.site-footer {
+    width: calc(100% - 36px) !important;
+  }
+
+  .site-header {
+    min-height: 86px !important;
+    padding: 22px 0 !important;
+    align-items: center !important;
+  }
+
+  .brand {
+    max-width: calc(100% - 112px) !important;
+    font-size: clamp(21px, 5.6vw, 26px) !important;
+    line-height: 1.05 !important;
+  }
+
+  .menu-toggle {
+    flex: 0 0 auto !important;
+    min-width: 92px !important;
+    min-height: 48px !important;
+    padding: 0 17px !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+  }
+
+  .site-header nav {
+    top: calc(100% + 1px) !important;
+    left: 0 !important;
+    right: 0 !important;
+    padding: 8px !important;
+    background: rgba(10, 10, 10, 0.98) !important;
+    box-shadow: 0 22px 50px rgba(0, 0, 0, 0.52) !important;
+  }
+
+  .site-header nav a {
+    padding: 14px 12px !important;
+    font-size: 16px !important;
+  }
+
+  .hero {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 38px !important;
+    padding: 34px 0 62px !important;
+  }
+
+  .hero-visual {
+    order: -1 !important;
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    padding-right: 0 !important;
+  }
+
+  .portrait-frame {
+    width: 100% !important;
+    max-width: none !important;
+    aspect-ratio: 16 / 11 !important;
+    overflow: hidden !important;
+  }
+
+  .portrait-frame img {
+    object-position: center 30% !important;
+  }
+
+  .portrait-caption {
+    left: 14px !important;
+    bottom: 14px !important;
+    max-width: calc(100% - 86px) !important;
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+  }
+
+  .vertical-note {
+    position: absolute !important;
+    top: 14px !important;
+    right: 12px !important;
+    z-index: 2 !important;
+    height: calc(100% - 28px) !important;
+    max-height: none !important;
+    writing-mode: vertical-rl !important;
+    text-orientation: mixed !important;
+    font-size: 10px !important;
+    line-height: 1 !important;
+    letter-spacing: 0.23em !important;
+    color: rgba(255, 255, 255, 0.62) !important;
+    pointer-events: none !important;
+  }
+
+  .hero-copy {
+    width: 100% !important;
+  }
+
+  .hero .eyebrow {
+    margin-bottom: 15px !important;
+    font-size: 11px !important;
+    letter-spacing: 0.2em !important;
+  }
+
+  .hero h1,
+  .hero h1[style] {
+    max-width: 100% !important;
+    margin: 0 0 18px !important;
+    font-size: clamp(40px, 11.4vw, 58px) !important;
+    line-height: 0.98 !important;
+    letter-spacing: -0.055em !important;
+  }
+
+  .hero h1[style] {
+    margin-top: 4px !important;
+    font-size: clamp(28px, 8.4vw, 39px) !important;
+    line-height: 1.05 !important;
+  }
+
+  .lead {
+    max-width: none !important;
+    margin-top: 26px !important;
+    font-size: 18px !important;
+    line-height: 1.55 !important;
+  }
+
+  .hero-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin: 30px 0 38px !important;
+  }
+
+  .hero-actions .button {
+    width: 100% !important;
+    min-height: 54px !important;
+    padding: 12px 14px !important;
+    font-size: 15px !important;
+    text-align: center !important;
+  }
+
+  .hero-facts {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    padding-top: 24px !important;
+  }
+
+  .hero-facts span {
+    width: auto !important;
+    min-width: 0 !important;
+    font-size: 12px !important;
+  }
+
+  .hero-facts b {
+    margin-bottom: 8px !important;
+    font-size: 31px !important;
+  }
+
+  .voice-strip {
+    scroll-margin-top: 96px !important;
+  }
+
+  .voice-inner {
+    display: block !important;
+    padding: 62px 0 !important;
+  }
+
+  .voice-inner > div:first-child {
+    margin-bottom: 34px !important;
+  }
+
+  .voice-inner h2 {
+    font-size: clamp(34px, 9vw, 48px) !important;
+  }
+
+  .voice-inner > div:first-child > p:last-child {
+    max-width: 34rem !important;
+    font-size: 16px !important;
+    line-height: 1.55 !important;
+  }
+
+  .audio-compare-player {
+    --wave-width: 100% !important;
+    width: 100% !important;
+    grid-template-columns: 64px minmax(0, 1fr) !important;
+    column-gap: 18px !important;
+  }
+
+  .audio-compare-player .player-play {
+    width: 64px !important;
+    height: 64px !important;
+  }
+
+  .audio-compare-player .wave {
+    gap: 2px !important;
+  }
+
+  .section {
+    padding: 72px 0 !important;
+  }
+
+  .section-head--compact {
+    margin-bottom: 32px !important;
+  }
+
+  .section-head h2 {
+    font-size: clamp(34px, 9vw, 46px) !important;
+    line-height: 1.05 !important;
+  }
+
+  .section-more-link {
+    display: inline-block !important;
+    margin-top: 14px !important;
+    font-size: 15px !important;
+  }
+
+  .coming-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+  }
+
+  .coming-card {
+    min-width: 0 !important;
+  }
+
+  .coming-banner {
+    aspect-ratio: 16 / 9 !important;
+    min-height: 0 !important;
+  }
+
+  .coming-meta {
+    padding-top: 16px !important;
+  }
+
+  .coming-meta h3 {
+    font-size: 22px !important;
+    line-height: 1.15 !important;
+  }
+
+  .coming-meta p {
+    font-size: 15px !important;
+    line-height: 1.55 !important;
+  }
+
+  .coming-card--placeholder {
+    display: none !important;
+  }
+
+  .manifesto {
+    padding: 54px 0 !important;
+  }
+
+  .manifesto-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+    padding: 30px 26px !important;
+  }
+
+  .manifesto-grid .eyebrow {
+    margin-bottom: 0 !important;
+  }
+
+  .manifesto-grid blockquote {
+    margin: 0 !important;
+    font-size: clamp(28px, 7.7vw, 39px) !important;
+    line-height: 1.23 !important;
+    letter-spacing: -0.035em !important;
+  }
+
+  .manifesto-grid > div p {
+    font-size: 16px !important;
+    line-height: 1.65 !important;
+  }
+
+  .manifesto-grid .text-link {
+    display: inline-block !important;
+    margin-top: 20px !important;
+    font-size: 16px !important;
+  }
+
+  .split-callout {
+    display: block !important;
+    padding: 76px 0 !important;
+  }
+
+  .split-callout > div:first-child {
+    margin-bottom: 42px !important;
+  }
+
+  .split-callout h2 {
+    max-width: 12ch !important;
+    font-size: clamp(36px, 9.7vw, 50px) !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.045em !important;
+  }
+
+  .discipline-list a {
+    display: grid !important;
+    grid-template-columns: 42px minmax(0, 1fr) !important;
+    gap: 8px 18px !important;
+    padding: 24px 0 !important;
+  }
+
+  .discipline-list a span {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    padding-top: 3px !important;
+  }
+
+  .discipline-list a b {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    min-width: 0 !important;
+    font-size: 20px !important;
+    line-height: 1.25 !important;
+  }
+
+  .discipline-list a p {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    max-width: none !important;
+    margin: 8px 0 0 !important;
+    font-size: 15px !important;
+    line-height: 1.55 !important;
+  }
+
+  body > footer.site-footer {
+    padding: 26px 0 30px !important;
+  }
+
+  body > footer.site-footer .footer-right {
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    gap: 18px !important;
+    align-items: center !important;
+  }
+
+  body > footer.site-footer .footer-links {
+    gap: 16px 20px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .shell,
+  .site-header,
+  body > footer.site-footer {
+    width: calc(100% - 28px) !important;
+  }
+
+  .site-header {
+    min-height: 78px !important;
+  }
+
+  .brand {
+    max-width: calc(100% - 98px) !important;
+    font-size: 20px !important;
+  }
+
+  .menu-toggle {
+    min-width: 84px !important;
+    min-height: 44px !important;
+    padding: 0 13px !important;
+    font-size: 15px !important;
+  }
+
+  .hero {
+    padding-top: 26px !important;
+  }
+
+  .portrait-frame {
+    aspect-ratio: 4 / 3 !important;
+  }
+
+  .hero-actions {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 5px !important;
+  }
+
+  .hero-facts b {
+    font-size: 27px !important;
+  }
+
+  .hero-facts span {
+    font-size: 11px !important;
+  }
+
+  .audio-compare-player {
+    grid-template-columns: 56px minmax(0, 1fr) !important;
+    column-gap: 14px !important;
+  }
+
+  .audio-compare-player .player-play {
+    width: 56px !important;
+    height: 56px !important;
+  }
+
+  .manifesto-grid {
+    padding: 26px 20px !important;
+  }
+
+  body > footer.site-footer .footer-right {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* ==========================================================================
+   HOME PAGE — MOBILE COMPOSITION V2
+   ========================================================================== */
+
+.hero-visual--mobile {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  /* Hero: text → portrait → buttons → facts */
+  .hero {
+    gap: 0 !important;
+    padding: 30px 0 46px !important;
+  }
+
+  .hero-visual--desktop {
+    display: none !important;
+  }
+
+  .hero-visual--mobile {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    margin: 28px 0 20px !important;
+    padding: 0 !important;
+  }
+
+  .hero-visual--mobile .portrait-frame {
+    width: 100% !important;
+    aspect-ratio: 16 / 10 !important;
+  }
+
+  .hero-visual--mobile .portrait-frame img {
+    object-position: center 28% !important;
+  }
+
+  .hero-visual--mobile .portrait-caption {
+    left: 14px !important;
+    bottom: 14px !important;
+    max-width: calc(100% - 88px) !important;
+  }
+
+  .hero-visual--mobile .vertical-note {
+    top: 14px !important;
+    right: 12px !important;
+    height: calc(100% - 28px) !important;
+  }
+
+  .lead {
+    margin-bottom: 0 !important;
+  }
+
+  .hero-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+    margin: 0 0 28px !important;
+  }
+
+  .hero-actions .button {
+    min-height: 48px !important;
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+    white-space: nowrap !important;
+  }
+
+  .hero-facts {
+    padding-top: 22px !important;
+  }
+
+  /* Voice: compact text block directly above a full-width player */
+  .voice-inner {
+    width: calc(100% - 36px) !important;
+    padding: 46px 0 50px !important;
+  }
+
+  .voice-inner > div:first-child {
+    width: 100% !important;
+    margin-bottom: 24px !important;
+  }
+
+  .voice-inner h2 {
+    margin-bottom: 12px !important;
+    font-size: clamp(31px, 8vw, 40px) !important;
+  }
+
+  .voice-inner > div:first-child > p:last-child {
+    max-width: none !important;
+    margin: 0 !important;
+    font-size: 15px !important;
+    line-height: 1.5 !important;
+  }
+
+  .audio-compare-player {
+    width: 100% !important;
+    max-width: none !important;
+    grid-template-columns: 58px minmax(0, 1fr) !important;
+    column-gap: 14px !important;
+    padding: 18px 16px !important;
+    border: 1px solid rgba(255,255,255,0.11) !important;
+    background: rgba(255,255,255,0.025) !important;
+    box-sizing: border-box !important;
+  }
+
+  .audio-compare-player .player-play {
+    width: 58px !important;
+    height: 58px !important;
+  }
+
+  /* Journal: keep all three cards, only make them slightly tighter */
+  .coming-grid {
+    gap: 22px !important;
+  }
+
+  .coming-card--placeholder {
+    display: block !important;
+  }
+
+  .coming-banner {
+    aspect-ratio: 16 / 8.4 !important;
+  }
+
+  .coming-meta {
+    padding-top: 13px !important;
+  }
+
+  .coming-meta h3 {
+    margin-bottom: 7px !important;
+    font-size: 20px !important;
+  }
+
+  .coming-meta p {
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+  }
+
+  /* Keep the manifesto exactly as designed in the previous patch. */
+
+  /* Two crafts: full-width heading, compact three-row table */
+  .split-callout {
+    padding: 62px 0 24px !important;
+  }
+
+  .split-callout > div:first-child {
+    margin-bottom: 30px !important;
+  }
+
+  .split-callout h2 {
+    width: 100% !important;
+    max-width: none !important;
+    font-size: clamp(31px, 8.1vw, 42px) !important;
+    line-height: 1.08 !important;
+    letter-spacing: -0.04em !important;
+  }
+
+  .split-callout h2 br {
+    display: none !important;
+  }
+
+  .discipline-list a {
+    grid-template-columns: 32px minmax(0, 1fr) !important;
+    gap: 5px 12px !important;
+    padding: 18px 0 !important;
+  }
+
+  .discipline-list a span {
+    font-size: 13px !important;
+  }
+
+  .discipline-list a b {
+    font-size: 18px !important;
+    line-height: 1.2 !important;
+  }
+
+  .discipline-list a p {
+    margin-top: 5px !important;
+    font-size: 14px !important;
+    line-height: 1.45 !important;
+  }
+
+  body > footer.site-footer {
+    margin-top: 0 !important;
+    padding-top: 18px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .hero-visual--mobile {
+    margin-top: 24px !important;
+  }
+
+  .hero-visual--mobile .portrait-frame {
+    aspect-ratio: 4 / 3 !important;
+  }
+
+  .hero-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .hero-actions .button {
+    min-height: 46px !important;
+    padding-inline: 8px !important;
+    font-size: 13px !important;
+  }
+
+  .voice-inner {
+    width: calc(100% - 28px) !important;
+  }
+
+  .audio-compare-player {
+    grid-template-columns: 52px minmax(0, 1fr) !important;
+    padding: 15px 12px !important;
+  }
+
+  .audio-compare-player .player-play {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .split-callout {
+    padding-bottom: 18px !important;
+  }
+}
+
+
+/* ==========================================================================
+   MOBILE FOOTER — contacts left, copyright fixed right
+   ========================================================================== */
+
+@media (max-width: 760px) {
+  body > footer.site-footer {
+    width: min(100% - 32px, var(--max)) !important;
+    min-height: auto !important;
+    display: block !important;
+    padding: 18px 0 22px !important;
+  }
+
+  body > footer.site-footer .footer-brand {
+    display: none !important;
+  }
+
+  body > footer.site-footer .footer-right {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+  }
+
+  body > footer.site-footer .footer-links {
+    min-width: 0 !important;
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: clamp(14px, 4vw, 24px) !important;
+  }
+
+  body > footer.site-footer .footer-links a {
+    white-space: nowrap !important;
+  }
+
+  body > footer.site-footer .footer-copy {
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+    white-space: nowrap !important;
+    text-align: right !important;
+  }
+}
+
+@media (max-width: 390px) {
+  body > footer.site-footer .footer-links {
+    gap: 12px !important;
+  }
+
+  body > footer.site-footer .footer-links a,
+  body > footer.site-footer .footer-copy {
+    font-size: 12px !important;
+  }
+}
+
+
+/* ==========================================================================
+   HOME MOBILE V4 — smaller portrait, footer spacing and readability
+   ========================================================================== */
+
+@media (max-width: 760px) {
+  .hero-visual--mobile {
+    width: min(100%, 560px) !important;
+    margin: 26px auto 20px !important;
+    padding: 0 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  .hero-visual--mobile .portrait-frame {
+    width: 100% !important;
+    aspect-ratio: 16 / 8.8 !important;
+  }
+
+  .split-callout {
+    padding-bottom: 58px !important;
+  }
+
+  body > footer.site-footer {
+    width: min(100% - 32px, var(--max)) !important;
+    padding: 26px 0 30px !important;
+  }
+
+  body > footer.site-footer .footer-right {
+    gap: 20px !important;
+  }
+
+  body > footer.site-footer .footer-links {
+    gap: clamp(16px, 4.8vw, 28px) !important;
+  }
+
+  body > footer.site-footer .footer-links a,
+  body > footer.site-footer .footer-copy {
+    font-size: 15px !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .hero-visual--mobile {
+    width: calc(100% - 24px) !important;
+    margin-top: 22px !important;
+    padding: 0 !important;
+  }
+
+  .hero-visual--mobile .portrait-frame {
+    aspect-ratio: 16 / 9.2 !important;
+  }
+
+  .split-callout {
+    padding-bottom: 50px !important;
+  }
+
+  body > footer.site-footer {
+    width: calc(100% - 28px) !important;
+    padding: 24px 0 28px !important;
+  }
+
+  body > footer.site-footer .footer-right {
+    gap: 12px !important;
+  }
+
+  body > footer.site-footer .footer-links {
+    gap: 14px !important;
+  }
+
+  body > footer.site-footer .footer-links a,
+  body > footer.site-footer .footer-copy {
+    font-size: 13px !important;
+  }
+}
+
+
+/* ==========================================================================
+   HOME MOBILE V5 — compact spacing around the Approach block
+   ========================================================================== */
+
+@media (max-width: 760px) {
+  .manifesto-wrap {
+    padding-top: 34px !important;
+    padding-bottom: 34px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .manifesto-wrap {
+    padding-top: 26px !important;
+    padding-bottom: 26px !important;
+  }
+}
+
+
+/* ==========================================================================
+   HOME MOBILE V6 — tighter spacing around the Approach block
+   ========================================================================== */
+
+@media (max-width: 760px) {
+  .manifesto-wrap {
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .manifesto-wrap {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+}
+
+
+/* ==========================================================================
+   HOME MOBILE V7 — reduce the actual gaps above and below the Approach card
+   ========================================================================== */
+
+@media (max-width: 760px) {
+  .manifesto {
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .manifesto {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+}
+
+
+/* ==========================================================================
+   GLOBAL TEXT FORMATTING — justified readable prose
+   Applies to regular page text on desktop and mobile.
+   Poetry and song pages are excluded.
+   ========================================================================== */
+
+main p:not(.approach-label):not(.eyebrow):not(.kicker):not(.meta):not(.tag):not(.badge):not(.chip):not(.work-meta):not(.release-meta):not(.journal-meta):not(.author-meta):not(.poetry-meta):not(.site-meta),
+main li {
+  text-align: justify;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.poetry-page p,
+.poetry-page li,
+.author-page p,
+.author-page li,
+.poem-content p,
+.poem-content li,
+.song-content p,
+.song-content li,
+.lyrics p,
+.lyrics li,
+pre,
+code {
+  text-align: initial !important;
+  hyphens: manual !important;
+}
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   CONTACT PAGE ONLY — larger gap before footer
+   ========================================================================== */
+
+body:has(main.contact-page) main.contact-page,
+body:has(main.contacts-page) main.contacts-page,
+body:has(.contact-page) .contact-page,
+body:has(.contacts-page) .contacts-page,
+main.contact-page,
+main.contacts-page {
+  padding-bottom: 64px !important;
+}
+
+@media (max-width: 700px) {
+  body:has(main.contact-page) main.contact-page,
+  body:has(main.contacts-page) main.contacts-page,
+  body:has(.contact-page) .contact-page,
+  body:has(.contacts-page) .contacts-page,
+  main.contact-page,
+  main.contacts-page {
+    padding-bottom: 56px !important;
+  }
+}
+
+
+/* ==========================================================================
+   MOBILE MENU — designed square button and compact dropdown
+   ========================================================================== */
+
+@media (max-width: 980px) {
+  .menu-toggle {
+    position: relative !important;
+    display: inline-grid !important;
+    grid-template-columns: 16px auto !important;
+    align-items: center !important;
+    gap: 9px !important;
+    min-width: 74px !important;
+    height: 38px !important;
+    padding: 0 12px !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    border-radius: 4px !important;
+    background:
+      linear-gradient(135deg, rgba(255,255,255,0.10), rgba(255,255,255,0.02)) !important;
+    color: #f4f4f4 !important;
+    font-size: 12px !important;
+    line-height: 1 !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.035),
+      0 10px 24px rgba(0,0,0,0.24) !important;
+  }
+
+  .menu-toggle::before {
+    content: "" !important;
+    display: block !important;
+    width: 16px !important;
+    height: 10px !important;
+    background:
+      linear-gradient(#fff, #fff) 0 0 / 16px 1px no-repeat,
+      linear-gradient(#fff, #fff) 0 50% / 12px 1px no-repeat,
+      linear-gradient(#fff, #fff) 0 100% / 16px 1px no-repeat !important;
+    opacity: 0.9 !important;
+  }
+
+  .menu-toggle::after {
+    content: "" !important;
+    position: absolute !important;
+    inset: 5px !important;
+    border: 1px solid rgba(255,255,255,0.055) !important;
+    pointer-events: none !important;
+  }
+
+  .site-header nav {
+    top: 66px !important;
+    padding: 8px !important;
+    gap: 2px !important;
+    border-radius: 6px !important;
+    background: rgba(10, 10, 10, 0.98) !important;
+    box-shadow: 0 18px 38px rgba(0,0,0,0.35) !important;
+  }
+
+  .site-header nav a {
+    padding: 9px 10px !important;
+    font-size: 13px !important;
+    line-height: 1.1 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.055) !important;
+  }
+
+  .site-header nav a:last-child {
+    border-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .menu-toggle {
+    min-width: 68px !important;
+    height: 36px !important;
+    padding: 0 10px !important;
+    gap: 8px !important;
+    font-size: 11px !important;
+  }
+
+  .site-header nav {
+    top: 62px !important;
+    padding: 7px !important;
+  }
+
+  .site-header nav a {
+    padding: 8px 9px !important;
+    font-size: 12.5px !important;
+  }
+}
+
+
+/* ==========================================================================
+   MOBILE MENU — less glossy button, larger tap targets
+   ========================================================================== */
+
+@media (max-width: 980px) {
+  .menu-toggle {
+    min-width: 82px !important;
+    height: 42px !important;
+    padding: 0 13px !important;
+    gap: 10px !important;
+    border-radius: 4px !important;
+    border-color: rgba(255, 255, 255, 0.18) !important;
+    background: #0d0d0d !important;
+    color: #f2f2f2 !important;
+    font-size: 12.5px !important;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.025) !important;
+  }
+
+  .menu-toggle::after {
+    inset: 6px !important;
+    border-color: rgba(255,255,255,0.045) !important;
+  }
+
+  .site-header nav {
+    top: 70px !important;
+    padding: 10px !important;
+    gap: 4px !important;
+  }
+
+  .site-header nav a {
+    padding: 12px 12px !important;
+    font-size: 14px !important;
+    line-height: 1.2 !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .menu-toggle {
+    min-width: 78px !important;
+    height: 40px !important;
+    padding: 0 12px !important;
+    gap: 9px !important;
+    font-size: 12px !important;
+  }
+
+  .site-header nav {
+    top: 66px !important;
+    padding: 9px !important;
+  }
+
+  .site-header nav a {
+    padding: 11px 11px !important;
+    font-size: 13.5px !important;
+  }
+}
+
+
+/* ==========================================================================
+   MOBILE MENU — medium dropdown size
+   ========================================================================== */
+
+@media (max-width: 980px) {
+  .site-header nav {
+    top: 72px !important;
+    padding: 12px !important;
+    gap: 5px !important;
+  }
+
+  .site-header nav a {
+    padding: 14px 13px !important;
+    font-size: 14.5px !important;
+    line-height: 1.22 !important;
+  }
+}
+
+@media (max-width: 620px) {
+  .site-header nav {
+    top: 68px !important;
+    padding: 11px !important;
+    gap: 4px !important;
+  }
+
+  .site-header nav a {
+    padding: 13px 12px !important;
+    font-size: 14px !important;
+    line-height: 1.22 !important;
+  }
+}
+
+
+/* ==========================================================================
+   HASHLESS SECTION BUTTONS
+   ========================================================================== */
+
+button.button {
+  font: inherit;
+  cursor: pointer;
+}

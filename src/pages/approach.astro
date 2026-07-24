@@ -292,5 +292,541 @@ const steps = [
       line-height: 1.55 !important;
     }
 
+  
+    /* ======================================================================
+       APPROACH MOBILE — stack card content instead of squeezing the text
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card,
+      .method-card,
+      .process-card {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        grid-template-areas:
+          "number"
+          "content"
+          "label" !important;
+        gap: 18px !important;
+        min-height: 0 !important;
+        padding: 24px 22px !important;
+      }
+
+      .approach-card-number,
+      .method-card-number,
+      .process-card-number,
+      .approach-step,
+      .method-step {
+        grid-area: number !important;
+        position: static !important;
+        width: auto !important;
+        margin: 0 !important;
+        font-size: 42px !important;
+        line-height: 1 !important;
+      }
+
+      .approach-card-content,
+      .method-card-content,
+      .process-card-content,
+      .approach-card-main,
+      .method-card-main {
+        grid-area: content !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .approach-card-content h2,
+      .approach-card-content h3,
+      .method-card-content h2,
+      .method-card-content h3,
+      .process-card-content h2,
+      .process-card-content h3,
+      .approach-card-main h2,
+      .approach-card-main h3,
+      .method-card-main h2,
+      .method-card-main h3 {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 0 12px !important;
+        font-size: 27px !important;
+        line-height: 1.08 !important;
+      }
+
+      .approach-card-content p,
+      .method-card-content p,
+      .process-card-content p,
+      .approach-card-main p,
+      .method-card-main p {
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        font-size: 16px !important;
+        line-height: 1.5 !important;
+      }
+
+      .approach-card-label,
+      .method-card-label,
+      .process-card-label,
+      .approach-card-tag,
+      .method-card-tag {
+        grid-area: label !important;
+        position: static !important;
+        width: 100% !important;
+        margin: 4px 0 0 !important;
+        padding-top: 16px !important;
+        border-top: 1px solid rgba(255,255,255,0.1) !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       APPROACH MOBILE V2 — compact top row and full-width content
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card,
+      .method-card,
+      .process-card {
+        display: grid !important;
+        grid-template-columns: auto minmax(0, 1fr) !important;
+        grid-template-areas:
+          "number label"
+          "content content" !important;
+        gap: 18px 20px !important;
+        min-height: 0 !important;
+        padding: 22px 20px 24px !important;
+        align-items: start !important;
+      }
+
+      .approach-card-number,
+      .method-card-number,
+      .process-card-number,
+      .approach-step,
+      .method-step {
+        grid-area: number !important;
+        position: static !important;
+        margin: 0 !important;
+        align-self: center !important;
+        font-size: 38px !important;
+        line-height: 1 !important;
+      }
+
+      .approach-card-label,
+      .method-card-label,
+      .process-card-label,
+      .approach-card-tag,
+      .method-card-tag {
+        grid-area: label !important;
+        position: static !important;
+        width: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border: 0 !important;
+        align-self: center !important;
+        justify-self: end !important;
+        text-align: right !important;
+      }
+
+      .approach-card-content,
+      .method-card-content,
+      .process-card-content,
+      .approach-card-main,
+      .method-card-main {
+        grid-area: content !important;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 18px 0 0 !important;
+        border-top: 1px solid rgba(255,255,255,0.1) !important;
+      }
+
+      .approach-card-content h2,
+      .approach-card-content h3,
+      .method-card-content h2,
+      .method-card-content h3,
+      .process-card-content h2,
+      .process-card-content h3,
+      .approach-card-main h2,
+      .approach-card-main h3,
+      .method-card-main h2,
+      .method-card-main h3 {
+        margin: 0 0 10px !important;
+        font-size: 25px !important;
+        line-height: 1.1 !important;
+      }
+
+      .approach-card-content p,
+      .method-card-content p,
+      .process-card-content p,
+      .approach-card-main p,
+      .method-card-main p {
+        margin: 0 !important;
+        font-size: 15px !important;
+        line-height: 1.52 !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .approach-card,
+      .method-card,
+      .process-card {
+        gap: 16px !important;
+        padding: 20px 18px 22px !important;
+      }
+
+      .approach-card-number,
+      .method-card-number,
+      .process-card-number,
+      .approach-step,
+      .method-step {
+        font-size: 34px !important;
+      }
+
+      .approach-card-content h2,
+      .approach-card-content h3,
+      .method-card-content h2,
+      .method-card-content h3,
+      .process-card-content h2,
+      .process-card-content h3,
+      .approach-card-main h2,
+      .approach-card-main h3,
+      .method-card-main h2,
+      .method-card-main h3 {
+        font-size: 23px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       APPROACH MOBILE — balance only the first card
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card:first-child {
+        grid-template-columns: 132px minmax(0, 1fr) !important;
+        gap: 16px !important;
+      }
+
+      .approach-card:first-child .approach-card-index {
+        padding-right: 14px !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .approach-card:first-child {
+        grid-template-columns: 118px minmax(0, 1fr) !important;
+        gap: 14px !important;
+      }
+
+      .approach-card:first-child .approach-card-index {
+        padding-right: 12px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       APPROACH MOBILE — smaller left labels/numbers and footer breathing room
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card-number,
+      .method-card-number,
+      .process-card-number,
+      .approach-step,
+      .method-step {
+        font-size: 32px !important;
+        line-height: 1 !important;
+      }
+
+      .approach-card-label,
+      .method-card-label,
+      .process-card-label,
+      .approach-card-tag,
+      .method-card-tag {
+        font-size: 11px !important;
+        line-height: 1.35 !important;
+        letter-spacing: 0.13em !important;
+      }
+
+      .approach-card:first-child {
+        grid-template-columns: 112px minmax(0, 1fr) !important;
+        gap: 14px !important;
+      }
+
+      .approach-page,
+      .approach-main,
+      main:has(.approach-card) {
+        padding-bottom: 54px !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .approach-card-number,
+      .method-card-number,
+      .process-card-number,
+      .approach-step,
+      .method-step {
+        font-size: 29px !important;
+      }
+
+      .approach-card-label,
+      .method-card-label,
+      .process-card-label,
+      .approach-card-tag,
+      .method-card-tag {
+        font-size: 10px !important;
+      }
+
+      .approach-card:first-child {
+        grid-template-columns: 102px minmax(0, 1fr) !important;
+        gap: 12px !important;
+      }
+
+      .approach-page,
+      .approach-main,
+      main:has(.approach-card) {
+        padding-bottom: 46px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       APPROACH MOBILE — slightly smaller left label in first card only
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card:first-child .approach-card-label,
+      .approach-card:first-child .approach-card-tag,
+      .approach-card:first-child .method-card-label,
+      .approach-card:first-child .method-card-tag {
+        font-size: 9.5px !important;
+        letter-spacing: 0.11em !important;
+        line-height: 1.3 !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .approach-card:first-child .approach-card-label,
+      .approach-card:first-child .approach-card-tag,
+      .approach-card:first-child .method-card-label,
+      .approach-card:first-child .method-card-tag {
+        font-size: 9px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       APPROACH MOBILE — reduce the actual left text in the first card
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card:first-child .approach-card-index b {
+        font-size: 11px !important;
+        line-height: 1.28 !important;
+        letter-spacing: 0.13em !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .approach-card:first-child .approach-card-index b {
+        font-size: 10px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       APPROACH MOBILE — unify all left labels
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card .approach-card-index b {
+        font-size: 11px !important;
+        line-height: 1.28 !important;
+        letter-spacing: 0.13em !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .approach-card .approach-card-index b {
+        font-size: 10px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       APPROACH MOBILE — slightly smaller numbers, slightly larger left labels
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card .approach-card-index span {
+        font-size: 30px !important;
+        line-height: 1 !important;
+      }
+
+      .approach-card .approach-card-index b {
+        font-size: 12px !important;
+        line-height: 1.3 !important;
+        letter-spacing: 0.13em !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .approach-card .approach-card-index span {
+        font-size: 27px !important;
+      }
+
+      .approach-card .approach-card-index b {
+        font-size: 11px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       APPROACH MOBILE — slightly larger text under the numbers
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card .approach-card-index b {
+        font-size: 13px !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .approach-card .approach-card-index b {
+        font-size: 12px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       APPROACH MOBILE — clearly larger text under the numbers
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card .approach-card-index b {
+        font-size: 15px !important;
+        line-height: 1.32 !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .approach-card .approach-card-index b {
+        font-size: 14px !important;
+      }
+    }
+
+  
+
+    /* ======================================================================
+       APPROACH MOBILE — shift cards 2 and 3 text to the right to match card 1
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card:nth-child(2),
+      .approach-card:nth-child(3) {
+        grid-template-columns: 112px minmax(0, 1fr) !important;
+        gap: 14px !important;
+      }
+
+      .approach-card:nth-child(2) .approach-card-index,
+      .approach-card:nth-child(3) .approach-card-index {
+        padding-right: 14px !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .approach-card:nth-child(2),
+      .approach-card:nth-child(3) {
+        grid-template-columns: 102px minmax(0, 1fr) !important;
+        gap: 12px !important;
+      }
+
+      .approach-card:nth-child(2) .approach-card-index,
+      .approach-card:nth-child(3) .approach-card-index {
+        padding-right: 12px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       APPROACH MOBILE — first label exactly matches labels 2 and 3
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card:first-child .approach-card-index b,
+      .approach-card:nth-child(2) .approach-card-index b,
+      .approach-card:nth-child(3) .approach-card-index b {
+        font-size: 15px !important;
+        line-height: 1.32 !important;
+        letter-spacing: 0.13em !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .approach-card:first-child .approach-card-index b,
+      .approach-card:nth-child(2) .approach-card-index b,
+      .approach-card:nth-child(3) .approach-card-index b {
+        font-size: 14px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       APPROACH MOBILE — medium label size under all numbers
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card:first-child .approach-card-index b,
+      .approach-card:nth-child(2) .approach-card-index b,
+      .approach-card:nth-child(3) .approach-card-index b {
+        font-size: 14px !important;
+        line-height: 1.32 !important;
+        letter-spacing: 0.13em !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .approach-card:first-child .approach-card-index b,
+      .approach-card:nth-child(2) .approach-card-index b,
+      .approach-card:nth-child(3) .approach-card-index b {
+        font-size: 13px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       APPROACH MOBILE — final equal visual size for all labels under numbers
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .approach-card .approach-card-index b,
+      .approach-card:first-child .approach-card-index b,
+      .approach-card:nth-child(2) .approach-card-index b,
+      .approach-card:nth-child(3) .approach-card-index b {
+        font-size: 14px !important;
+        line-height: 1.3 !important;
+        letter-spacing: 0.12em !important;
+      }
+
+      .approach-card:first-child .approach-card-index b {
+        letter-spacing: 0.105em !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .approach-card .approach-card-index b,
+      .approach-card:first-child .approach-card-index b,
+      .approach-card:nth-child(2) .approach-card-index b,
+      .approach-card:nth-child(3) .approach-card-index b {
+        font-size: 13px !important;
+      }
+
+      .approach-card:first-child .approach-card-index b {
+        letter-spacing: 0.095em !important;
+      }
+    }
+
   </style>
 </BaseLayout>

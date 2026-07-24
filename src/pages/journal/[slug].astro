@@ -42,30 +42,43 @@ const { Content } = await render(entry);
   </main>
 
   <script is:inline>
-    const smartBackLink = document.querySelector('[data-smart-back]');
+    (() => {
+      const smartBackLink = document.querySelector('[data-smart-back]');
+      if (!smartBackLink) return;
 
-    if (smartBackLink) {
       const fallbackHref = '/';
-      const referrer = document.referrer;
+      let canRestorePreviousPage = false;
 
       try {
-        const referrerUrl = referrer ? new URL(referrer) : null;
-        const isSameOrigin = referrerUrl && referrerUrl.origin === window.location.origin;
+        const referrerUrl = document.referrer ? new URL(document.referrer) : null;
+        const isSameOrigin =
+          referrerUrl && referrerUrl.origin === window.location.origin;
+
         const referrerPath = isSameOrigin ? referrerUrl.pathname : '';
+
+        canRestorePreviousPage =
+          referrerPath === '/' ||
+          referrerPath === '/journal' ||
+          referrerPath === '/journal/';
 
         if (referrerPath === '/journal' || referrerPath === '/journal/') {
           smartBackLink.setAttribute('href', '/journal');
-        } else if (referrerPath === '/' || referrerPath === '') {
-          smartBackLink.setAttribute('href', fallbackHref);
-        } else if (isSameOrigin) {
-          smartBackLink.setAttribute('href', referrerPath + referrerUrl.search + referrerUrl.hash);
+        } else if (referrerPath === '/') {
+          smartBackLink.setAttribute('href', '/#journal');
         } else {
           smartBackLink.setAttribute('href', fallbackHref);
         }
       } catch {
         smartBackLink.setAttribute('href', fallbackHref);
       }
-    }
+
+      smartBackLink.addEventListener('click', (event) => {
+        if (!canRestorePreviousPage || window.history.length <= 1) return;
+
+        event.preventDefault();
+        window.history.back();
+      });
+    })();
   </script>
 
   <style>

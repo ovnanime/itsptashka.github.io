@@ -693,5 +693,164 @@ const gear = [
       margin: 0 0 14px !important;
     }
 
+  
+    /* ======================================================================
+       ABOUT — mobile polish for text and photos
+       ====================================================================== */
+
+    @media (max-width: 700px) {
+      .abv4-hero p,
+      .abv4-project-text p:not(.abv4-label),
+      .abv4-story-card p {
+        font-size: 15px !important;
+        line-height: 1.48 !important;
+      }
+
+      .abv4-main-photo {
+        width: min(100%, 340px) !important;
+        max-width: 340px !important;
+        min-height: 0 !important;
+        height: auto !important;
+        aspect-ratio: 1 / 1 !important;
+        justify-self: center !important;
+        align-self: center !important;
+      }
+
+      .abv4-main-photo img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+      }
+
+      .abv4-logo-slot {
+        order: -1 !important;
+        width: min(100%, 300px) !important;
+        max-width: 300px !important;
+        min-height: 210px !important;
+        justify-self: center !important;
+      }
+
+      .abv4-project-text {
+        padding: 18px !important;
+      }
+
+      .abv4-timeline-layout {
+        align-items: start !important;
+      }
+
+      .abv4-timeline-photo {
+        width: min(100%, 300px) !important;
+        max-width: 300px !important;
+        min-height: 0 !important;
+        height: 330px !important;
+        justify-self: center !important;
+      }
+
+      .abv4-timeline-photo img {
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .abv4-hero p,
+      .abv4-project-text p:not(.abv4-label),
+      .abv4-story-card p {
+        font-size: 14.5px !important;
+        line-height: 1.46 !important;
+      }
+
+      .abv4-main-photo {
+        width: min(100%, 310px) !important;
+        max-width: 310px !important;
+      }
+
+      .abv4-logo-slot {
+        width: min(100%, 280px) !important;
+        max-width: 280px !important;
+        min-height: 196px !important;
+      }
+
+      .abv4-timeline-photo {
+        width: min(100%, 280px) !important;
+        max-width: 280px !important;
+        height: 305px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       ABOUT — mobile photos/logo full block width, no full-body crop
+       ====================================================================== */
+
+    @media (max-width: 700px) {
+      .abv4-main-photo {
+        width: 100% !important;
+        max-width: none !important;
+        min-height: 0 !important;
+        height: auto !important;
+        aspect-ratio: 1440 / 1079 !important;
+        justify-self: stretch !important;
+        align-self: stretch !important;
+      }
+
+      .abv4-main-photo img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
+      }
+
+      .abv4-logo-slot {
+        order: -1 !important;
+        width: 100% !important;
+        max-width: none !important;
+        min-height: 230px !important;
+        aspect-ratio: 310 / 230 !important;
+        justify-self: stretch !important;
+        align-self: stretch !important;
+      }
+
+      .abv4-logo-slot img {
+        width: 78% !important;
+        height: 78% !important;
+        object-fit: contain !important;
+      }
+
+      .abv4-timeline-photo {
+        width: 100% !important;
+        max-width: none !important;
+        min-height: 0 !important;
+        height: auto !important;
+        aspect-ratio: auto !important;
+        justify-self: stretch !important;
+        align-self: start !important;
+        background: #101010 !important;
+      }
+
+      .abv4-timeline-photo img {
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        object-fit: contain !important;
+        object-position: center top !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .abv4-main-photo,
+      .abv4-logo-slot,
+      .abv4-timeline-photo {
+        width: 100% !important;
+        max-width: none !important;
+      }
+
+      .abv4-logo-slot {
+        min-height: 210px !important;
+      }
+    }
+
   </style>
 </BaseLayout>

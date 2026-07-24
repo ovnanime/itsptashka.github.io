@@ -835,11 +835,13 @@ const poetryCount = poetryEntries.length;
     const panels = document.querySelectorAll('[data-panel]');
 
     const availableTabs = ['demo', 'releases', 'author'];
+    const WORKS_TAB_KEY = 'ptahen-works-active-tab';
 
-    const getTabFromHash = () => {
-      const hash = window.location.hash.replace('#', '');
+    const getInitialTab = () => {
+      const stored = sessionStorage.getItem(WORKS_TAB_KEY);
+      sessionStorage.removeItem(WORKS_TAB_KEY);
 
-      return availableTabs.includes(hash) ? hash : 'demo';
+      return availableTabs.includes(stored) ? stored : 'demo';
     };
 
     const resetReleaseRoleFilter = () => {
@@ -874,28 +876,16 @@ const poetryCount = poetryEntries.length;
       resetReleaseRoleFilter();
     };
 
-    setActiveTab(getTabFromHash());
+    setActiveTab(getInitialTab());
 
     tabButtons.forEach((button) => {
       button.addEventListener('click', () => {
         const target = button.dataset.tab;
+        if (!availableTabs.includes(target)) return;
 
         setActiveTab(target);
-
-        const nextHash = target === 'demo' ? '#demo' : `#${target}`;
-
-        if (window.location.hash !== nextHash) {
-          history.pushState(null, '', nextHash);
-        }
+        history.replaceState(history.state, '', location.pathname + location.search);
       });
-    });
-
-    window.addEventListener('popstate', () => {
-      setActiveTab(getTabFromHash());
-    });
-
-    window.addEventListener('hashchange', () => {
-      setActiveTab(getTabFromHash());
     });
 
     const roleFilterButtons = document.querySelectorAll('[data-role-filter]');
@@ -3159,6 +3149,522 @@ const poetryCount = poetryEntries.length;
 
       .author-corner-redesign .author-row h3 {
         font-size: 21px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       WORKS — MOBILE / TABLET POLISH
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      /* A little more breathing room before the footer */
+      .portfolio-redesign {
+        padding-bottom: 58px !important;
+      }
+
+      /* Demo cards: slightly narrower, like home news/photo cards */
+      .portfolio-panel[data-panel="demo"] .demo-card {
+        width: calc(100% - 24px) !important;
+        max-width: 560px !important;
+        margin-inline: auto !important;
+      }
+
+      .portfolio-panel[data-panel="demo"] .demo-video-launch,
+      .portfolio-panel[data-panel="demo"] .demo-placeholder {
+        min-height: 154px !important;
+        border-radius: 12px !important;
+      }
+
+      .portfolio-panel[data-panel="demo"] .demo-card-meta {
+        padding: 11px 2px 13px !important;
+      }
+
+      /* Releases: one clean line of three filter buttons */
+      .roles-filter-redesign {
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        margin-bottom: 24px !important;
+      }
+
+      .roles-filter-redesign .roles-filter-label {
+        grid-column: 1 / -1 !important;
+        margin-bottom: 1px !important;
+        font-size: 12px !important;
+        letter-spacing: 0.12em !important;
+        text-transform: uppercase !important;
+      }
+
+      .roles-filter-redesign .role-legend-item {
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 42px !important;
+        justify-content: center !important;
+        padding: 8px 7px !important;
+        font-size: 12px !important;
+        line-height: 1.15 !important;
+        text-align: center !important;
+      }
+
+      .roles-filter-redesign .role-legend-item svg {
+        flex: 0 0 auto !important;
+      }
+
+      /* Author tools:
+         [ input ][ search ]
+         [ type  ][ sort   ] */
+      .author-corner-redesign .author-tools {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 14px 10px !important;
+      }
+
+      .author-corner-redesign .author-search {
+        grid-column: 1 / -1 !important;
+        min-width: 0 !important;
+      }
+
+      .author-corner-redesign .author-search-control {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        gap: 8px !important;
+      }
+
+      .author-corner-redesign .author-search input {
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      .author-corner-redesign .author-search-control button {
+        min-width: 78px !important;
+      }
+
+      .author-corner-redesign .author-filter {
+        min-width: 0 !important;
+      }
+
+      .author-corner-redesign .author-filter select {
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .portfolio-panel[data-panel="demo"] .demo-card {
+        width: calc(100% - 20px) !important;
+      }
+
+      .portfolio-panel[data-panel="demo"] .demo-video-launch,
+      .portfolio-panel[data-panel="demo"] .demo-placeholder {
+        min-height: 146px !important;
+      }
+
+      .roles-filter-redesign {
+        gap: 6px !important;
+      }
+
+      .roles-filter-redesign .role-legend-item {
+        padding-inline: 5px !important;
+        font-size: 11px !important;
+      }
+
+      .author-corner-redesign .author-tools {
+        gap: 12px 8px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       WORKS MOBILE V2 — proportion, filters and 3-column releases
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      /* Demo: preserve original proportions, only make the cards slightly narrower */
+      .portfolio-panel[data-panel="demo"] .demo-card {
+        width: calc(100% - 12px) !important;
+        max-width: 600px !important;
+      }
+
+      .portfolio-panel[data-panel="demo"] .demo-video-launch,
+      .portfolio-panel[data-panel="demo"] .demo-placeholder {
+        min-height: 0 !important;
+        aspect-ratio: 16 / 9 !important;
+        border-radius: 10px !important;
+      }
+
+      /* Filter pills: same layout, less sausage-like height */
+      .roles-filter-redesign .role-legend-item {
+        min-height: 34px !important;
+        padding: 5px 7px !important;
+      }
+
+      /* Releases: three compact posters per row */
+      .release-grid-redesign {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 18px 10px !important;
+      }
+
+      .release-card-redesign,
+      .release-card-redesign > a,
+      .release-placeholder {
+        width: 100% !important;
+        max-width: none !important;
+      }
+
+      .release-card-redesign h3 {
+        margin-top: 7px !important;
+        font-size: 11px !important;
+        line-height: 1.25 !important;
+      }
+
+      .release-badges-redesign {
+        top: 5px !important;
+        right: 5px !important;
+        gap: 4px !important;
+      }
+
+      .release-badges-redesign span {
+        min-width: 24px !important;
+        min-height: 24px !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .portfolio-panel[data-panel="demo"] .demo-card {
+        width: calc(100% - 8px) !important;
+      }
+
+      .roles-filter-redesign .role-legend-item {
+        min-height: 32px !important;
+        padding: 4px 5px !important;
+      }
+
+      .release-grid-redesign {
+        gap: 16px 8px !important;
+      }
+
+      .release-card-redesign h3 {
+        font-size: 10px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       AUTHOR CORNER MOBILE — wide text column, stacked date and read button
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .author-row {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) 92px !important;
+        gap: 14px !important;
+        align-items: stretch !important;
+        padding: 18px 16px !important;
+      }
+
+      .author-row-main {
+        min-width: 0 !important;
+        gap: 7px !important;
+      }
+
+      .author-row h3 {
+        max-width: none !important;
+        font-size: 21px !important;
+        line-height: 1.1 !important;
+      }
+
+      .author-row-main p {
+        max-width: none !important;
+        font-size: 15px !important;
+        line-height: 1.42 !important;
+      }
+
+      .author-row-meta {
+        width: 92px !important;
+        min-width: 92px !important;
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        justify-content: center !important;
+        gap: 12px !important;
+      }
+
+      .author-row-meta time {
+        width: 100% !important;
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+        text-align: center !important;
+        white-space: nowrap !important;
+      }
+
+      .author-row-meta span {
+        width: 100% !important;
+        min-width: 0 !important;
+        height: 36px !important;
+        padding: 0 8px !important;
+        font-size: 13px !important;
+        box-sizing: border-box !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .author-row {
+        grid-template-columns: minmax(0, 1fr) 84px !important;
+        gap: 10px !important;
+        padding: 16px 14px !important;
+      }
+
+      .author-row h3 {
+        font-size: 19px !important;
+      }
+
+      .author-row-main p {
+        font-size: 14px !important;
+      }
+
+      .author-row-meta {
+        width: 84px !important;
+        min-width: 84px !important;
+      }
+
+      .author-row-meta time {
+        font-size: 11px !important;
+      }
+
+      .author-row-meta span {
+        height: 34px !important;
+        font-size: 12px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       AUTHOR CORNER MOBILE V2 — compact Read button
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .author-row-meta {
+        align-items: flex-end !important;
+      }
+
+      .author-row-meta span,
+      .author-row-meta .author-read,
+      .author-row-meta a {
+        width: auto !important;
+        min-width: 72px !important;
+        max-width: 100% !important;
+        height: 34px !important;
+        padding: 0 14px !important;
+        align-self: flex-end !important;
+        box-sizing: border-box !important;
+        white-space: nowrap !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .author-row-meta span,
+      .author-row-meta .author-read,
+      .author-row-meta a {
+        min-width: 68px !important;
+        height: 32px !important;
+        padding-inline: 12px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       AUTHOR CORNER MOBILE V3 — keep Read button fully inside the card
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .author-row-meta {
+        width: 88px !important;
+        min-width: 88px !important;
+        align-items: center !important;
+        justify-self: stretch !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+      }
+
+      .author-row-meta time {
+        width: 100% !important;
+        text-align: center !important;
+      }
+
+      .author-row-meta span,
+      .author-row-meta .author-read,
+      .author-row-meta a {
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: 76px !important;
+        height: 34px !important;
+        margin: 0 auto !important;
+        padding: 0 12px !important;
+        align-self: center !important;
+        justify-self: center !important;
+        box-sizing: border-box !important;
+        white-space: nowrap !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .author-row {
+        grid-template-columns: minmax(0, 1fr) 78px !important;
+      }
+
+      .author-row-meta {
+        width: 78px !important;
+        min-width: 78px !important;
+      }
+
+      .author-row-meta span,
+      .author-row-meta .author-read,
+      .author-row-meta a {
+        max-width: 72px !important;
+        height: 32px !important;
+        padding-inline: 10px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       AUTHOR CORNER MOBILE — smaller Read button only
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .author-row-meta span,
+      .author-row-meta .author-read,
+      .author-row-meta a {
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        height: 28px !important;
+        padding: 0 8px !important;
+        margin: 0 auto !important;
+        border-radius: 8px !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .author-row-meta span,
+      .author-row-meta .author-read,
+      .author-row-meta a {
+        height: 26px !important;
+        padding-inline: 7px !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       AUTHOR CORNER MOBILE — shift date and Read button slightly left
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .author-row-meta {
+        transform: translateX(-10px) !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .author-row-meta {
+        transform: translateX(-8px) !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       AUTHOR CORNER MOBILE — shift date and Read button a little further left
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .author-row-meta {
+        transform: translateX(-16px) !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .author-row-meta {
+        transform: translateX(-13px) !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       AUTHOR CORNER MOBILE — equal left and right card padding
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .author-row-meta {
+        transform: none !important;
+        justify-self: end !important;
+        margin: 0 !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       AUTHOR CORNER MOBILE — true equal outer padding
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .author-row {
+        grid-template-columns: minmax(0, 1fr) auto !important;
+      }
+
+      .author-row-meta {
+        width: auto !important;
+        min-width: 0 !important;
+        justify-self: end !important;
+        align-items: flex-end !important;
+        transform: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .author-row-meta time {
+        width: auto !important;
+        margin: 0 !important;
+        text-align: right !important;
+      }
+
+      .author-row-meta span,
+      .author-row-meta .author-read,
+      .author-row-meta a {
+        width: auto !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        margin: 0 !important;
+        align-self: flex-end !important;
+        justify-self: end !important;
+      }
+    }
+
+  
+    /* ======================================================================
+       AUTHOR CORNER MOBILE — reduce Read button height only
+       ====================================================================== */
+
+    @media (max-width: 720px) {
+      .author-row-meta span,
+      .author-row-meta .author-read,
+      .author-row-meta a {
+        height: 26px !important;
+        min-height: 26px !important;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+        line-height: 1 !important;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .author-row-meta span,
+      .author-row-meta .author-read,
+      .author-row-meta a {
+        height: 24px !important;
+        min-height: 24px !important;
       }
     }
 
