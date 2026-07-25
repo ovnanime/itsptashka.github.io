@@ -5137,3 +5137,161 @@ button.button {
   font: inherit;
   cursor: pointer;
 }
+
+
+/* ==========================================================================
+   SELECTIVE LEFT ALIGNMENT — requested blocks only
+   ========================================================================== */
+
+/* Главная: первый экран */
+.hero-copy,
+.hero-copy p,
+.hero-copy h1,
+.hero-copy h2,
+.hero-copy h3,
+.hero-copy span,
+.hero-copy b,
+.hero-copy em {
+  text-align: left !important;
+  hyphens: manual !important;
+}
+
+/* Главная: блок «Голос» */
+.voice-strip,
+.voice-strip p,
+.voice-strip h1,
+.voice-strip h2,
+.voice-strip h3,
+.voice-strip span,
+.voice-strip b,
+.voice-strip em {
+  text-align: left !important;
+  hyphens: manual !important;
+}
+
+/* Главная: блок «Два ремесла» */
+.split-callout,
+.split-callout p,
+.split-callout h1,
+.split-callout h2,
+.split-callout h3,
+.split-callout span,
+.split-callout b,
+.split-callout em,
+.discipline-list,
+.discipline-list p,
+.discipline-list span,
+.discipline-list b {
+  text-align: left !important;
+  hyphens: manual !important;
+}
+
+/* Работы: описания демо */
+.demo-card-meta,
+.demo-card-meta h3,
+.demo-card-meta p {
+  text-align: left !important;
+  hyphens: manual !important;
+}
+
+/* Работы: авторский уголок */
+.author-corner-redesign,
+.author-corner-redesign label,
+.author-corner-redesign input,
+.author-corner-redesign select,
+.author-corner-redesign button,
+.author-row-main,
+.author-row-main h3,
+.author-row-main p,
+.author-row-main span,
+.author-empty {
+  text-align: left !important;
+  hyphens: manual !important;
+}
+
+/* Публикации: текст под заголовком «Журнал» */
+.journal-head > p:last-child {
+  text-align: left !important;
+  hyphens: manual !important;
+}
+
+/* Контакты: весь текст страницы */
+.contact-page,
+.contact-page p,
+.contact-page h1,
+.contact-page h2,
+.contact-page h3,
+.contact-page span,
+.contact-page b,
+.contact-page i {
+  text-align: left !important;
+  hyphens: manual !important;
+}
+
+/* ==========================================================================
+   ABOUT — keep photo blocks inside the shell and avoid visual upscaling
+   ========================================================================== */
+
+.abv4-page,
+.abv4-page .shell,
+.abv4-hero,
+.abv4-project-row,
+.abv4-timeline,
+.abv4-timeline-layout,
+.abv4-main-photo,
+.abv4-logo-slot,
+.abv4-timeline-photo {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.abv4-main-photo,
+.abv4-logo-slot,
+.abv4-timeline-photo {
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+.abv4-main-photo img,
+.abv4-timeline-photo img {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  image-rendering: auto !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+@media (min-width: 701px) {
+  .abv4-main-photo {
+    max-width: 430px !important;
+    justify-self: end !important;
+  }
+
+  .abv4-timeline-photo {
+    max-width: 360px !important;
+    justify-self: start !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .abv4-main-photo,
+  .abv4-logo-slot,
+  .abv4-timeline-photo {
+    max-width: 100% !important;
+    justify-self: stretch !important;
+  }
+
+  .abv4-main-photo img {
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+
+  .abv4-timeline-photo img {
+    height: auto !important;
+    object-fit: contain !important;
+    object-position: center top !important;
+  }
+}
