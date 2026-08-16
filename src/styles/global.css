@@ -166,6 +166,12 @@ video {
   color:#8e8e8a
 }
 
+.hero-title-detail {
+  display:block;
+  margin-top:10px;
+  font-size:clamp(28px,3vw,34px)
+}
+
 .lead {
   font-size:20px;
   color:#c8c8c4;
@@ -3666,6 +3672,7 @@ button img,
 .movie-poster-link img,
 .project-card img,
 .project-image img,
+.release-card-redesign img,
 .demo-card img,
 .demo-thumb img,
 .demo-video-card img,
@@ -5293,5 +5300,65 @@ button.button {
     height: auto !important;
     object-fit: contain !important;
     object-position: center top !important;
+  }
+}
+
+/* Keep the footer at the viewport bottom on short pages without overlaying content. */
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+}
+
+body > header.site-header,
+body > footer.site-footer {
+  flex-shrink: 0;
+}
+
+body > main {
+  flex: 1 0 auto;
+}
+
+/* Home hero: a roomier portrait while both columns stay inside the site grid. */
+@media (min-width: 1101px) {
+  .hero {
+    min-height: 530px;
+  }
+
+  .hero-copy h1 {
+    width: calc(100% + 50px);
+    max-width: calc(100% + 50px);
+  }
+
+  .hero-visual--desktop .portrait-frame {
+    width: min(480px, calc(100% - 28px));
+    height: 415px;
+    aspect-ratio: auto;
+  }
+}
+
+/* Accessibility guarantees must stay last in the cascade. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid #fff !important;
+  outline-offset: 3px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

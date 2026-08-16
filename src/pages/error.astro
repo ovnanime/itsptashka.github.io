@@ -2,8 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Ошибка — Что-то пошло не так">
-  <main class="error-page">
+<BaseLayout
+  title="Ошибка — Что-то пошло не так"
+  description="Техническая страница ошибки."
+  robots="noindex, nofollow"
+>
+  <div class="error-page">
     <section class="shell error-shell" aria-labelledby="error-title">
       <div class="error-visual" aria-hidden="true">
         <div class="error-mark">
@@ -35,9 +39,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
       </div>
     </section>
-  </main>
+  </div>
 
-  <script is:inline>
+  <script is:inline data-astro-rerun>
+    (() => {
     document.querySelector('[data-error-reload]')?.addEventListener('click', () => {
       window.location.reload();
     });
@@ -50,6 +55,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       window.location.href = '/';
     });
+    })();
   </script>
 
   <style>

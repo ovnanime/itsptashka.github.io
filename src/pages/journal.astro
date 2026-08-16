@@ -7,8 +7,11 @@ const posts = (await getCollection('journal'))
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
 
-<BaseLayout title="Журнал — Феофилакт Птахен">
-  <main class="journal-page">
+<BaseLayout
+  title="Журнал — Феофилакт Птахен"
+  description="Публикации Феофилакта Птахена о звуке, озвучивании, рабочих процессах и развитии сайта."
+>
+  <div class="journal-page">
     <section class="shell journal-shell">
       <header class="journal-head">
         <p class="journal-kicker">Публикации</p>
@@ -22,10 +25,18 @@ const posts = (await getCollection('journal'))
       <div class="journal-list">
         {
           posts.map((post) => (
-            <a class="journal-card" href={`/journal/${post.slug}`}>
+            <a class="journal-card" href={`/journal/${post.id}`}>
               <div class="journal-card-poster">
                 {post.data.poster ? (
-                  <img src={post.data.poster} alt="" loading="lazy" data-no-image-viewer />
+                  <img
+                    src={post.data.poster}
+                    alt=""
+                    width={post.data.posterWidth}
+                    height={post.data.posterHeight}
+                    loading="lazy"
+                    decoding="async"
+                    data-no-image-viewer
+                  />
                 ) : (
                   <span>Постер</span>
                 )}
@@ -49,7 +60,7 @@ const posts = (await getCollection('journal'))
         }
       </div>
     </section>
-  </main>
+  </div>
 
   <style>
     .journal-page {
@@ -245,32 +256,6 @@ const posts = (await getCollection('journal'))
       background: #fff;
       color: #050505;
       border-color: #fff;
-    }
-
-    /* Footer pinned to browser bottom when the journal is short */
-    :global(html),
-    :global(body) {
-      min-height: 100%;
-    }
-
-    :global(body) {
-      display: flex;
-      min-height: 100dvh;
-      flex-direction: column;
-    }
-
-    :global(body > header.site-header) {
-      flex-shrink: 0;
-    }
-
-    :global(body > main),
-    .journal-page {
-      flex: 1 0 auto;
-    }
-
-    :global(body > footer.site-footer) {
-      flex-shrink: 0;
-      margin-top: auto !important;
     }
 
     @media (max-width: 900px) {

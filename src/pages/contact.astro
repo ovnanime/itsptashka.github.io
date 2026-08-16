@@ -1,30 +1,13 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-
-const contacts = [
-  {
-    label: 'Telegram',
-    value: '@itsptashka',
-    text: 'Самый быстрый способ связаться по проекту.',
-    href: 'https://t.me/itsptashka',
-  },
-  {
-    label: 'ВКонтакте',
-    value: '@itsptashka',
-    text: 'Для сообщений, проектов и связи через VK.',
-    href: 'https://vk.com/itsptashka',
-  },
-  {
-    label: 'Почта',
-    value: 'pushkinilya2004@mail.ru',
-    text: 'Рабочая почта для предложений, материалов и ТЗ.',
-    href: 'mailto:pushkinilya2004@mail.ru',
-  },
-];
+import { CONTACTS } from '../data/site';
 ---
 
-<BaseLayout title="Контакты — Феофилакт Птахен">
-  <main class="contact-page">
+<BaseLayout
+  title="Контакты — Феофилакт Птахен"
+  description="Связаться с Феофилактом Птахеном по вопросам озвучивания, дубляжа, звукорежиссуры и локализации."
+>
+  <div class="contact-page">
     <section class="shell contact-hero">
       <div class="contact-hero-copy">
         <p class="contact-label">Связаться</p>
@@ -44,8 +27,8 @@ const contacts = [
     </section>
 
     <section class="shell contact-grid" aria-label="Способы связи">
-      {contacts.map((item) => (
-        <a class="contact-card" href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noreferrer' : undefined}>
+      {CONTACTS.map((item) => (
+        <a class="contact-card" href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}>
           <div>
             <span>{item.label}</span>
             <h2>{item.value}</h2>
@@ -56,7 +39,7 @@ const contacts = [
         </a>
       ))}
     </section>
-  </main>
+  </div>
 
   <style>
 

@@ -13,11 +13,12 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout
@@ -26,13 +27,19 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: npm
 
       - name: Install dependencies
-        run: npm install --package-lock=false --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
-      - name: Build site
-        run: npm run build
+      - name: Audit dependencies
+        run: npm run audit:deps
+
+      - name: Verify and build site
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
+        run: npm run verify
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

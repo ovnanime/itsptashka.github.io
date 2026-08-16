@@ -8,7 +8,7 @@ export async function getStaticPaths() {
   return entries
     .filter((entry) => !entry.data.draft)
     .map((entry) => ({
-      params: { slug: entry.slug },
+      params: { slug: entry.id },
       props: { entry },
     }));
 }
@@ -17,8 +17,8 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 ---
 
-<BaseLayout title={`${entry.data.title} — Журнал`}>
-  <main class="journal-post-page">
+<BaseLayout title={`${entry.data.title} — Журнал`} description={entry.data.description}>
+  <div class="journal-post-page">
     <article class="shell journal-post-shell">
       <a class="back-link" href="/" data-smart-back>← Назад</a>
 
@@ -39,9 +39,9 @@ const { Content } = await render(entry);
         <Content />
       </section>
     </article>
-  </main>
+  </div>
 
-  <script is:inline>
+  <script is:inline data-astro-rerun>
     (() => {
       const smartBackLink = document.querySelector('[data-smart-back]');
       if (!smartBackLink) return;
@@ -50,11 +50,18 @@ const { Content } = await render(entry);
       let canRestorePreviousPage = false;
 
       try {
+        const routerNavigation = JSON.parse(
+          sessionStorage.getItem('ptahen-router-navigation') || 'null',
+        );
         const referrerUrl = document.referrer ? new URL(document.referrer) : null;
         const isSameOrigin =
           referrerUrl && referrerUrl.origin === window.location.origin;
 
-        const referrerPath = isSameOrigin ? referrerUrl.pathname : '';
+        const currentUrl = `${window.location.pathname}${window.location.search}${window.location.hash}`;
+        const routerPath = routerNavigation?.to === currentUrl
+          ? new URL(routerNavigation.from, window.location.origin).pathname
+          : '';
+        const referrerPath = routerPath || (isSameOrigin ? referrerUrl.pathname : '');
 
         canRestorePreviousPage =
           referrerPath === '/' ||

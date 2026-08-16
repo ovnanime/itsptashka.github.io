@@ -1,13 +1,48 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import PartnerBadge from '../../components/PartnerBadge.astro';
 import { getCollection } from 'astro:content';
 
 interface Project {
   title: string;
-  link: string;
   img: string;
   roles: ('voice' | 'sound' | 'dub')[];
+  partner?: 'tvoe' | 'deep';
 }
+
+interface ProgramProject {
+  title: string;
+  description: string;
+  platform: string;
+  version: string;
+  icon: string;
+  downloadLabel: string;
+  downloadHref: string;
+  repositoryHref: string;
+}
+
+const programProjects: ProgramProject[] = [
+  {
+    title: 'SubtitleSplitter',
+    description: 'Разделяет субтитры ASS по актёрам и сохраняет результат в ASS или SRT. Поддерживает графический интерфейс и перетаскивание файлов.',
+    platform: 'Windows',
+    version: '1.1.0',
+    icon: '/assets/images/programs/subtitle-splitter.ico',
+    downloadLabel: 'Скачать EXE',
+    downloadHref: 'https://www.dropbox.com/scl/fi/o65jajea6n2rl8hg5zgn2/SubtitleSplitter_1.1.0.exe?rlkey=ivlg3539esh06u5gyy8hr3p4i&st=1vut1q2y&dl=1',
+    repositoryHref: 'https://github.com/ovnanime/SubtitleSplitter',
+  },
+  {
+    title: 'Галка: Планы и заметки',
+    description: 'Ежедневник с календарём, задачами и локальными напоминаниями. Без аккаунтов, рекламы, аналитики и передачи данных на сервер.',
+    platform: 'Android',
+    version: '1.0.0',
+    icon: '/assets/images/programs/galka.png',
+    downloadLabel: 'Скачать APK',
+    downloadHref: 'https://www.dropbox.com/scl/fi/shi9l39ksrrxyjubbscd8/galka-1.0.0.apk?rlkey=37nhd0d8ac8ivx599tpzlf03n&st=z82avt8u&dl=1',
+    repositoryHref: 'https://github.com/ovnanime/galka',
+  },
+];
 
 const demoCards = [
   {
@@ -44,74 +79,67 @@ const demoCards = [
 
 const mdaProjects: Project[] = [
   {
+    title: 'Рассекая небосвод',
+    img: '/assets/images/posters/mda/Рассекая небосвод.webp',
+    roles: ['voice', 'sound'],
+  },
+  {
     title: 'День моего вознесения',
-    link: '#',
     img: '/assets/images/posters/mda/День моего вознесения.webp',
     roles: ['voice', 'sound'],
   },
   {
     title: 'Повелитель тайн: Добыча',
-    link: '#',
     img: '/assets/images/posters/mda/Повелитель тайн Добыча.webp',
     roles: ['voice', 'sound'],
   },
   {
     title: 'Освободите эту ведьму',
-    link: 'https://donghuaworld.online/anime/osvobodite-etu-vedmu',
     img: '/assets/images/posters/mda/Освободите эту ведьму.webp',
     roles: ['voice', 'sound'],
   },
   {
     title: 'Путь выбора 2026',
-    link: 'https://donghuaworld.online/anime/put-vybora-2026',
     img: '/assets/images/posters/mda/Путь Выбора 2026.webp',
     roles: ['voice', 'sound'],
   },
   {
     title: 'Очерки приключений',
-    link: 'https://donghuaworld.online/anime/ocerki-prikliucenii-vo-vremena-dinastii-tan',
     img: '/assets/images/posters/mda/Очерки приключений во времена династии Тан.webp',
     roles: ['voice', 'sound'],
   },
   {
     title: 'Призрачный Наньтин',
-    link: '#',
     img: '/assets/images/posters/mda/Призрачный Наньтин.webp',
     roles: ['voice', 'sound'],
   },
   {
     title: 'Повелитель тайн: Клоун',
-    link: '#',
     img: '/assets/images/posters/mda/Повелитель тайн Клоун.webp',
     roles: ['voice', 'sound'],
   },
   {
     title: 'Повесть о герое меча 3',
-    link: '#',
     img: '/assets/images/posters/mda/Повесть о герое меча 3.webp',
     roles: ['voice', 'sound'],
   },
   {
     title: 'Под тремя реками',
-    link: '#',
     img: '/assets/images/posters/mda/Под тремя реками.webp',
     roles: ['voice', 'sound'],
   },
   {
     title: 'Воинственный бог',
-    link: '#',
     img: '/assets/images/posters/mda/Воинственный бог девяти солнц.webp',
     roles: ['voice'],
   },
   {
     title: 'Я из секты меча',
-    link: '#',
     img: '/assets/images/posters/mda/Я из секты меча.webp',
     roles: ['voice'],
   },
   {
     title: 'Сказание о пастухе',
-    link: '#',
     img: '/assets/images/posters/mda/Сказание о пастухе богов.webp',
     roles: ['voice'],
   },
@@ -120,59 +148,57 @@ const mdaProjects: Project[] = [
 
 const edProjects: Project[] = [
   {
+    title: 'Липкая любовь',
+    img: '/assets/images/posters/tvoe/Липкая любовь.webp',
+    roles: ['sound'],
+    partner: 'tvoe',
+  },
+  {
+    title: 'Стойкий доктор',
+    img: '/assets/images/posters/tvoe/Стойкий доктор.webp',
+    roles: ['sound'],
+    partner: 'tvoe',
+  },
+  {
     title: 'Время приключений: Побочные квесты',
-    link: '#',
     img: '/assets/images/posters/ed/Время приключений Побочные квесты.webp',
     roles: ['voice', 'sound', 'dub'],
   },
   {
     title: 'Тайная битва за престол невзрачного принца',
-    link: '#',
     img: '/assets/images/posters/ed/Тайная битва за престол невзрачного принца.webp',
     roles: ['voice', 'sound', 'dub'],
-  },
-  {
-    title: 'Суперчудаки',
-    link: '#',
-    img: '/assets/images/posters/ed/Суперчудаки.webp',
-    roles: ['voice', 'sound'],
   },
 ];
 
 const goltfilmProjects: Project[] = [
   {
     title: 'Йеллоустоун: Маршалы',
-    link: 'https://vk.com/wall-187803582_5991',
     img: '/assets/images/posters/gf/Йеллоустоун Маршалы.webp',
     roles: ['voice'],
   },
   {
     title: 'Миллиардер в трущобах',
-    link: 'https://vk.com/wall-187803582_5880',
     img: '/assets/images/posters/gf/Миллиардер в трущобах.webp',
     roles: ['voice'],
   },
   {
     title: 'Вечно богатый',
-    link: 'https://vk.com/wall-187803582_5904',
     img: '/assets/images/posters/gf/Вечно богатый.webp',
     roles: ['voice'],
   },
   {
     title: '28 лет спустя: Храм костей',
-    link: 'https://vk.com/wall-187803582_5950',
     img: '/assets/images/posters/gf/28 лет спустя Храм костей.webp',
     roles: ['voice'],
   },
   {
     title: '28 лет спустя',
-    link: 'https://vk.com/wall-187803582_5682',
     img: '/assets/images/posters/gf/28 лет спустя.webp',
     roles: ['voice'],
   },
   {
     title: 'Рождение Китаро',
-    link: 'https://vk.com/wall-187803582_5250',
     img: '/assets/images/posters/gf/Рождение Китаро.webp',
     roles: ['voice'],
   },
@@ -181,151 +207,126 @@ const goltfilmProjects: Project[] = [
 const animauntProjects: Project[] = [
   {
     title: 'Повседневная жизнь стажёра-мучителя',
-    link: 'https://animaunt.org/16253-goumon-baito-kun-no-nichijou.html',
     img: '/assets/images/posters/am/Повседневная жизнь стажёра-мучителя.webp',
     roles: ['voice'],
   },
   {
     title: 'Медалистка 2',
-    link: 'https://animaunt.org/15837-medalistka-2.html',
     img: '/assets/images/posters/am/Медалистка 2.webp',
     roles: ['voice'],
   },
   {
     title: 'Соседнему королевству продали...',
-    link: 'https://animaunt.org/14964-sosednemu-korolevstvu-prodali-svyatuyu-pomolvku-kotoroy-razorvali-iz-za-togo-chto-ona-stala-slishkom-sovershennoy.html',
     img: '/assets/images/posters/am/Соседнему королевству продали.webp',
     roles: ['voice'],
   },
   {
     title: 'Дни проходят, а еда хороша',
-    link: 'https://animaunt.org/15366-hibi-wa-sugiredo-meshi-umashi.html',
     img: '/assets/images/posters/am/Дни проходят, а еда по-прежнему хороша.webp',
     roles: ['voice'],
   },
   {
     title: 'Ликорис Рикоил Друзья',
-    link: 'https://animaunt.org/14534-lycoris-recoil-short-movie.html',
     img: '/assets/images/posters/am/Ликорис Рикоил Друзья похитители времени.webp',
     roles: ['voice'],
   },
   {
     title: 'Стать сильнее! Новая сага',
-    link: 'https://animaunt.org/11355-stat-silnee-novaya-saga.html',
     img: '/assets/images/posters/am/Стать сильнее! Новая сага.webp',
     roles: ['voice'],
   },
   {
     title: 'Гармония Милле-Фея',
-    link: 'https://animaunt.org/11966-utagoe-wa-mille-feuille.html',
     img: '/assets/images/posters/am/Гармония Милле-Фея.webp',
     roles: ['voice'],
   },
   {
     title: 'Эта фарфоровая кукла 2',
-    link: 'https://animaunt.org/11530-eta-farforovaya-kukla-vlyubilas-2.html',
     img: '/assets/images/posters/am/Эта фарфоровая кукла влюбилась 2 сезон.webp',
     roles: ['voice'],
   },
   {
     title: 'Возмездие раненой святой',
-    link: 'https://animaunt.org/14862-vozmezdie-ranenoy-svyatoy.html',
     img: '/assets/images/posters/am/Возмездие раненой святой.webp',
     roles: ['voice'],
   },
   {
     title: 'Девушка на час 4',
-    link: 'https://animaunt.org/14470-devushka-na-chas-4.html',
     img: '/assets/images/posters/am/Девушка на час 4.webp',
     roles: ['voice'],
   },
   {
     title: 'Там нет другого',
-    link: 'https://animaunt.org/14953-tam-net-drugogo.html',
     img: '/assets/images/posters/am/Там нет другого.webp',
     roles: ['voice'],
   },
   {
     title: 'Апокалипсис Миногры',
-    link: 'https://animaunt.org/14377-apokalipsis-minogry-pokorenie-drugogo-mira-nachinaetsya-s-razrushennoy-civilizacii.html',
     img: '/assets/images/posters/am/Апокалипсис Миногры.webp',
     roles: ['voice'],
   },
   {
     title: 'Не трогай меня, Котэсаси',
-    link: 'https://animaunt.org/15664-ne-trogay-menya-kotesasi.html',
     img: '/assets/images/posters/am/Не трогай меня, Котэсаси.webp',
     roles: ['voice'],
   },
   {
     title: 'Мой статус убийцы...',
-    link: 'https://animaunt.org/15590-no-ya-ubiyca-a-ne-geroy.html',
     img: '/assets/images/posters/am/Мой статус убийцы очевидно превосходит геройский.webp',
     roles: ['voice'],
   },
   {
     title: 'Один танец',
-    link: 'https://animaunt.org/14708-odin-tanec.html',
     img: '/assets/images/posters/am/Один танец.webp',
     roles: ['voice'],
   },
   {
     title: 'Заблудший путник',
-    link: 'https://animaunt.org/8837-zabludshiy-putnik.html',
     img: '/assets/images/posters/am/Заблудший путник.webp',
     roles: ['voice'],
   },
   {
     title: 'Ресторан Хо',
-    link: 'https://animaunt.org/15720-restoran-ho.html',
     img: '/assets/images/posters/am/Ресторан Хо.webp',
     roles: ['voice'],
   },
   {
     title: 'Страховка от развода',
-    link: 'https://animaunt.org/15719-strahovka-na-sluchay-razvoda.html',
     img: '/assets/images/posters/am/Страховка от развода.webp',
     roles: ['voice'],
   },
   {
     title: 'Возвращение во дворец',
-    link: 'https://animaunt.org/15340-vozvraschenie-vo-dvorec.html',
     img: '/assets/images/posters/am/Возвращение во дворец.webp',
     roles: ['voice'],
   },
   {
     title: 'Попробуйте: Мы чудеса',
-    link: 'https://animaunt.org/16327-poprobuyte-my-stanovimsya-chudesami.html',
     img: '/assets/images/posters/am/Попробуйте Мы становимся чудесами.webp',
     roles: ['voice'],
   },
   {
     title: 'Приятного аппетита',
-    link: 'https://animaunt.org/16558-priyatnogo-appetita-vashe-velichestvo-bon-appetit-your-majesty.html',
     img: '/assets/images/posters/am/Приятного аппетита, Ваше Величество.webp',
     roles: ['voice'],
   },
   {
     title: 'Сотня воспоминаний',
-    link: 'https://animaunt.org/16631-sotnya-vospominaniy.html',
     img: '/assets/images/posters/am/Сотня воспоминаний.webp',
     roles: ['voice'],
   },
   {
     title: 'Наш соседский спецназ',
-    link: 'https://animaunt.org/17077-nash-sosedskiy-specnaz.html',
     img: '/assets/images/posters/am/Наш соседский спецназ.webp',
     roles: ['voice'],
   },
   {
     title: 'Адвокат айдола',
-    link: 'https://animaunt.org/17155-advokat-aydola.html',
     img: '/assets/images/posters/am/Адвокат айдола.webp',
     roles: ['voice'],
   },
   {
     title: 'Боязнь любви',
-    link: 'https://animaunt.org/17564-boyazn-lyubvi.html',
     img: '/assets/images/posters/am/Боязнь любви.webp',
     roles: ['voice'],
   },
@@ -333,11 +334,10 @@ const animauntProjects: Project[] = [
 
 
 
-const renderIcon = (name: 'voice' | 'sound' | 'link' | 'lock') => {
+const renderIcon = (name: 'voice' | 'sound' | 'lock') => {
   const icons = {
     voice: '<path d="M12 3a3 3 0 0 0-3 3v5a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3Z"/><path d="M5 10v1a7 7 0 0 0 14 0v-1"/><path d="M12 18v3"/><path d="M8 21h8"/>',
     sound: '<path d="M4 9v6h4l5 4V5L8 9H4Z"/><path d="M16 8a5 5 0 0 1 0 8"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/>',
-    link: '<path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1 0l-2 2A5 5 0 0 0 12 20.1l1.1-1.1"/>',
     lock: '<rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
   };
 
@@ -358,15 +358,17 @@ const poetryCount = poetryEntries.length;
 - /public/assets/images/posters/mda/Повелитель тайн Добыча.webp
 - /public/assets/images/posters/ed/Время приключений Побочные квесты.webp
 - /public/assets/images/posters/ed/Тайная битва за престол невзрачного принца.webp
-- /public/assets/images/posters/ed/Суперчудаки.webp
 -->
-<BaseLayout title="Портфолио — Феофилакт Птахен">
+<BaseLayout
+  title="Портфолио — Феофилакт Птахен"
+  description="Портфолио Феофилакта Птахена: голосовые демо, релизы, дубляж, звукорежиссура, авторские тексты и программы."
+>
   <section class="shell portfolio-redesign">
     <header class="portfolio-head">
       <p class="portfolio-kicker">Работы</p>
       <h1>Портфолио</h1>
       <p>
-        Деморил по направлениям, релизы по студиям и авторский уголок. <br />
+        Деморил по направлениям, релизы по студиям, авторский уголок и программы. <br />
         Всё компактно: без лишней витрины, дублей и перегруженных кейсов.
       </p>
     </header>
@@ -375,6 +377,7 @@ const poetryCount = poetryEntries.length;
       <button class="active" type="button" data-tab="demo">Деморил</button>
       <button type="button" data-tab="releases">Релизы</button>
       <button type="button" data-tab="author">Авторский уголок</button>
+      <button type="button" data-tab="programs">Программы</button>
     </nav>
 
     <div class="portfolio-panel active" data-panel="demo">
@@ -484,18 +487,17 @@ const poetryCount = poetryEntries.length;
                   }
                 </div>
 
+                <PartnerBadge partner={project.partner} />
+
                 {
                   project.roles.includes('dub') && (
                     <span class="dub-label">Дубляж</span>
                   )
                 }
 
-                <a href={project.link} target="_blank" rel="noreferrer">
-                  <img src={project.img} alt={project.title} loading="lazy" />
-                  <span class="release-hover">
-                    <svg viewBox="0 0 24 24" aria-hidden="true" set:html={renderIcon('link')}></svg>
-                  </span>
-                </a>
+                <div class="release-poster-redesign">
+                  <img src={project.img} alt={project.title} width="400" height="600" loading="lazy" decoding="async" />
+                </div>
 
                 <h3>{project.title}</h3>
               </article>
@@ -508,6 +510,18 @@ const poetryCount = poetryEntries.length;
 
       <section class="studio-section-redesign" data-studio-section>
         <h2>Ушастая озвучка</h2>
+
+        <div class="nda-card-redesign">
+          <svg viewBox="0 0 24 24" aria-hidden="true" set:html={renderIcon('lock')}></svg>
+          <div>
+            <h3>Коммерческие проекты под NDA</h3>
+            <p>
+              Часть коммерческих релизов защищена соглашениями о неразглашении.
+              Открытая часть портфолио регулярно обновляется.
+            </p>
+          </div>
+        </div>
+
         <div class="release-grid-redesign">
           {
             edProjects.map((project) => (
@@ -529,18 +543,17 @@ const poetryCount = poetryEntries.length;
                   }
                 </div>
 
+                <PartnerBadge partner={project.partner} />
+
                 {
                   project.roles.includes('dub') && (
                     <span class="dub-label">Дубляж</span>
                   )
                 }
 
-                <a href={project.link} target="_blank" rel="noreferrer">
-                  <img src={project.img} alt={project.title} loading="lazy" />
-                  <span class="release-hover">
-                    <svg viewBox="0 0 24 24" aria-hidden="true" set:html={renderIcon('link')}></svg>
-                  </span>
-                </a>
+                <div class="release-poster-redesign">
+                  <img src={project.img} alt={project.title} width="400" height="600" loading="lazy" decoding="async" />
+                </div>
 
                 <h3>{project.title}</h3>
               </article>
@@ -549,7 +562,6 @@ const poetryCount = poetryEntries.length;
         </div>
       </section>
 
-      
       <section class="studio-section-redesign" data-studio-section>
         <h2>MK Studio</h2>
         <div class="nda-card-redesign">
@@ -574,18 +586,17 @@ const poetryCount = poetryEntries.length;
                   </span>
                 </div>
 
+                <PartnerBadge partner={project.partner} />
+
                 {
                   project.roles.includes('dub') && (
                     <span class="dub-label">Дубляж</span>
                   )
                 }
 
-                <a href={project.link} target="_blank" rel="noreferrer">
-                  <img src={project.img} alt={project.title} loading="lazy" />
-                  <span class="release-hover">
-                    <svg viewBox="0 0 24 24" aria-hidden="true" set:html={renderIcon('link')}></svg>
-                  </span>
-                </a>
+                <div class="release-poster-redesign">
+                  <img src={project.img} alt={project.title} width="400" height="600" loading="lazy" decoding="async" />
+                </div>
 
                 <h3>{project.title}</h3>
               </article>
@@ -606,18 +617,17 @@ const poetryCount = poetryEntries.length;
                   </span>
                 </div>
 
+                <PartnerBadge partner={project.partner} />
+
                 {
                   project.roles.includes('dub') && (
                     <span class="dub-label">Дубляж</span>
                   )
                 }
 
-                <a href={project.link} target="_blank" rel="noreferrer">
-                  <img src={project.img} alt={project.title} loading="lazy" />
-                  <span class="release-hover">
-                    <svg viewBox="0 0 24 24" aria-hidden="true" set:html={renderIcon('link')}></svg>
-                  </span>
-                </a>
+                <div class="release-poster-redesign">
+                  <img src={project.img} alt={project.title} width="400" height="600" loading="lazy" decoding="async" />
+                </div>
 
                 <h3>{project.title}</h3>
               </article>
@@ -667,7 +677,7 @@ const poetryCount = poetryEntries.length;
             poetryEntries.map((entry) => (
               <a
                 class="author-row"
-                href={`/works/author/${entry.slug}`}
+                href={`/works/author/${entry.id}`}
                 data-title={entry.data.title.toLowerCase()}
                 data-search={`${entry.data.title} ${entry.data.excerpt ?? ''}`.toLowerCase()}
                 data-type={entry.data.type}
@@ -695,6 +705,74 @@ const poetryCount = poetryEntries.length;
         <p class="author-empty" data-author-empty hidden>
           Ничего не найдено. Попробуй изменить поиск или фильтр.
         </p>
+      </div>
+    </div>
+
+    <div class="portfolio-panel" data-panel="programs">
+      <div class="programs-grid" aria-label="Мои программы">
+        {
+          programProjects.map((program) => (
+            <article class="program-card">
+              <div class="program-card-main">
+                <img
+                  src={program.icon}
+                  alt=""
+                  width="84"
+                  height="84"
+                  loading="lazy"
+                  decoding="async"
+                  data-no-image-viewer
+                />
+
+                <div class="program-card-copy">
+                  <div class="program-card-meta">
+                  <span class="program-platform">{program.platform}</span>
+                  <span class="program-version">v{program.version}</span>
+                  </div>
+                  <h2>{program.title}</h2>
+                  <p>{program.description}</p>
+                </div>
+              </div>
+
+              <div class="program-actions">
+                <button
+                  type="button"
+                  data-program-action="download"
+                  data-program-title={program.title}
+                  data-program-url={program.downloadHref}
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 3v12m0 0 5-5m-5 5-5-5M4 20h16"></path>
+                  </svg>
+                  {program.downloadLabel}
+                </button>
+                <button
+                  type="button"
+                  data-program-action="visit"
+                  data-program-title={program.title}
+                  data-program-url={program.repositoryHref}
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M9 18c-4.5 1.4-4.5-2.5-6-3m12 6v-3.9c0-1.1.1-1.6-.5-2.3 2.8-.3 5.7-1.4 5.7-6.2 0-1.4-.5-2.5-1.3-3.4.1-.3.6-1.6-.1-3.3 0 0-1.1-.3-3.6 1.3a12.4 12.4 0 0 0-6.5 0C6.2 1.5 5.1 1.8 5.1 1.8c-.7 1.7-.2 3-.1 3.3a4.9 4.9 0 0 0-1.3 3.4c0 4.8 2.9 5.9 5.7 6.2-.4.5-.5 1-.5 2.1V21"></path>
+                  </svg>
+                  GitHub
+                </button>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <div class="program-confirm" data-program-confirm hidden aria-hidden="true">
+        <div class="program-confirm-card" role="dialog" aria-modal="true" aria-labelledby="program-confirm-title" aria-describedby="program-confirm-text">
+          <p class="program-confirm-kicker">Внешнее действие</p>
+          <h2 id="program-confirm-title" data-program-confirm-title>Подтвердите действие</h2>
+          <p id="program-confirm-text" data-program-confirm-text></p>
+          <div class="program-confirm-actions">
+            <button type="button" data-program-confirm-cancel>Отмена</button>
+            <button class="program-confirm-primary" type="button" data-program-confirm-accept>Продолжить</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -830,18 +908,31 @@ const poetryCount = poetryEntries.length;
 
   </section>
 
-  <script is:inline>
+  <script is:inline data-astro-rerun>
+    (() => {
     const tabButtons = document.querySelectorAll('[data-tab]');
     const panels = document.querySelectorAll('[data-panel]');
 
-    const availableTabs = ['demo', 'releases', 'author'];
+    const availableTabs = ['demo', 'releases', 'author', 'programs'];
     const WORKS_TAB_KEY = 'ptahen-works-active-tab';
+    const WORKS_HISTORY_TAB_KEY = 'ptahenWorksActiveTab';
 
     const getInitialTab = () => {
+      const historyTab = history.state?.[WORKS_HISTORY_TAB_KEY];
       const stored = sessionStorage.getItem(WORKS_TAB_KEY);
       sessionStorage.removeItem(WORKS_TAB_KEY);
 
+      if (availableTabs.includes(historyTab)) return historyTab;
       return availableTabs.includes(stored) ? stored : 'demo';
+    };
+
+    const rememberActiveTab = (target) => {
+      const currentState = history.state && typeof history.state === 'object' ? history.state : {};
+      history.replaceState(
+        { ...currentState, [WORKS_HISTORY_TAB_KEY]: target },
+        '',
+        location.href,
+      );
     };
 
     const resetReleaseRoleFilter = () => {
@@ -862,6 +953,7 @@ const poetryCount = poetryEntries.length;
       studioSections.forEach((section) => {
         section.hidden = false;
       });
+
     };
 
     const setActiveTab = (target) => {
@@ -874,6 +966,7 @@ const poetryCount = poetryEntries.length;
       });
 
       resetReleaseRoleFilter();
+      rememberActiveTab(target);
     };
 
     setActiveTab(getInitialTab());
@@ -884,7 +977,6 @@ const poetryCount = poetryEntries.length;
         if (!availableTabs.includes(target)) return;
 
         setActiveTab(target);
-        history.replaceState(history.state, '', location.pathname + location.search);
       });
     });
 
@@ -953,6 +1045,73 @@ const poetryCount = poetryEntries.length;
         });
       });
     });
+    })();
+  </script>
+
+  <script is:inline data-astro-rerun>
+    (() => {
+      const overlay = document.querySelector('[data-program-confirm]');
+      if (!overlay) return;
+
+      document.body.appendChild(overlay);
+
+      const title = overlay.querySelector('[data-program-confirm-title]');
+      const text = overlay.querySelector('[data-program-confirm-text]');
+      const cancelButton = overlay.querySelector('[data-program-confirm-cancel]');
+      const acceptButton = overlay.querySelector('[data-program-confirm-accept]');
+      const actionButtons = document.querySelectorAll('[data-program-action]');
+      let pendingUrl = '';
+      let pendingAction = '';
+
+      const closeConfirm = () => {
+        overlay.hidden = true;
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.removeProperty('overflow');
+        pendingUrl = '';
+        pendingAction = '';
+      };
+
+      const openConfirm = (button) => {
+        const programTitle = button.dataset.programTitle || 'программу';
+        pendingUrl = button.dataset.programUrl || '';
+        pendingAction = button.dataset.programAction || '';
+
+        if (pendingAction === 'download') {
+          title.textContent = `Скачать ${programTitle}?`;
+          text.textContent = 'Загрузка начнётся с внешнего сервиса Dropbox.';
+          acceptButton.textContent = 'Скачать';
+        } else {
+          title.textContent = `Перейти к ${programTitle}?`;
+          text.textContent = 'Репозиторий откроется на внешнем сайте GitHub.';
+          acceptButton.textContent = 'Перейти';
+        }
+
+        overlay.hidden = false;
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        acceptButton.focus();
+      };
+
+      actionButtons.forEach((button) => {
+        button.addEventListener('click', () => openConfirm(button));
+      });
+
+      cancelButton?.addEventListener('click', closeConfirm);
+
+      acceptButton?.addEventListener('click', () => {
+        if (!pendingUrl) return closeConfirm();
+        window.open(pendingUrl, '_blank', 'noopener,noreferrer');
+        closeConfirm();
+      });
+
+      overlay.addEventListener('click', (event) => {
+        if (event.target === overlay) closeConfirm();
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && !overlay.hidden) closeConfirm();
+      });
+    })();
   </script>
 
   <style>
@@ -961,7 +1120,7 @@ const poetryCount = poetryEntries.length;
     }
 
     .portfolio-head {
-      max-width: 680px;
+      max-width: 840px;
       padding-bottom: 26px;
       border-bottom: 1px solid var(--line);
     }
@@ -989,6 +1148,10 @@ const poetryCount = poetryEntries.length;
       color: var(--muted);
       font-size: 18px;
       line-height: 1.55;
+      hyphens: none !important;
+      overflow-wrap: normal !important;
+      text-align: left !important;
+      text-wrap: wrap !important;
     }
 
     .portfolio-tabs {
@@ -1019,6 +1182,220 @@ const poetryCount = poetryEntries.length;
 
     .portfolio-panel.active {
       display: block;
+    }
+
+    .programs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .program-card {
+      display: flex;
+      min-height: 220px;
+      flex-direction: column;
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background:
+        radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.065), transparent 34%),
+        #101010;
+    }
+
+    .program-card-main {
+      display: grid;
+      grid-template-columns: 84px minmax(0, 1fr);
+      align-items: flex-start;
+      gap: 15px;
+    }
+
+    .program-card-main > img {
+      display: block;
+      width: 84px;
+      height: 84px;
+      margin-top: 14px;
+      border-radius: 16px;
+      object-fit: cover;
+      background: #fff;
+      cursor: inherit !important;
+    }
+
+    .program-card-copy {
+      min-width: 0;
+    }
+
+    .program-card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .program-platform,
+    .program-version {
+      display: inline-flex;
+      min-height: 23px;
+      align-items: center;
+      padding: 0 7px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      color: #c4c8cd;
+      font-size: 11px;
+      line-height: 1;
+      font-weight: 800;
+    }
+
+    .program-card h2 {
+      margin: 10px 0 6px;
+      color: #fff;
+      font-size: 20px;
+      line-height: 1.12;
+      letter-spacing: -0.025em;
+    }
+
+    .program-card-copy > p {
+      display: -webkit-box;
+      overflow: hidden;
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 3;
+    }
+
+    .program-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 18px;
+    }
+
+    .program-actions button {
+      display: inline-flex;
+      min-height: 38px;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 9px;
+      border: 1px dashed rgba(255, 255, 255, 0.16);
+      border-style: solid;
+      border-radius: 10px;
+      background: transparent;
+      color: #fff;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .program-actions button:first-child {
+      background: #fff;
+      color: #050505;
+    }
+
+    .program-actions button:hover {
+      border-color: rgba(255, 255, 255, 0.38);
+    }
+
+    .program-actions svg {
+      width: 15px;
+      height: 15px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .program-confirm {
+      position: fixed;
+      inset: 0;
+      z-index: 100000;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(10px);
+    }
+
+    .program-confirm[hidden] {
+      display: none !important;
+    }
+
+    .program-confirm-card {
+      width: min(100%, 460px);
+      padding: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 18px;
+      background: #111;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.48);
+    }
+
+    .program-confirm-kicker {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .program-confirm-card h2 {
+      margin: 0;
+      color: #fff;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+
+    .program-confirm-card > p:not(.program-confirm-kicker) {
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .program-confirm-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .program-confirm-actions button {
+      min-height: 44px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 10px;
+      background: transparent;
+      color: #fff;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .program-confirm-actions .program-confirm-primary {
+      background: #fff;
+      color: #050505;
+    }
+
+    @media (max-width: 1100px) {
+      .programs-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .programs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .program-confirm-actions {
+        grid-template-columns: 1fr;
+      }
     }
 
     .demo-grid {
@@ -1087,7 +1464,6 @@ const poetryCount = poetryEntries.length;
 
     .roles-legend-redesign svg,
     .release-badges-redesign svg,
-    .release-hover svg,
     .nda-card-redesign svg {
       width: 16px;
       height: 16px;
@@ -1130,7 +1506,7 @@ const poetryCount = poetryEntries.length;
       min-width: 0;
     }
 
-    .release-card-redesign > a {
+    .release-poster-redesign {
       position: relative;
       display: block;
       aspect-ratio: 2 / 3;
@@ -1144,7 +1520,6 @@ const poetryCount = poetryEntries.length;
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.3s ease;
     }
 
     .release-card-redesign h3 {
@@ -1158,10 +1533,6 @@ const poetryCount = poetryEntries.length;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-    }
-
-    .release-card-redesign:hover img {
-      transform: scale(1.045);
     }
 
     .release-badges-redesign {
@@ -1183,27 +1554,6 @@ const poetryCount = poetryEntries.length;
       background: rgba(12, 12, 12, 0.86);
       border: 1px solid rgba(255, 255, 255, 0.14);
       backdrop-filter: blur(4px);
-    }
-
-    .release-hover {
-      position: absolute;
-      inset: 0;
-      z-index: 3;
-      display: grid;
-      place-items: center;
-      color: #fff;
-      background: rgba(0, 0, 0, 0.68);
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-
-    .release-hover svg {
-      width: 28px;
-      height: 28px;
-    }
-
-    .release-card-redesign:hover .release-hover {
-      opacity: 1;
     }
 
     .nda-card-redesign {
@@ -1294,7 +1644,7 @@ const poetryCount = poetryEntries.length;
       min-width: 0 !important;
     }
 
-    .release-card-redesign > a,
+    .release-poster-redesign,
     .release-placeholder {
       width: 100% !important;
       max-width: 170px !important;
@@ -1318,6 +1668,10 @@ const poetryCount = poetryEntries.length;
       width: 100% !important;
       max-width: none !important;
       box-sizing: border-box !important;
+    }
+
+    .nda-card-redesign + .release-grid-redesign {
+      margin-top: 28px !important;
     }
 
     .dub-label {
@@ -1357,7 +1711,7 @@ const poetryCount = poetryEntries.length;
       }
 
       .release-card-redesign,
-      .release-card-redesign > a,
+      .release-poster-redesign,
       .release-placeholder {
         max-width: none !important;
       }
@@ -3307,7 +3661,7 @@ const poetryCount = poetryEntries.length;
       }
 
       .release-card-redesign,
-      .release-card-redesign > a,
+      .release-poster-redesign,
       .release-placeholder {
         width: 100% !important;
         max-width: none !important;
@@ -3668,9 +4022,36 @@ const poetryCount = poetryEntries.length;
       }
     }
 
+    /* Mobile portfolio tabs: swipeable instead of squeezing into four columns. */
+    @media (max-width: 620px) {
+      .portfolio-tabs {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        justify-content: flex-start !important;
+        gap: 28px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        overscroll-behavior-inline: contain;
+        scroll-snap-type: inline proximity;
+        scrollbar-width: none;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .portfolio-tabs::-webkit-scrollbar {
+        display: none;
+      }
+
+      .portfolio-tabs button {
+        flex: 0 0 auto !important;
+        min-height: 44px;
+        white-space: nowrap !important;
+        scroll-snap-align: start;
+      }
+    }
+
   </style>
 
-  <script is:inline>
+  <script is:inline data-astro-rerun>
     (() => {
       const initAuthorSearch = () => {
         const authorList = document.querySelector('[data-author-list]');
@@ -3744,7 +4125,18 @@ const poetryCount = poetryEntries.length;
   </script>
 
 
-  <script is:inline>
+  <script is:inline data-astro-rerun>
+    (() => {
+    const pageController = new AbortController();
+    const { signal: pageSignal } = pageController;
+    document.addEventListener('astro:before-swap', () => {
+      document.querySelector('[data-demo-player-video]')?.pause?.();
+      pageController.abort();
+    }, {
+      once: true,
+      signal: pageSignal,
+    });
+
     (() => {
       const overlay = document.querySelector('[data-demo-player]');
       if (overlay && overlay.parentElement !== document.body) {
@@ -3901,7 +4293,7 @@ const poetryCount = poetryEntries.length;
       document.addEventListener('fullscreenchange', () => {
         if (overlay.hidden) return;
         updatePlayingState();
-      });
+      }, { signal: pageSignal });
 
       progress?.addEventListener('input', () => {
         if (!video.duration) return;
@@ -3934,7 +4326,7 @@ const poetryCount = poetryEntries.length;
         }
         if (event.key === 'ArrowLeft') video.currentTime = Math.max(0, video.currentTime - 10);
         if (event.key === 'ArrowRight') video.currentTime = Math.min(video.duration || video.currentTime, video.currentTime + 10);
-      });
+      }, { signal: pageSignal });
 
       updatePlayingState();
       updateProgress();
@@ -4058,7 +4450,7 @@ const poetryCount = poetryEntries.length;
 
         event.stopPropagation();
         updateDownloadButton(button);
-      }, true);
+      }, { capture: true, signal: pageSignal });
 
       document.addEventListener('mousedown', (event) => {
         const button = event.target?.closest?.('[data-video-download]');
@@ -4067,7 +4459,7 @@ const poetryCount = poetryEntries.length;
 
         event.stopPropagation();
         updateDownloadButton(button);
-      }, true);
+      }, { capture: true, signal: pageSignal });
 
       document.addEventListener('click', (event) => {
         const button = event.target?.closest?.('[data-video-download]');
@@ -4076,7 +4468,9 @@ const poetryCount = poetryEntries.length;
 
         event.stopPropagation();
         updateDownloadButton(button);
-      }, true);
+      }, { capture: true, signal: pageSignal });
+    })();
+
     })();
 
   </script>

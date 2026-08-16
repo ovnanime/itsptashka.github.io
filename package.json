@@ -1,1 +1,24 @@
-{"name":"ptahen-portfolio","version":"1.0.0","private":true,"type":"module","scripts":{"dev":"astro dev","build":"astro build","preview":"astro preview"},"dependencies":{"@astrojs/check":"^0.9.4","astro":"^5.13.7","typescript":"^5.9.2","@astrojs/mdx":"^4.3.0"}}
+{
+  "name": "ptahen-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0",
+    "check": "astro check",
+    "build": "astro build",
+    "audit": "node scripts/audit-build.mjs",
+    "audit:deps": "npm audit --omit=dev --audit-level=high",
+    "verify": "npm run check && npm run build && npm run audit",
+    "preview": "astro preview --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@astrojs/check": "0.9.10",
+    "@astrojs/mdx": "7.0.5",
+    "astro": "7.2.2",
+    "typescript": "6.0.3"
+  }
+}

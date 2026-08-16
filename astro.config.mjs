@@ -8,4 +8,7 @@ export default defineConfig({
   base: '/',
   trailingSlash: 'never',
   integrations: [mdx()],
+  vite: {
+    cacheDir: '.astro/vite',
+  },
 });

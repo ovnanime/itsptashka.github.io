@@ -1,30 +1,36 @@
 ---
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
+import { CONTACTS, NAV_ITEMS, SITE } from '../data/site';
 
 const {
-  title = 'Феофилакт Птахен',
-  description = 'Актёр озвучивания и звукорежиссёр',
+  title = SITE.defaultTitle,
+  description = SITE.defaultDescription,
+  robots = 'index, follow',
 } = Astro.props;
 
 const path = Astro.url.pathname;
-
-const nav = [
-  ['/', 'Главная'],
-  ['/works', 'Работы'],
-  ['/approach', 'Подход'],
-  ['/about', 'Обо мне'],
-  ['/journal', 'Публикации'],
-  ['/contact', 'Контакты'],
-];
+const canonicalUrl = new URL(path, Astro.site);
+const currentYear = new Date().getFullYear();
 ---
 
 <!doctype html>
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-<title>{title}</title>
+    <meta name="robots" content={robots} />
+    <meta name="theme-color" content="#0a0a0a" />
+    <link rel="canonical" href={canonicalUrl} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta name="twitter:card" content="summary" />
+    <title>{title}</title>
+    <ClientRouter fallback="animate" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -33,24 +39,30 @@ const nav = [
       rel="stylesheet"
     />
     <link rel="icon" href="/favicon.ico" sizes="any" />
-  <link rel="icon" type="image/png" href="/favicon.png" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-  <link rel="manifest" href="/site.webmanifest" />
-</head>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+  </head>
 
   <body>
     <header class="site-header">
       <a class="brand" href="/" aria-label="На главную">
-        Феофилакт Птахен
+        {SITE.name}
       </a>
 
-      <button class="menu-toggle" type="button" aria-label="Открыть меню">
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-label="Открыть меню"
+        aria-controls="site-navigation"
+        aria-expanded="false"
+      >
         Меню
       </button>
 
-      <nav aria-label="Основная навигация">
+      <nav id="site-navigation" aria-label="Основная навигация">
         {
-          nav.map(([href, label]) => (
+          NAV_ITEMS.map(({ href, label }) => (
             <a
               class={
                 path === href || (href !== '/' && path.startsWith(href))
@@ -71,30 +83,67 @@ const nav = [
     </main>
 
     <footer class="site-footer">
-      <a class="footer-brand" href="/"> 
-      </a>
+      <a class="footer-brand" href="/">{SITE.name}</a>
 
       <div class="footer-right">
         <nav class="footer-links" aria-label="Контакты">
-          <a href="https://t.me/itsptashka">Telegram</a>
-          <a href="https://vk.com/itsptashka">VK</a>
-          <a href="mailto:itsptashka@gmail.com">Email</a>
+          {CONTACTS.map((contact) => <a href={contact.href}>{contact.footerLabel}</a>)}
         </nav>
 
-        <span class="footer-copy">© 2023–2026</span>
+        <span class="footer-copy">© {SITE.copyrightStartYear}–{currentYear}</span>
       </div>
     </footer>
 
-    <script is:inline>
+    <script is:inline data-astro-rerun>
+      (() => {
+      window.__ptahenMenuController?.abort();
+      const controller = new AbortController();
+      const { signal } = controller;
+      window.__ptahenMenuController = controller;
+
       const menuButton = document.querySelector('.menu-toggle');
-      const navigation = document.querySelector('header nav');
+      const navigation = document.querySelector('#site-navigation');
+
+      const setMenuState = (isOpen) => {
+        navigation?.classList.toggle('open', isOpen);
+        menuButton?.setAttribute('aria-expanded', String(isOpen));
+        menuButton?.setAttribute('aria-label', isOpen ? 'Закрыть меню' : 'Открыть меню');
+      };
 
       menuButton?.addEventListener('click', () => {
-        navigation?.classList.toggle('open');
-      });
+        setMenuState(!navigation?.classList.contains('open'));
+      }, { signal });
+
+      navigation?.addEventListener('click', (event) => {
+        if (event.target.closest('a')) setMenuState(false);
+      }, { signal });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') setMenuState(false);
+      }, { signal });
+
+      document.addEventListener('astro:before-preparation', (event) => {
+        const from = event.from;
+        if (!from || from.origin !== window.location.origin) return;
+
+        const to = event.to;
+        sessionStorage.setItem('ptahen-router-navigation', JSON.stringify({
+          from: `${from.pathname}${from.search}${from.hash}`,
+          to: to ? `${to.pathname}${to.search}${to.hash}` : '',
+        }));
+      }, { signal });
+      })();
     </script>
 
-    <div class="image-viewer-overlay" data-image-viewer-overlay hidden aria-hidden="true">
+    <div
+      class="image-viewer-overlay"
+      data-image-viewer-overlay
+      role="dialog"
+      aria-modal="true"
+      aria-label="Просмотр изображения"
+      hidden
+      aria-hidden="true"
+    >
       <div class="image-viewer-topbar">
         <button class="image-viewer-button" type="button" data-image-viewer-close>
           ← Назад
@@ -117,8 +166,13 @@ const nav = [
       </div>
     </div>
 
-    <script is:inline>
+    <script is:inline data-astro-rerun>
       (() => {
+        window.__ptahenImageViewerController?.abort();
+        const controller = new AbortController();
+        const { signal } = controller;
+        window.__ptahenImageViewerController = controller;
+
         const overlay = document.querySelector('[data-image-viewer-overlay]');
         const frame = document.querySelector('[data-image-viewer-frame]');
         const viewerImage = document.querySelector('[data-image-viewer-image]');
@@ -137,6 +191,7 @@ const nav = [
           '.movie-poster-link',
           '.project-card',
           '.project-image',
+          '.release-card-redesign',
           '.demo-card',
           '.demo-thumb',
           '.demo-video-card'
@@ -159,6 +214,9 @@ const nav = [
           if (!target || target.closest(ignored)) return;
 
           target.setAttribute('data-image-viewer-target', '');
+          target.setAttribute('role', 'button');
+          target.setAttribute('tabindex', '0');
+          target.setAttribute('aria-label', `Открыть изображение: ${image.alt || 'без подписи'}`);
           target.__viewerImage = image;
         });
 
@@ -170,6 +228,8 @@ const nav = [
             return 'image';
           }
         };
+
+        let previouslyFocused = null;
 
         const openViewer = (image) => {
           const src = image.currentSrc || image.src;
@@ -183,6 +243,8 @@ const nav = [
           overlay.hidden = false;
           overlay.setAttribute('aria-hidden', 'false');
           document.body.classList.add('image-viewer-open');
+          previouslyFocused = document.activeElement;
+          closeButton.focus();
         };
 
         const closeViewer = () => {
@@ -192,6 +254,8 @@ const nav = [
           viewerImage.removeAttribute('src');
           viewerImage.alt = '';
           downloadButton.href = '#';
+          previouslyFocused?.focus?.();
+          previouslyFocused = null;
         };
 
         document.addEventListener('click', (event) => {
@@ -204,179 +268,36 @@ const nav = [
           event.preventDefault();
           event.stopPropagation();
           openViewer(image);
-        });
+        }, { signal });
 
-        closeButton.addEventListener('click', closeViewer);
+        document.addEventListener('keydown', (event) => {
+          if (event.key !== 'Enter' && event.key !== ' ') return;
+
+          const target = event.target?.closest?.('[data-image-viewer-target]');
+          if (!target) return;
+
+          const image = target.__viewerImage || target.querySelector('img');
+          if (!image) return;
+
+          event.preventDefault();
+          openViewer(image);
+        }, { signal });
+
+        closeButton.addEventListener('click', closeViewer, { signal });
 
         overlay.addEventListener('click', (event) => {
           if (event.target === overlay || event.target === frame) {
             closeViewer();
           }
-        });
+        }, { signal });
 
         document.addEventListener('keydown', (event) => {
           if (event.key === 'Escape' && !overlay.hidden) {
             closeViewer();
           }
-        });
+        }, { signal });
       })();
     </script>
-
-  
-<script is:inline>
-  (() => {
-    const viewerSelectors = [
-      '[data-image-viewer]',
-      '.image-viewer',
-      '.fullscreen-viewer',
-      '.media-viewer',
-      '.lightbox',
-      '.viewer',
-      'dialog[open]'
-    ];
-
-    const closeSelectors = [
-      '[data-image-viewer-close]',
-      '[data-viewer-close]',
-      '.image-viewer-close',
-      '.fullscreen-viewer-close',
-      '.media-viewer-close',
-      '.lightbox-close',
-      '.viewer-close',
-      'button[aria-label="Закрыть"]',
-      'button[aria-label="Close"]'
-    ];
-
-    let pushedViewerState = false;
-    let closingFromPop = false;
-
-    const isVisible = (el) => {
-      if (!el) return false;
-      if (el instanceof HTMLDialogElement) return el.open;
-      const style = window.getComputedStyle(el);
-      const rect = el.getBoundingClientRect();
-      return style.display !== 'none' &&
-        style.visibility !== 'hidden' &&
-        style.opacity !== '0' &&
-        rect.width > 0 &&
-        rect.height > 0;
-    };
-
-    const getOpenViewer = () => {
-      for (const selector of viewerSelectors) {
-        const nodes = Array.from(document.querySelectorAll(selector));
-        const found = nodes.find(isVisible);
-        if (found) return found;
-      }
-
-      const fixedNodes = Array.from(document.querySelectorAll('body *')).filter((el) => {
-        const style = window.getComputedStyle(el);
-        const rect = el.getBoundingClientRect();
-        return style.position === 'fixed' &&
-          Number(style.zIndex || 0) >= 50 &&
-          rect.width >= window.innerWidth * 0.75 &&
-          rect.height >= window.innerHeight * 0.75 &&
-          isVisible(el);
-      });
-
-      return fixedNodes[0] || null;
-    };
-
-    const closeViewer = () => {
-      const viewer = getOpenViewer();
-      if (!viewer) return false;
-
-      const closeButton = closeSelectors
-        .map((selector) => viewer.querySelector(selector) || document.querySelector(selector))
-        .find(Boolean);
-
-      if (closeButton) {
-        closeButton.click();
-        return true;
-      }
-
-      if (viewer instanceof HTMLDialogElement) {
-        viewer.close();
-        return true;
-      }
-
-      viewer.dispatchEvent(new KeyboardEvent('keydown', {
-        key: 'Escape',
-        code: 'Escape',
-        bubbles: true
-      }));
-
-      document.dispatchEvent(new KeyboardEvent('keydown', {
-        key: 'Escape',
-        code: 'Escape',
-        bubbles: true
-      }));
-
-      window.dispatchEvent(new KeyboardEvent('keydown', {
-        key: 'Escape',
-        code: 'Escape',
-        bubbles: true
-      }));
-
-      viewer.classList.remove('is-open', 'open', 'active', 'visible');
-      viewer.setAttribute('aria-hidden', 'true');
-      viewer.hidden = true;
-      document.documentElement.classList.remove('viewer-open', 'lightbox-open');
-      document.body.classList.remove('viewer-open', 'lightbox-open', 'no-scroll');
-
-      return true;
-    };
-
-    const armViewerHistory = () => {
-      if (closingFromPop) return;
-
-      const viewer = getOpenViewer();
-
-      if (viewer && !pushedViewerState) {
-        pushedViewerState = true;
-        history.pushState({ ptahenViewerOpen: true }, '', location.href);
-      }
-
-      if (!viewer && pushedViewerState) {
-        pushedViewerState = false;
-      }
-    };
-
-    document.addEventListener('click', () => {
-      requestAnimationFrame(() => setTimeout(armViewerHistory, 40));
-    }, true);
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape') {
-        pushedViewerState = false;
-      }
-    }, true);
-
-    window.addEventListener('popstate', () => {
-      const viewer = getOpenViewer();
-
-      if (viewer || pushedViewerState) {
-        closingFromPop = true;
-        closeViewer();
-        pushedViewerState = false;
-        requestAnimationFrame(() => {
-          closingFromPop = false;
-        });
-      }
-    });
-
-    const observer = new MutationObserver(() => {
-      requestAnimationFrame(armViewerHistory);
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['class', 'style', 'open', 'hidden', 'aria-hidden']
-    });
-  })();
-</script>
 
 </body>
 </html>

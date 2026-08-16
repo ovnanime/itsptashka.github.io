@@ -8,7 +8,7 @@ export async function getStaticPaths() {
   return entries
     .filter((entry) => !entry.data.draft)
     .map((entry) => ({
-      params: { slug: entry.slug },
+      params: { slug: entry.id },
       props: { entry },
     }));
 }
@@ -18,8 +18,11 @@ const { Content } = await render(entry);
 const label = entry.data.type === 'song' ? 'Песня' : 'Стихотворение';
 ---
 
-<BaseLayout title={`${entry.data.title} — Авторский уголок`}>
-  <main class="poetry-page">
+<BaseLayout
+  title={`${entry.data.title} — Авторский уголок`}
+  description={entry.data.excerpt ?? `${entry.data.title} — авторский текст Феофилакта Птахена.`}
+>
+  <div class="poetry-page">
     <article class="shell poetry-shell">
       <a class="back-link" href="/works" data-return-works-tab="author">← Авторский уголок</a>
 
@@ -41,7 +44,7 @@ const label = entry.data.type === 'song' ? 'Песня' : 'Стихотворе�
         <Content />
       </section>
     </article>
-  </main>
+  </div>
 
   <style>
     .poetry-page {
@@ -596,10 +599,12 @@ const label = entry.data.type === 'song' ? 'Песня' : 'Стихотворе�
 
   </style>
 
-  <script is:inline>
+  <script is:inline data-astro-rerun>
+    (() => {
     document.querySelector('[data-return-works-tab="author"]')?.addEventListener('click', () => {
       sessionStorage.setItem('ptahen-works-active-tab', 'author');
     });
+    })();
   </script>
 
 </BaseLayout>

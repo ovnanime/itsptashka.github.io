@@ -1,0 +1,107 @@
+---
+interface Props {
+  partner?: 'tvoe' | 'deep';
+}
+
+const badges = {
+  tvoe: {
+    name: 'TVOË',
+    label: 'Специально для онлайн-кинотеатра TVOË',
+  },
+  deep: {
+    name: 'DEEP',
+    label: 'Специально для DEEP',
+  },
+} as const;
+
+const { partner } = Astro.props;
+const badge = partner ? badges[partner] : undefined;
+---
+
+{
+  badge && (
+    <span
+      class:list={['partner-badge', `partner-badge--${partner}`]}
+      title={badge.label}
+      aria-label={badge.label}
+      data-partner-badge={partner}
+    >
+      <small>Специально для</small>
+      <strong>{badge.name}</strong>
+    </span>
+  )
+}
+
+<style>
+  .partner-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 6;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    min-width: 70px;
+    padding: 6px 9px 7px;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 8px;
+    pointer-events: none;
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.52),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+    font-family: Roboto, Arial, sans-serif;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .partner-badge small {
+    font-size: 7px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+  }
+
+  .partner-badge strong {
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+  }
+
+  .partner-badge--tvoe {
+    color: #061217;
+    border-color: #b9f6ff;
+    background: linear-gradient(135deg, #ffffff 0%, #a9f1ff 54%, #55d8f2 100%);
+    box-shadow:
+      0 8px 24px rgba(56, 211, 240, 0.3),
+      0 0 0 1px rgba(184, 246, 255, 0.28);
+  }
+
+  .partner-badge--deep {
+    color: #fff;
+    border-color: #f3b5ff;
+    background: linear-gradient(135deg, #151020 0%, #6f2cff 52%, #e143ff 100%);
+    box-shadow:
+      0 8px 24px rgba(168, 58, 255, 0.38),
+      0 0 0 1px rgba(244, 181, 255, 0.25);
+  }
+
+  @media (max-width: 720px) {
+    .partner-badge {
+      top: 5px;
+      left: 5px;
+      min-width: 0;
+      padding: 4px 6px 5px;
+      border-radius: 6px;
+    }
+
+    .partner-badge small {
+      font-size: 5px;
+      letter-spacing: 0.04em;
+    }
+
+    .partner-badge strong {
+      font-size: 11px;
+    }
+  }
+</style>
