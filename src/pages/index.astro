@@ -915,6 +915,45 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
       transform: none !important;
     }
 
+    @media (max-width: 620px) {
+      .hero .hero-copy .hero-facts span {
+        align-items: center !important;
+        text-align: center !important;
+      }
+
+      .hero .hero-copy .hero-facts b {
+        text-align: center !important;
+      }
+
+      .turnkey-release-actions {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .turnkey-release-actions .button,
+      .turnkey-release-actions .text-link {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        font-size: 14px;
+      }
+
+      .turnkey-release-actions .button {
+        padding-inline: 14px;
+      }
+
+      .turnkey-release {
+        border-bottom: 0;
+      }
+
+      .turnkey-release-steps {
+        border-bottom: 1px solid var(--line);
+      }
+    }
+
   </style>
 
 
