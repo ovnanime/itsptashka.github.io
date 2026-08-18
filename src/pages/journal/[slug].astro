@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { DEFAULT_OG_IMAGE, PERSON_ID, canonicalUrl } from '../../data/seo';
 
 export async function getStaticPaths() {
   const entries = await getCollection('journal');
@@ -15,9 +16,43 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+
+const url = canonicalUrl(Astro.url.pathname);
+const publishedTime = entry.data.date.toISOString();
+const modifiedTime = entry.data.updated?.toISOString();
+const image = entry.data.poster ?? DEFAULT_OG_IMAGE.url;
+const imageWidth = entry.data.poster ? entry.data.posterWidth : DEFAULT_OG_IMAGE.width;
+const imageHeight = entry.data.poster ? entry.data.posterHeight : DEFAULT_OG_IMAGE.height;
+
+const blogPosting: Record<string, unknown> = {
+  '@type': 'BlogPosting',
+  '@id': `${url}#article`,
+  headline: entry.data.title,
+  description: entry.data.description,
+  url,
+  datePublished: publishedTime,
+  inLanguage: 'ru-RU',
+  author: { '@id': PERSON_ID },
+  publisher: { '@id': PERSON_ID },
+  mainEntityOfPage: { '@id': `${url}#webpage` },
+  image: { '@id': `${url}#primaryimage` },
+};
+
+if (modifiedTime) blogPosting.dateModified = modifiedTime;
 ---
 
-<BaseLayout title={`${entry.data.title} — Журнал`} description={entry.data.description}>
+<BaseLayout
+  title={`${entry.data.title} — Журнал Феофилакта Птахена`}
+  description={entry.data.description}
+  ogType="article"
+  image={image}
+  imageWidth={imageWidth}
+  imageHeight={imageHeight}
+  imageAlt={`Обложка публикации «${entry.data.title}»`}
+  publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
+  schema={[blogPosting]}
+>
   <div class="journal-post-page">
     <article class="shell journal-post-shell">
       <a class="back-link" href="/" data-smart-back>← Назад</a>
@@ -69,7 +104,7 @@ const { Content } = await render(entry);
           referrerPath === '/journal/';
 
         if (referrerPath === '/journal' || referrerPath === '/journal/') {
-          smartBackLink.setAttribute('href', '/journal');
+          smartBackLink.setAttribute('href', '/journal/');
         } else if (referrerPath === '/') {
           smartBackLink.setAttribute('href', '/#journal');
         } else {

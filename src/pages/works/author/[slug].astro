@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { PERSON_ID, canonicalUrl } from '../../../data/seo';
 
 export async function getStaticPaths() {
   const entries = await getCollection('poetry');
@@ -16,15 +17,33 @@ export async function getStaticPaths() {
 const { entry } = Astro.props;
 const { Content } = await render(entry);
 const label = entry.data.type === 'song' ? 'Песня' : 'Стихотворение';
+
+const url = canonicalUrl(Astro.url.pathname);
+const description = entry.data.excerpt
+  ? `${label} «${entry.data.title}» из авторского уголка Феофилакта Птахена. ${entry.data.excerpt}`
+  : `${label} «${entry.data.title}» — авторский текст Феофилакта Птахена.`;
+
+const creativeWork = {
+  '@type': 'CreativeWork',
+  '@id': `${url}#work`,
+  name: entry.data.title,
+  genre: label,
+  url,
+  datePublished: entry.data.date.toISOString(),
+  inLanguage: 'ru-RU',
+  author: { '@id': PERSON_ID },
+  mainEntityOfPage: { '@id': `${url}#webpage` },
+};
 ---
 
 <BaseLayout
-  title={`${entry.data.title} — Авторский уголок`}
-  description={entry.data.excerpt ?? `${entry.data.title} — авторский текст Феофилакта Птахена.`}
+  title={`${entry.data.title} — авторский уголок Феофилакта Птахена`}
+  description={description}
+  schema={[creativeWork]}
 >
   <div class="poetry-page">
     <article class="shell poetry-shell">
-      <a class="back-link" href="/works" data-return-works-tab="author">← Авторский уголок</a>
+      <a class="back-link" href="/works/" data-return-works-tab="author">← Авторский уголок</a>
 
       <header class="poetry-header">
         <div>

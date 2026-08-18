@@ -1,16 +1,20 @@
 ---
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import Seo from '../components/Seo.astro';
+import type { Props as SeoProps } from '../components/Seo.astro';
 import { CONTACTS, NAV_ITEMS, SITE } from '../data/site';
+import { canonicalPath } from '../data/seo';
+
+export interface Props extends Partial<SeoProps> {}
 
 const {
   title = SITE.defaultTitle,
   description = SITE.defaultDescription,
-  robots = 'index, follow',
+  ...seo
 } = Astro.props;
 
-const path = Astro.url.pathname;
-const canonicalUrl = new URL(path, Astro.site);
+const path = canonicalPath(Astro.url.pathname);
 const currentYear = new Date().getFullYear();
 ---
 
@@ -19,17 +23,8 @@ const currentYear = new Date().getFullYear();
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content={description} />
-    <meta name="robots" content={robots} />
     <meta name="theme-color" content="#0a0a0a" />
-    <link rel="canonical" href={canonicalUrl} />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="ru_RU" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalUrl} />
-    <meta name="twitter:card" content="summary" />
-    <title>{title}</title>
+    <Seo title={title} description={description} {...seo} />
     <ClientRouter fallback="animate" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -39,6 +34,7 @@ const currentYear = new Date().getFullYear();
       rel="stylesheet"
     />
     <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
@@ -162,7 +158,7 @@ const currentYear = new Date().getFullYear();
       </div>
 
       <div class="image-viewer-frame" data-image-viewer-frame>
-        <img src="" alt="" data-image-viewer-image />
+        <img alt="" data-image-viewer-image />
       </div>
     </div>
 

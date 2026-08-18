@@ -13,7 +13,7 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
 
 <BaseLayout
   title="Феофилакт Птахен — актёр озвучивания и звукорежиссёр"
-  description="Озвучивание, дубляж, звукорежиссура и локализация: голосовые демо, портфолио и технический подход Феофилакта Птахена."
+  description="Официальный сайт Ильи Сергеевича Пушкина, работающего под псевдонимом Феофилакт Птахен: озвучивание, дубляж, закадр, локализация, саунд-дизайн и сведение. Голосовые демо, релизы и авторские работы."
 >
   <section class="hero shell">
     <div class="hero-copy">
@@ -51,7 +51,7 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
 
       <div class="hero-actions">
         <button class="button light" type="button" data-scroll-to="voice">Слушать голос</button>
-        <a class="button ghost" href="/works">Портфолио</a>
+        <a class="button ghost" href="/works/">Портфолио</a>
       </div>
 
       <div class="hero-facts">
@@ -143,8 +143,8 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
           до готовой мастер-версии, которую остаётся только принять и выпустить.
         </p>
         <div class="turnkey-release-actions">
-          <a class="button light" href="/contact">Обсудить релиз</a>
-          <a class="text-link" href="/works">Смотреть релизы ↗</a>
+          <a class="button light" href="/contact/">Обсудить релиз</a>
+          <a class="text-link" href="/works/">Смотреть релизы ↗</a>
         </div>
       </div>
     </div>
@@ -183,19 +183,19 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
       <div>
         <p class="eyebrow">Блог</p>
         <h2>Заметки и новости</h2>
-        <a class="section-more-link" href="/journal">Просмотреть все публикации →</a>
+        <a class="section-more-link" href="/journal/">Просмотреть все публикации →</a>
       </div>
     </div>
 
     <div class="coming-grid">
       {
         latestJournalPosts.map((post) => (
-          <a class="coming-card coming-card--news" href={`/journal/${post.id}`}>
+          <a class="coming-card coming-card--news" href={`/journal/${post.id}/`}>
             <div class="coming-banner coming-banner--news">
               {post.data.poster && (
                 <img
                   src={post.data.poster}
-                  alt=""
+                  alt={`Обложка публикации «${post.data.title}»`}
                   width={post.data.posterWidth}
                   height={post.data.posterHeight}
                   loading="lazy"
@@ -242,7 +242,7 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
           А опыт звукорежиссера позволяет свести этот исходник так, 
           чтобы голос стал абсолютно естественной частью видеоряда.
         </p>
-        <a class="text-link" href="/approach">
+        <a class="text-link" href="/approach/">
           Как я строю персонажа ↗
         </a>
       </div>
@@ -259,19 +259,19 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
     </div>
 
     <div class="discipline-list">
-      <a href="/works">
+      <a href="/works/">
         <span>01</span>
         <b>Озвучивание</b>
         <p>Дикторская начитка, закадровый перевод, рекаст, дубляж.</p>
       </a>
 
-      <a href="/works">
+      <a href="/works/">
         <span>02</span>
         <b>Звукорежиссура</b>
         <p>Чистка записи, саунд-дизайн, сведение дубляжа, липсинка и закадра.</p>
       </a>
 
-      <a href="/journal">
+      <a href="/journal/">
         <span>03</span>
         <b>Авторство</b>
         <p>Песни, рассказы, статьи, блоги.</p>

@@ -6,7 +6,7 @@ export default defineConfig({
   devToolbar: { enabled: false },
   site: 'https://ptahen.ru',
   base: '/',
-  trailingSlash: 'never',
+  trailingSlash: 'always',
   integrations: [mdx()],
   vite: {
     cacheDir: '.astro/vite',

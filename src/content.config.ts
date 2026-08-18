@@ -19,6 +19,8 @@ const journal = defineCollection({
     title: z.string(),
     description: z.string(),
     date: z.coerce.date(),
+    // Указывать только при реальном обновлении текста: попадает в dateModified.
+    updated: z.coerce.date().optional(),
     poster: z.string().optional(),
     posterWidth: z.number().int().positive().optional(),
     posterHeight: z.number().int().positive().optional(),

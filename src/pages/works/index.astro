@@ -360,8 +360,9 @@ const poetryCount = poetryEntries.length;
 - /public/assets/images/posters/ed/Тайная битва за престол невзрачного принца.webp
 -->
 <BaseLayout
-  title="Портфолио — Феофилакт Птахен"
-  description="Портфолио Феофилакта Птахена: голосовые демо, релизы, дубляж, звукорежиссура, авторские тексты и программы."
+  title="Работы и портфолио — Феофилакт Птахен"
+  description="Работы Феофилакта Птахена: голосовые демо, релизы озвучивания и дубляжа, звукорежиссура, авторский уголок со стихами и песнями, а также собственные программы."
+  pageType="CollectionPage"
 >
   <section class="shell portfolio-redesign">
     <header class="portfolio-head">
@@ -677,7 +678,7 @@ const poetryCount = poetryEntries.length;
             poetryEntries.map((entry) => (
               <a
                 class="author-row"
-                href={`/works/author/${entry.id}`}
+                href={`/works/author/${entry.id}/`}
                 data-title={entry.data.title.toLowerCase()}
                 data-search={`${entry.data.title} ${entry.data.excerpt ?? ''}`.toLowerCase()}
                 data-type={entry.data.type}
@@ -716,7 +717,7 @@ const poetryCount = poetryEntries.length;
               <div class="program-card-main">
                 <img
                   src={program.icon}
-                  alt=""
+                  alt={`Иконка программы ${program.title}`}
                   width="84"
                   height="84"
                   loading="lazy"

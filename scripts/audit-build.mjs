@@ -44,8 +44,19 @@ for (const file of htmlFiles) {
   if (!/<meta\b[^>]*\bname=["']robots["'][^>]*\bcontent=["'][^"']+["']/i.test(html)) {
     report(file, 'missing robots directive');
   }
-  if (!/<link\b[^>]*\brel=["']canonical["'][^>]*\bhref=["']https:\/\/ptahen\.ru\//i.test(html)) {
-    report(file, 'missing absolute canonical URL');
+  // Страницы под noindex каноникал не объявляют: канонизировать нечего.
+  const isIndexable = !/<meta\b[^>]*\bname=["']robots["'][^>]*\bcontent=["'][^"']*noindex/i.test(html);
+
+  if (isIndexable) {
+    const canonical = html.match(/<link\b[^>]*\brel=["']canonical["'][^>]*\bhref=["']([^"']+)["']/i)?.[1];
+
+    if (!canonical?.startsWith('https://ptahen.ru/')) {
+      report(file, 'missing absolute canonical URL');
+    } else if (!canonical.endsWith('/')) {
+      // Канонический формат проекта — со слешем: GitHub Pages отдаёт 301
+      // с /works на /works/, поэтому каноникал без слеша указывал бы на редирект.
+      report(file, `canonical URL without trailing slash: ${canonical}`);
+    }
   }
 
   for (const property of ['og:title', 'og:description', 'og:url']) {

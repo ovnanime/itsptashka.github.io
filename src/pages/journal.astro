@@ -8,8 +8,9 @@ const posts = (await getCollection('journal'))
 ---
 
 <BaseLayout
-  title="Журнал — Феофилакт Птахен"
-  description="Публикации Феофилакта Птахена о звуке, озвучивании, рабочих процессах и развитии сайта."
+  title="Публикации и журнал — Феофилакт Птахен"
+  description="Заметки и новости Феофилакта Птахена: разборы рабочих процессов, материалы о звуке и озвучивании, публикации о проектах и развитии сайта."
+  pageType="CollectionPage"
 >
   <div class="journal-page">
     <section class="shell journal-shell">
@@ -25,12 +26,12 @@ const posts = (await getCollection('journal'))
       <div class="journal-list">
         {
           posts.map((post) => (
-            <a class="journal-card" href={`/journal/${post.id}`}>
+            <a class="journal-card" href={`/journal/${post.id}/`}>
               <div class="journal-card-poster">
                 {post.data.poster ? (
                   <img
                     src={post.data.poster}
-                    alt=""
+                    alt={`Обложка публикации «${post.data.title}»`}
                     width={post.data.posterWidth}
                     height={post.data.posterHeight}
                     loading="lazy"
