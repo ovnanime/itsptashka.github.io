@@ -301,7 +301,8 @@
     font-size: 15px;
     line-height: 1.35;
     font-weight: 600;
-    text-align: center;
+    /* Перебиваем text-align: left !important со страницы контактов. */
+    text-align: center !important;
     box-shadow: 0 16px 34px rgba(0, 0, 0, 0.5);
     opacity: 0;
     transform: translate(-50%, 8px) scale(0.97);
@@ -329,15 +330,17 @@
     transform: translate(-50%, 0) scale(1);
   }
 
-  /* max-width и авто-поля обязательны: глобальный max-width для абзацев не даёт
-     растянуться между left и right, и подсказка уезжает к левому краю. */
+  /* Центрируем саму коробку, а не текст в ней: в global.css у страницы контактов
+     стоит text-align: left !important для всех абзацев, и подсказка,
+     растянутая на всю ширину, прижималась к левому краю экрана. */
   .ci-hint {
     position: absolute;
     top: var(--ci-sleep-y, 40%);
-    right: 0;
-    left: 0;
-    max-width: none;
-    margin: 92px auto 0;
+    left: 50%;
+    width: max-content;
+    max-width: calc(100vw - 48px);
+    margin: 92px 0 0;
+    transform: translateX(-50%);
     color: var(--muted);
     font-size: 14px;
     font-weight: 800;
@@ -509,6 +512,12 @@
     height: 62px;
     margin: -31px 0 0 -132px;
     transform: rotate(-90deg);
+  }
+
+  /* Корпус стоит повёрнутым на -90°, поэтому глаза вставали столбиком.
+     Доворачиваем их обратно, чтобы на экране они были рядом по горизонтали. */
+  .ci-actor.is-vertical .ci-face {
+    transform: rotate(90deg);
   }
 
   .ci-actor.is-vertical .ci-bubble {
