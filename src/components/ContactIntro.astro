@@ -1,7 +1,8 @@
 ---
 /**
  * Интро страницы контактов: кнопка «Связаться» спит на полке, после двух
- * толчков встаёт, уходит влево и утягивает за собой ширму, открывая контакты.
+ * толчков падает на линию над футером, встаёт, идёт по ней к левому краю и
+ * утягивает за собой ширму, открывая сайт.
  *
  * Сцена — прогрессивное улучшение. Разметка ниже помечена hidden и включается
  * только скриптом, поэтому без JS, при prefers-reduced-motion и у вернувшегося
@@ -9,7 +10,7 @@
  */
 ---
 
-{/* Гасит контакты синхронно, до первой отрисовки, иначе они успеют мигнуть. */}
+{/* Решение принимается синхронно, до первой отрисовки. */}
 <script is:inline data-astro-rerun>
   (() => {
     const root = document.documentElement;
@@ -30,8 +31,11 @@
 <div class="ci-stage" data-ci-stage hidden>
   <div class="ci-curtain" data-ci-curtain aria-hidden="true">
     <span class="ci-shelf"></span>
-    <span class="ci-floor"></span>
   </div>
+
+  {/* Линия пола совпадает с верхней границей футера: по ней кнопка и ходит. */}
+  <span class="ci-floorline" aria-hidden="true"></span>
+  <span class="ci-shadow" aria-hidden="true"></span>
 
   <div class="ci-actor" data-ci-actor>
     <p class="ci-bubble" data-ci-bubble aria-hidden="true"></p>
@@ -55,50 +59,30 @@
 </div>
 
 <style>
-  /* ---------- страница под сценой ---------- */
-
-  /* Пока идёт интро, высоту задаёт сцена, а не спрятанные под ней контакты:
-     на узком экране они стоят столбиком и растянули бы ширму на два экрана. */
-  :global(html[data-contact-intro='pending'] .contact-page) {
-    max-height: max(460px, calc(100dvh - 200px));
+  /* Пока висит ширма, страница не прокручивается, а main поднимается над
+     шапкой: main задаёт свой контекст наложения через isolation, иначе
+     шапка с z-index 30 рисовалась бы поверх сцены. */
+  :global(html[data-contact-intro]) {
     overflow: hidden;
   }
 
-  :global(html[data-contact-intro='pending'] .contact-hero),
-  :global(html[data-contact-intro='pending'] .contact-grid) {
-    opacity: 0;
-    visibility: hidden;
+  /* overflow-x: clip на body обрезает даже position: fixed, из-за чего ширма
+     не доставала до краёв экрана. Прокрутку в это время держит html. */
+  :global(html[data-contact-intro] body) {
+    overflow-x: visible;
   }
 
-  :global(html[data-contact-intro='revealing'] .contact-hero),
-  :global(html[data-contact-intro='revealing'] .contact-grid) {
-    animation: ci-content-in 0.6s cubic-bezier(0.2, 0.8, 0.25, 1) both;
-  }
-
-  :global(html[data-contact-intro='revealing'] .contact-grid) {
-    animation-delay: 0.09s;
-  }
-
-  @keyframes ci-content-in {
-    from {
-      opacity: 0;
-      transform: translateY(14px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
+  :global(html[data-contact-intro] main) {
+    position: relative;
+    z-index: 60;
   }
 
   /* ---------- сцена ---------- */
 
   .ci-stage {
-    --ci-rise: -29px;
-
-    position: absolute;
+    position: fixed;
     inset: 0;
-    z-index: 5;
-    min-height: 460px;
+    z-index: 60;
     font-family: Roboto, Arial, sans-serif;
   }
 
@@ -106,30 +90,26 @@
     display: none;
   }
 
+  /* Напуск за края: у html зарезервирован scrollbar-gutter, из-за которого
+     фиксированный слой не достаёт до физических краёв экрана. Менять сам
+     гаттер нельзя — при открытии контент сместился бы на 10px. */
   .ci-curtain {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    width: min(var(--max), calc(100% - 64px));
-    margin-inline: auto;
-    overflow: hidden;
-    border: 1px solid var(--line);
-    border-radius: 16px;
+    inset: 0 -14px;
     background:
       repeating-linear-gradient(
         90deg,
-        rgba(255, 255, 255, 0.016) 0 38px,
-        rgba(255, 255, 255, 0.042) 38px 76px
+        rgba(255, 255, 255, 0.014) 0 44px,
+        rgba(255, 255, 255, 0.038) 44px 88px
       ),
-      radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.07), transparent 32%),
-      #101010;
+      radial-gradient(circle at 82% 8%, rgba(255, 255, 255, 0.05), transparent 34%),
+      #0d0d0d;
     will-change: transform;
   }
 
+  /* Ширму и кнопку тянет одна и та же дистанция: иначе ткань уезжает из руки. */
   .ci-stage.is-pulling .ci-curtain {
-    animation: ci-pull 1.3s cubic-bezier(0.32, 0.06, 0.2, 1) forwards;
+    animation: ci-pull 1.45s cubic-bezier(0.36, 0.02, 0.22, 1) forwards;
   }
 
   @keyframes ci-pull {
@@ -137,48 +117,65 @@
       transform: translateX(0);
     }
     to {
-      transform: translateX(-118%);
+      transform: translateX(calc(-1 * var(--ci-pull, 110vw)));
     }
   }
 
-  /* Полка: та же волосяная линия, что и разделители сайта. */
+  /* Полка, с которой кнопка сваливается. */
   .ci-shelf {
     position: absolute;
-    top: 50%;
+    top: var(--ci-sleep-y, 40%);
     left: 50%;
     width: 304px;
     height: 1px;
     margin: 34px 0 0 -152px;
-    background: rgba(255, 255, 255, 0.26);
+    background: rgba(255, 255, 255, 0.24);
     box-shadow:
       0 1px 0 rgba(0, 0, 0, 0.9),
       0 12px 22px rgba(0, 0, 0, 0.55);
-    transition: opacity 0.4s ease;
+    transition: opacity 0.45s ease;
   }
 
   .ci-stage.is-awake .ci-shelf {
-    opacity: 0.35;
+    opacity: 0.3;
   }
 
-  /* Тень под приземлившейся кнопкой. */
-  .ci-floor {
+  /* Та же волосяная линия и та же ширина, что у границы футера под ширмой. */
+  .ci-floorline {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 300px;
-    height: 20px;
-    margin: 122px 0 0 -150px;
-    border-radius: 50%;
+    top: var(--ci-floor-y, 80%);
+    right: 0;
+    left: 0;
+    width: min(var(--max), calc(100% - 64px));
+    height: 1px;
+    margin-inline: auto;
+    background: var(--line);
     opacity: 0;
-    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.72), transparent 68%);
-    transition: opacity 0.35s ease;
+    transition: opacity 0.5s ease;
   }
 
-  .ci-stage.is-grounded .ci-floor {
+  .ci-stage.is-grounded .ci-floorline {
     opacity: 1;
   }
 
-  .ci-stage.is-walked .ci-floor {
+  .ci-shadow {
+    position: absolute;
+    top: var(--ci-floor-y, 80%);
+    left: 50%;
+    width: 300px;
+    height: 18px;
+    margin: -9px 0 0 -150px;
+    border-radius: 50%;
+    opacity: 0;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7), transparent 68%);
+    transition: opacity 0.35s ease;
+  }
+
+  .ci-stage.is-grounded .ci-shadow {
+    opacity: 1;
+  }
+
+  .ci-stage.is-walked .ci-shadow {
     opacity: 0;
   }
 
@@ -186,7 +183,7 @@
 
   .ci-actor {
     position: absolute;
-    top: 50%;
+    top: var(--ci-sleep-y, 40%);
     left: 50%;
     z-index: 3;
     width: 264px;
@@ -208,9 +205,11 @@
     font: 900 17px/1 Roboto, Arial, sans-serif;
     letter-spacing: -0.03em;
     cursor: pointer;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
   }
 
+  /* Отклик на нажатие нужен только лежащей кнопке: в вертикальной позе переход
+     доигрывал поворот уже после вставания и ронял персонажа обратно. */
   .ci-actor:not(.is-vertical) .ci-btn {
     transition: transform 0.16s ease;
   }
@@ -228,7 +227,6 @@
     white-space: nowrap;
   }
 
-  /* Глаза открываются только когда кнопка проснулась. */
   .ci-face {
     position: absolute;
     top: 50%;
@@ -329,12 +327,15 @@
     transform: translate(-50%, 0) scale(1);
   }
 
+  /* max-width и авто-поля обязательны: глобальный max-width для абзацев не даёт
+     растянуться между left и right, и подсказка уезжает к левому краю. */
   .ci-hint {
     position: absolute;
-    top: 50%;
+    top: var(--ci-sleep-y, 40%);
     right: 0;
     left: 0;
-    margin: 96px 0 0;
+    max-width: none;
+    margin: 92px auto 0;
     color: var(--muted);
     font-size: 14px;
     font-weight: 800;
@@ -351,8 +352,8 @@
 
   .ci-skip {
     position: absolute;
+    top: 26px;
     right: max(32px, calc((100% - var(--max)) / 2 + 32px));
-    bottom: 22px;
     z-index: 6;
     padding: 8px 2px;
     border: 0;
@@ -447,44 +448,43 @@
   }
 
   .ci-actor.is-falling {
-    animation: ci-fall 0.8s cubic-bezier(0.32, 0.02, 0.34, 1) forwards;
+    animation: ci-fall 0.86s cubic-bezier(0.34, 0.02, 0.32, 1) forwards;
   }
 
   @keyframes ci-fall {
     0% {
       transform: translate(0, 0) rotate(0);
     }
-    24% {
-      transform: translate(0, -6px) rotate(-3deg);
+    20% {
+      transform: translate(0, -8px) rotate(-3deg);
     }
-    70% {
-      transform: translate(0, 100px) rotate(11deg);
+    72% {
+      transform: translate(0, var(--ci-fall, 200px)) rotate(11deg);
     }
-    86% {
-      transform: translate(0, 86px) rotate(7deg);
+    87% {
+      transform: translate(0, calc(var(--ci-fall, 200px) - 16px)) rotate(7deg);
     }
     100% {
-      transform: translate(0, 100px) rotate(9deg);
+      transform: translate(0, var(--ci-fall, 200px)) rotate(9deg);
     }
   }
 
-  /* Лёжа на боку поднимается и встаёт торцом. */
   .ci-actor.is-standing {
-    animation: ci-stand 0.85s cubic-bezier(0.18, 0.8, 0.25, 1) forwards;
+    animation: ci-stand 0.9s cubic-bezier(0.18, 0.8, 0.25, 1) forwards;
   }
 
   @keyframes ci-stand {
     0% {
-      transform: translate(0, 100px) rotate(9deg);
+      transform: translate(0, var(--ci-fall, 200px)) rotate(9deg);
     }
     45% {
-      transform: translate(0, 74px) rotate(-38deg);
+      transform: translate(0, calc(var(--ci-fall, 200px) - 26px)) rotate(-38deg);
     }
     80% {
-      transform: translate(0, -20px) rotate(-97deg);
+      transform: translate(0, calc(var(--ci-rise, 100px) + 18px)) rotate(-97deg);
     }
     100% {
-      transform: translate(0, var(--ci-rise)) rotate(-90deg);
+      transform: translate(0, var(--ci-rise, 100px)) rotate(-90deg);
     }
   }
 
@@ -494,7 +494,7 @@
     width: 62px;
     height: 264px;
     margin: -132px 0 0 -31px;
-    transform: translate(0, var(--ci-rise));
+    transform: translate(0, var(--ci-rise, 100px));
   }
 
   .ci-actor.is-vertical .ci-btn {
@@ -513,15 +513,15 @@
   }
 
   .ci-actor.is-walking {
-    animation: ci-walk 2.4s cubic-bezier(0.42, 0, 0.62, 1) forwards;
+    animation: ci-walk 2.6s cubic-bezier(0.4, 0, 0.6, 1) forwards;
   }
 
   @keyframes ci-walk {
     from {
-      transform: translate(0, var(--ci-rise));
+      transform: translate(0, var(--ci-rise, 100px));
     }
     to {
-      transform: translate(var(--ci-walk, -320px), var(--ci-rise));
+      transform: translate(var(--ci-walk, -320px), var(--ci-rise, 100px));
     }
   }
 
@@ -543,57 +543,56 @@
 
   @keyframes ci-step-a {
     from {
-      transform: rotate(19deg);
+      transform: rotate(20deg);
     }
     to {
-      transform: rotate(-17deg);
+      transform: rotate(-18deg);
     }
   }
 
   @keyframes ci-step-b {
     from {
-      transform: rotate(-17deg);
+      transform: rotate(-18deg);
     }
     to {
-      transform: rotate(19deg);
+      transform: rotate(20deg);
     }
   }
 
   @keyframes ci-swing-a {
     from {
-      transform: rotate(34deg);
+      transform: rotate(36deg);
     }
     to {
-      transform: rotate(-16deg);
+      transform: rotate(-18deg);
     }
   }
 
   @keyframes ci-swing-b {
     from {
-      transform: rotate(-34deg);
+      transform: rotate(-36deg);
     }
     to {
-      transform: rotate(16deg);
+      transform: rotate(18deg);
     }
   }
 
-  /* Дотянулся до края ширмы и упирается. */
   .ci-actor.is-grabbing {
     animation: ci-strain 0.62s ease-in-out infinite alternate;
   }
 
   @keyframes ci-strain {
     from {
-      transform: translate(var(--ci-walk, -320px), var(--ci-rise));
+      transform: translate(var(--ci-walk, -320px), var(--ci-rise, 100px));
     }
     to {
-      transform: translate(calc(var(--ci-walk, -320px) - 9px), var(--ci-rise));
+      transform: translate(calc(var(--ci-walk, -320px) - 10px), var(--ci-rise, 100px));
     }
   }
 
   .ci-actor.is-grabbing .ci-arm--l {
-    left: -66px;
-    width: 74px;
+    left: -70px;
+    width: 78px;
     transform: rotate(0deg);
     transition:
       width 0.34s ease,
@@ -602,24 +601,24 @@
   }
 
   .ci-actor.is-grabbing .ci-arm--r {
-    transform: rotate(-44deg);
+    transform: rotate(-46deg);
   }
 
+  /* Ровно то же расстояние и та же кривая, что у ширмы: кнопка держит ткань
+     и уходит за край экрана вместе с ней, а не растворяется. */
   .ci-stage.is-pulling .ci-actor {
-    animation: ci-drag 1.3s cubic-bezier(0.32, 0.06, 0.2, 1) forwards;
+    animation: ci-drag 1.45s cubic-bezier(0.36, 0.02, 0.22, 1) forwards;
   }
 
   @keyframes ci-drag {
     from {
-      transform: translate(var(--ci-walk, -320px), var(--ci-rise));
-      opacity: 1;
-    }
-    72% {
-      opacity: 1;
+      transform: translate(var(--ci-walk, -320px), var(--ci-rise, 100px));
     }
     to {
-      transform: translate(calc(var(--ci-walk, -320px) - 60vw), var(--ci-rise));
-      opacity: 0;
+      transform: translate(
+        calc(var(--ci-walk, -320px) - var(--ci-pull, 110vw)),
+        var(--ci-rise, 100px)
+      );
     }
   }
 
@@ -655,7 +654,7 @@
   /* ---------- узкие экраны ---------- */
 
   @media (max-width: 900px) {
-    .ci-curtain {
+    .ci-floorline {
       width: calc(100% - 36px);
     }
 
@@ -665,12 +664,6 @@
   }
 
   @media (max-width: 640px) {
-    .ci-stage {
-      --ci-rise: -4px;
-
-      min-height: 420px;
-    }
-
     .ci-actor {
       width: 208px;
       height: 56px;
@@ -710,9 +703,9 @@
       margin-left: -120px;
     }
 
-    .ci-floor {
+    .ci-shadow {
       width: 232px;
-      margin: 119px 0 0 -116px;
+      margin-left: -116px;
     }
 
     .ci-bubble {
@@ -721,6 +714,7 @@
     }
 
     .ci-hint {
+      margin-top: 84px;
       font-size: 12px;
     }
   }
@@ -751,14 +745,9 @@
     const bubble = stage.querySelector('[data-ci-bubble]');
     const hint = stage.querySelector('[data-ci-hint]');
     const skip = stage.querySelector('[data-ci-skip]');
-    const curtain = stage.querySelector('[data-ci-curtain]');
-    /** Скрытые контакты не должны ловить фокус, но сцена внутри страницы — должна. */
-    const setContentInert = (on) => {
-      page.querySelectorAll('.contact-hero, .contact-grid').forEach((el) => {
-        if (on) el.setAttribute('inert', '');
-        else el.removeAttribute('inert');
-      });
-    };
+
+    /** Ноги торчат ниже корпуса — на столько же поднимаем стоящую фигуру. */
+    const FEET = 28;
 
     const timers = new Set();
     const later = (ms, fn) => {
@@ -780,9 +769,17 @@
       bubble.classList.add('is-shown');
     };
     const hush = () => bubble.classList.remove('is-shown');
-    const nudgeHint = (text) => {
+    const showHint = (text) => {
       hint.textContent = text;
       hint.classList.toggle('is-shown', Boolean(text));
+    };
+
+    /** Ширма закрывает сайт целиком, поэтому фокус не должен уходить под неё. */
+    const setContentInert = (on) => {
+      document.querySelectorAll('main, header.site-header, footer.site-footer').forEach((el) => {
+        if (on) el.setAttribute('inert', '');
+        else el.removeAttribute('inert');
+      });
     };
 
     const remember = () => {
@@ -793,22 +790,41 @@
       }
     };
 
-    /** Насколько шагов влево до края ширмы — зависит от ширины экрана. */
-    const measureWalk = () => {
-      const width = curtain.getBoundingClientRect().width;
-      const actorHalf = actor.getBoundingClientRect().width / 2;
-      const distance = Math.max(120, width / 2 - actorHalf - 46);
-      stage.style.setProperty('--ci-walk', `${-Math.round(distance)}px`);
+    /**
+     * Пол сцены совпадает с верхней границей футера, чтобы кнопка ходила
+     * ровно по той линии, которая останется на странице после интро.
+     */
+    const measure = () => {
+      const footer = document.querySelector('footer.site-footer');
+      const viewport = window.innerHeight;
+
+      const footerTop = footer ? footer.getBoundingClientRect().top : viewport - 150;
+      const floorY = Math.min(Math.max(footerTop, 320), viewport - 40);
+
+      const lyingWidth = actor.offsetWidth || 264;
+      const lyingHeight = actor.offsetHeight || 62;
+
+      // Полка висит на фиксированной высоте над полом: падение читается
+      // одинаково и на ноутбуке, и на большом мониторе.
+      const drop = Math.min(230, Math.max(150, floorY * 0.32));
+      const sleepY = floorY - drop;
+
+      const set = (name, value) => stage.style.setProperty(name, Math.round(value) + 'px');
+
+      set('--ci-sleep-y', sleepY);
+      set('--ci-floor-y', floorY);
+      set('--ci-fall', floorY - sleepY - lyingHeight / 2);
+      set('--ci-rise', floorY - sleepY - (lyingWidth / 2 + FEET));
+      set('--ci-walk', -(window.innerWidth / 2 - 96));
+      set('--ci-pull', window.innerWidth + 140);
     };
 
-    /** Контакты открыты: сцена больше не нужна и не должна ловить фокус. */
     const finish = () => {
       stopTimers();
       stage.hidden = true;
       stage.className = 'ci-stage';
       setContentInert(false);
-      root.setAttribute('data-contact-intro', 'revealing');
-      later(900, () => root.removeAttribute('data-contact-intro'));
+      root.removeAttribute('data-contact-intro');
       remember();
       showReplay();
     };
@@ -825,10 +841,10 @@
       actor.className = 'ci-actor';
       label.textContent = 'Связаться';
       hush();
-      nudgeHint('');
-      measureWalk();
+      showHint('');
       root.setAttribute('data-contact-intro', 'pending');
       setContentInert(true);
+      measure();
     };
 
     const run = () => {
@@ -837,7 +853,7 @@
       if (phase === 0) {
         phase = 1;
         say('М-м… ещё пять минут.');
-        nudgeHint('Толкните ещё раз');
+        showHint('Толкните ещё раз');
         actor.classList.add('is-nudged');
         later(620, () => actor.classList.remove('is-nudged'));
         return;
@@ -848,51 +864,47 @@
       phase = 2;
       busy = true;
       hush();
-      nudgeHint('');
+      showHint('');
+      measure();
       stage.classList.add('is-awake');
       actor.classList.remove('is-nudged');
       actor.classList.add('is-falling');
       label.textContent = 'Ай!';
 
-      later(760, () => stage.classList.add('is-grounded'));
+      later(800, () => stage.classList.add('is-grounded'));
 
-      later(820, () => {
+      later(880, () => {
         actor.classList.remove('is-falling');
         actor.classList.add('is-standing');
       });
 
-      later(1670, () => {
+      later(1780, () => {
         actor.classList.remove('is-standing');
         actor.classList.add('is-vertical', 'is-awake');
         say('Ай. Ну ладно, встаю.');
         label.textContent = 'Ну вот…';
       });
 
-      later(3050, () => {
+      later(3150, () => {
         hush();
         label.textContent = 'Иду…';
-        measureWalk();
         stage.classList.add('is-walked');
         actor.classList.add('is-walking');
       });
 
-      later(5450, () => {
+      later(5750, () => {
         actor.classList.remove('is-walking');
         actor.classList.add('is-grabbing');
         say('Сейчас открою.');
         label.textContent = 'Тяну…';
       });
 
-      later(6350, () => {
+      later(6800, () => {
         hush();
         stage.classList.add('is-pulling');
       });
 
-      later(7050, () => {
-        root.setAttribute('data-contact-intro', 'revealing');
-      });
-
-      later(7700, finish);
+      later(8250, finish);
     };
 
     let replay = page.querySelector('.ci-replay');
@@ -908,7 +920,6 @@
       replay.type = 'button';
       replay.className = 'ci-replay';
       replay.textContent = '↻ Показать анимацию заново';
-      row.appendChild(replay);
       replay.addEventListener(
         'click',
         () => {
@@ -923,18 +934,25 @@
         { signal },
       );
 
+      row.appendChild(replay);
       grid.insertAdjacentElement('afterend', row);
     }
 
     wake.addEventListener('click', run, { signal });
     skip.addEventListener('click', finish, { signal });
-    window.addEventListener('resize', measureWalk, { signal });
+
+    window.addEventListener(
+      'resize',
+      () => {
+        if (!stage.hidden && !busy) measure();
+      },
+      { signal },
+    );
 
     // Уход со страницы посреди анимации не должен доигрывать таймеры и
     // помечать интро просмотренным.
     document.addEventListener('astro:before-swap', () => controller.abort(), { signal });
 
-    // Побег из сцены по Esc — на случай, если анимация мешает.
     document.addEventListener(
       'keydown',
       (event) => {
@@ -952,7 +970,6 @@
     };
 
     if (root.getAttribute('data-contact-intro') === 'pending') {
-      // Ширму показываем сразу, остальное — когда контакты уже разобраны.
       stage.hidden = false;
       ready(start);
     } else {
