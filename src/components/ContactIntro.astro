@@ -1,0 +1,962 @@
+---
+/**
+ * Интро страницы контактов: кнопка «Связаться» спит на полке, после двух
+ * толчков встаёт, уходит влево и утягивает за собой ширму, открывая контакты.
+ *
+ * Сцена — прогрессивное улучшение. Разметка ниже помечена hidden и включается
+ * только скриптом, поэтому без JS, при prefers-reduced-motion и у вернувшегося
+ * посетителя страница остаётся обычной страницей контактов.
+ */
+---
+
+{/* Гасит контакты синхронно, до первой отрисовки, иначе они успеют мигнуть. */}
+<script is:inline data-astro-rerun>
+  (() => {
+    const root = document.documentElement;
+    root.removeAttribute('data-contact-intro');
+
+    if (!window.matchMedia || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    try {
+      if (localStorage.getItem('ptahen-contact-intro-seen') === '1') return;
+    } catch {
+      // Приватный режим: localStorage недоступен, просто играем интро.
+    }
+
+    root.setAttribute('data-contact-intro', 'pending');
+  })();
+</script>
+
+<div class="ci-stage" data-ci-stage hidden>
+  <div class="ci-curtain" data-ci-curtain aria-hidden="true">
+    <span class="ci-shelf"></span>
+    <span class="ci-floor"></span>
+  </div>
+
+  <div class="ci-actor" data-ci-actor>
+    <p class="ci-bubble" data-ci-bubble aria-hidden="true"></p>
+
+    <button class="ci-btn" type="button" data-ci-wake>
+      <span class="ci-label" data-ci-label>Связаться</span>
+      <span class="ci-face" aria-hidden="true"><i></i><i></i></span>
+    </button>
+
+    <span class="ci-sleep" aria-hidden="true">z<b>z</b></span>
+
+    <span class="ci-arm ci-arm--l" aria-hidden="true"></span>
+    <span class="ci-arm ci-arm--r" aria-hidden="true"></span>
+    <span class="ci-leg ci-leg--l" aria-hidden="true"></span>
+    <span class="ci-leg ci-leg--r" aria-hidden="true"></span>
+  </div>
+
+  <p class="ci-hint" data-ci-hint role="status"></p>
+
+  <button class="ci-skip" type="button" data-ci-skip>Пропустить</button>
+</div>
+
+<style>
+  /* ---------- страница под сценой ---------- */
+
+  /* Пока идёт интро, высоту задаёт сцена, а не спрятанные под ней контакты:
+     на узком экране они стоят столбиком и растянули бы ширму на два экрана. */
+  :global(html[data-contact-intro='pending'] .contact-page) {
+    max-height: max(460px, calc(100dvh - 200px));
+    overflow: hidden;
+  }
+
+  :global(html[data-contact-intro='pending'] .contact-hero),
+  :global(html[data-contact-intro='pending'] .contact-grid) {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  :global(html[data-contact-intro='revealing'] .contact-hero),
+  :global(html[data-contact-intro='revealing'] .contact-grid) {
+    animation: ci-content-in 0.6s cubic-bezier(0.2, 0.8, 0.25, 1) both;
+  }
+
+  :global(html[data-contact-intro='revealing'] .contact-grid) {
+    animation-delay: 0.09s;
+  }
+
+  @keyframes ci-content-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ---------- сцена ---------- */
+
+  .ci-stage {
+    --ci-rise: -29px;
+
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    min-height: 460px;
+    font-family: Roboto, Arial, sans-serif;
+  }
+
+  .ci-stage[hidden] {
+    display: none;
+  }
+
+  .ci-curtain {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: min(var(--max), calc(100% - 64px));
+    margin-inline: auto;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.016) 0 38px,
+        rgba(255, 255, 255, 0.042) 38px 76px
+      ),
+      radial-gradient(circle at 100% 0%, rgba(255, 255, 255, 0.07), transparent 32%),
+      #101010;
+    will-change: transform;
+  }
+
+  .ci-stage.is-pulling .ci-curtain {
+    animation: ci-pull 1.3s cubic-bezier(0.32, 0.06, 0.2, 1) forwards;
+  }
+
+  @keyframes ci-pull {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-118%);
+    }
+  }
+
+  /* Полка: та же волосяная линия, что и разделители сайта. */
+  .ci-shelf {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 304px;
+    height: 1px;
+    margin: 34px 0 0 -152px;
+    background: rgba(255, 255, 255, 0.26);
+    box-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.9),
+      0 12px 22px rgba(0, 0, 0, 0.55);
+    transition: opacity 0.4s ease;
+  }
+
+  .ci-stage.is-awake .ci-shelf {
+    opacity: 0.35;
+  }
+
+  /* Тень под приземлившейся кнопкой. */
+  .ci-floor {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 20px;
+    margin: 122px 0 0 -150px;
+    border-radius: 50%;
+    opacity: 0;
+    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.72), transparent 68%);
+    transition: opacity 0.35s ease;
+  }
+
+  .ci-stage.is-grounded .ci-floor {
+    opacity: 1;
+  }
+
+  .ci-stage.is-walked .ci-floor {
+    opacity: 0;
+  }
+
+  /* ---------- персонаж ---------- */
+
+  .ci-actor {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    width: 264px;
+    height: 62px;
+    margin: -31px 0 0 -132px;
+    will-change: transform;
+  }
+
+  .ci-btn {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 22px;
+    border: 1px solid #fff;
+    background: #fff;
+    color: #080808;
+    font: 900 17px/1 Roboto, Arial, sans-serif;
+    letter-spacing: -0.03em;
+    cursor: pointer;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  }
+
+  .ci-actor:not(.is-vertical) .ci-btn {
+    transition: transform 0.16s ease;
+  }
+
+  .ci-btn:active {
+    transform: scale(0.985);
+  }
+
+  .ci-btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 4px;
+  }
+
+  .ci-label {
+    white-space: nowrap;
+  }
+
+  /* Глаза открываются только когда кнопка проснулась. */
+  .ci-face {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    display: flex;
+    gap: 7px;
+    margin-top: -3px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .ci-face i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #080808;
+  }
+
+  .ci-actor.is-awake .ci-face {
+    opacity: 1;
+  }
+
+  .ci-sleep {
+    position: absolute;
+    top: -16px;
+    right: 10px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    animation: ci-z 2.1s ease-in-out infinite;
+  }
+
+  .ci-sleep b {
+    font-size: 16px;
+  }
+
+  @keyframes ci-z {
+    0%,
+    100% {
+      transform: translate(0, 0);
+      opacity: 0.3;
+    }
+    50% {
+      transform: translate(6px, -9px);
+      opacity: 0.85;
+    }
+  }
+
+  .ci-actor.is-awake .ci-sleep {
+    opacity: 0;
+    animation: none;
+    transition: opacity 0.2s ease;
+  }
+
+  /* ---------- реплика и подсказка ---------- */
+
+  .ci-bubble {
+    position: absolute;
+    bottom: calc(100% + 20px);
+    left: 50%;
+    z-index: 4;
+    width: max-content;
+    max-width: 300px;
+    margin: 0;
+    padding: 11px 15px;
+    border-radius: 14px;
+    background: var(--text);
+    color: #0d0d0d;
+    font-size: 15px;
+    line-height: 1.35;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 16px 34px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translate(-50%, 8px) scale(0.97);
+    transition:
+      opacity 0.24s ease,
+      transform 0.24s cubic-bezier(0.2, 0.85, 0.25, 1);
+    pointer-events: none;
+  }
+
+  .ci-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    border-radius: 2px;
+    background: var(--text);
+    transform: rotate(45deg);
+  }
+
+  .ci-bubble.is-shown {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+
+  .ci-hint {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    margin: 96px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.24s ease;
+  }
+
+  .ci-hint.is-shown {
+    opacity: 1;
+  }
+
+  .ci-skip {
+    position: absolute;
+    right: max(32px, calc((100% - var(--max)) / 2 + 32px));
+    bottom: 22px;
+    z-index: 6;
+    padding: 8px 2px;
+    border: 0;
+    border-bottom: 1px solid #3a3a3a;
+    background: none;
+    color: var(--muted);
+    font: 700 14px/1 Roboto, Arial, sans-serif;
+    cursor: pointer;
+    transition:
+      color 0.18s ease,
+      border-color 0.18s ease;
+  }
+
+  .ci-skip:hover {
+    color: var(--text);
+    border-color: #777;
+  }
+
+  /* ---------- руки и ноги ---------- */
+
+  .ci-arm,
+  .ci-leg {
+    position: absolute;
+    background: #fff;
+    border-radius: 999px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .ci-actor.is-awake .ci-arm,
+  .ci-actor.is-awake .ci-leg {
+    opacity: 1;
+  }
+
+  .ci-arm {
+    top: 66px;
+    width: 40px;
+    height: 7px;
+  }
+
+  .ci-arm--l {
+    left: -32px;
+    transform-origin: right center;
+    transform: rotate(18deg);
+  }
+
+  .ci-arm--r {
+    right: -32px;
+    transform-origin: left center;
+    transform: rotate(-18deg);
+  }
+
+  .ci-leg {
+    bottom: -28px;
+    width: 7px;
+    height: 32px;
+    transform-origin: center top;
+  }
+
+  .ci-leg--l {
+    left: 12px;
+    transform: rotate(7deg);
+  }
+
+  .ci-leg--r {
+    right: 12px;
+    transform: rotate(-7deg);
+  }
+
+  /* ---------- фазы ---------- */
+
+  .ci-actor.is-nudged {
+    animation: ci-nudge 0.6s cubic-bezier(0.2, 0.85, 0.25, 1);
+  }
+
+  @keyframes ci-nudge {
+    0% {
+      transform: translate(0, 0) rotate(0);
+    }
+    22% {
+      transform: translate(0, -5px) rotate(-1.6deg);
+    }
+    48% {
+      transform: translate(0, 3px) rotate(1.3deg);
+    }
+    74% {
+      transform: translate(0, -2px) rotate(-0.7deg);
+    }
+    100% {
+      transform: translate(0, 0) rotate(0);
+    }
+  }
+
+  .ci-actor.is-falling {
+    animation: ci-fall 0.8s cubic-bezier(0.32, 0.02, 0.34, 1) forwards;
+  }
+
+  @keyframes ci-fall {
+    0% {
+      transform: translate(0, 0) rotate(0);
+    }
+    24% {
+      transform: translate(0, -6px) rotate(-3deg);
+    }
+    70% {
+      transform: translate(0, 100px) rotate(11deg);
+    }
+    86% {
+      transform: translate(0, 86px) rotate(7deg);
+    }
+    100% {
+      transform: translate(0, 100px) rotate(9deg);
+    }
+  }
+
+  /* Лёжа на боку поднимается и встаёт торцом. */
+  .ci-actor.is-standing {
+    animation: ci-stand 0.85s cubic-bezier(0.18, 0.8, 0.25, 1) forwards;
+  }
+
+  @keyframes ci-stand {
+    0% {
+      transform: translate(0, 100px) rotate(9deg);
+    }
+    45% {
+      transform: translate(0, 74px) rotate(-38deg);
+    }
+    80% {
+      transform: translate(0, -20px) rotate(-97deg);
+    }
+    100% {
+      transform: translate(0, var(--ci-rise)) rotate(-90deg);
+    }
+  }
+
+  /* Устойчивая вертикаль: тот же силуэт, но геометрия уже не повёрнута,
+     поэтому руки и ноги живут в обычных координатах. */
+  .ci-actor.is-vertical {
+    width: 62px;
+    height: 264px;
+    margin: -132px 0 0 -31px;
+    transform: translate(0, var(--ci-rise));
+  }
+
+  .ci-actor.is-vertical .ci-btn {
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    width: 264px;
+    height: 62px;
+    margin: -31px 0 0 -132px;
+    transform: rotate(-90deg);
+  }
+
+  .ci-actor.is-vertical .ci-bubble {
+    bottom: calc(100% + 16px);
+  }
+
+  .ci-actor.is-walking {
+    animation: ci-walk 2.4s cubic-bezier(0.42, 0, 0.62, 1) forwards;
+  }
+
+  @keyframes ci-walk {
+    from {
+      transform: translate(0, var(--ci-rise));
+    }
+    to {
+      transform: translate(var(--ci-walk, -320px), var(--ci-rise));
+    }
+  }
+
+  .ci-actor.is-walking .ci-leg--l {
+    animation: ci-step-a 0.4s ease-in-out infinite alternate;
+  }
+
+  .ci-actor.is-walking .ci-leg--r {
+    animation: ci-step-b 0.4s ease-in-out infinite alternate;
+  }
+
+  .ci-actor.is-walking .ci-arm--l {
+    animation: ci-swing-a 0.4s ease-in-out infinite alternate;
+  }
+
+  .ci-actor.is-walking .ci-arm--r {
+    animation: ci-swing-b 0.4s ease-in-out infinite alternate;
+  }
+
+  @keyframes ci-step-a {
+    from {
+      transform: rotate(19deg);
+    }
+    to {
+      transform: rotate(-17deg);
+    }
+  }
+
+  @keyframes ci-step-b {
+    from {
+      transform: rotate(-17deg);
+    }
+    to {
+      transform: rotate(19deg);
+    }
+  }
+
+  @keyframes ci-swing-a {
+    from {
+      transform: rotate(34deg);
+    }
+    to {
+      transform: rotate(-16deg);
+    }
+  }
+
+  @keyframes ci-swing-b {
+    from {
+      transform: rotate(-34deg);
+    }
+    to {
+      transform: rotate(16deg);
+    }
+  }
+
+  /* Дотянулся до края ширмы и упирается. */
+  .ci-actor.is-grabbing {
+    animation: ci-strain 0.62s ease-in-out infinite alternate;
+  }
+
+  @keyframes ci-strain {
+    from {
+      transform: translate(var(--ci-walk, -320px), var(--ci-rise));
+    }
+    to {
+      transform: translate(calc(var(--ci-walk, -320px) - 9px), var(--ci-rise));
+    }
+  }
+
+  .ci-actor.is-grabbing .ci-arm--l {
+    left: -66px;
+    width: 74px;
+    transform: rotate(0deg);
+    transition:
+      width 0.34s ease,
+      left 0.34s ease,
+      transform 0.34s ease;
+  }
+
+  .ci-actor.is-grabbing .ci-arm--r {
+    transform: rotate(-44deg);
+  }
+
+  .ci-stage.is-pulling .ci-actor {
+    animation: ci-drag 1.3s cubic-bezier(0.32, 0.06, 0.2, 1) forwards;
+  }
+
+  @keyframes ci-drag {
+    from {
+      transform: translate(var(--ci-walk, -320px), var(--ci-rise));
+      opacity: 1;
+    }
+    72% {
+      opacity: 1;
+    }
+    to {
+      transform: translate(calc(var(--ci-walk, -320px) - 60vw), var(--ci-rise));
+      opacity: 0;
+    }
+  }
+
+  /* ---------- ссылка «показать заново» ---------- */
+
+  :global(.ci-replay-row) {
+    padding-top: 22px;
+    padding-bottom: 4px;
+  }
+
+  :global(.ci-replay) {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 0 0 3px;
+    border: 0;
+    border-bottom: 1px solid #2a2a2a;
+    background: none;
+    color: var(--muted);
+    font: 700 14px/1 Roboto, Arial, sans-serif;
+    cursor: pointer;
+    transition:
+      color 0.18s ease,
+      border-color 0.18s ease;
+  }
+
+  :global(.ci-replay:hover) {
+    color: var(--text);
+    border-color: #777;
+  }
+
+  /* ---------- узкие экраны ---------- */
+
+  @media (max-width: 900px) {
+    .ci-curtain {
+      width: calc(100% - 36px);
+    }
+
+    .ci-skip {
+      right: 30px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .ci-stage {
+      --ci-rise: -4px;
+
+      min-height: 420px;
+    }
+
+    .ci-actor {
+      width: 208px;
+      height: 56px;
+      margin: -28px 0 0 -104px;
+    }
+
+    .ci-actor.is-vertical {
+      width: 56px;
+      height: 208px;
+      margin: -104px 0 0 -28px;
+    }
+
+    .ci-actor.is-vertical .ci-btn {
+      width: 208px;
+      height: 56px;
+      margin: -28px 0 0 -104px;
+    }
+
+    .ci-btn {
+      font-size: 15px;
+    }
+
+    .ci-arm {
+      top: 54px;
+    }
+
+    .ci-leg--l {
+      left: 10px;
+    }
+
+    .ci-leg--r {
+      right: 10px;
+    }
+
+    .ci-shelf {
+      width: 240px;
+      margin-left: -120px;
+    }
+
+    .ci-floor {
+      width: 232px;
+      margin: 119px 0 0 -116px;
+    }
+
+    .ci-bubble {
+      max-width: min(280px, calc(100vw - 56px));
+      font-size: 14px;
+    }
+
+    .ci-hint {
+      font-size: 12px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ci-stage {
+      display: none;
+    }
+  }
+</style>
+
+<script is:inline data-astro-rerun>
+  (() => {
+    window.__ptahenContactIntro?.abort();
+
+    const stage = document.querySelector('[data-ci-stage]');
+    const page = document.querySelector('[data-contact-page]');
+    if (!stage || !page) return;
+
+    const controller = new AbortController();
+    const { signal } = controller;
+    window.__ptahenContactIntro = controller;
+
+    const root = document.documentElement;
+    const actor = stage.querySelector('[data-ci-actor]');
+    const wake = stage.querySelector('[data-ci-wake]');
+    const label = stage.querySelector('[data-ci-label]');
+    const bubble = stage.querySelector('[data-ci-bubble]');
+    const hint = stage.querySelector('[data-ci-hint]');
+    const skip = stage.querySelector('[data-ci-skip]');
+    const curtain = stage.querySelector('[data-ci-curtain]');
+    /** Скрытые контакты не должны ловить фокус, но сцена внутри страницы — должна. */
+    const setContentInert = (on) => {
+      page.querySelectorAll('.contact-hero, .contact-grid').forEach((el) => {
+        if (on) el.setAttribute('inert', '');
+        else el.removeAttribute('inert');
+      });
+    };
+
+    const timers = new Set();
+    const later = (ms, fn) => {
+      const id = setTimeout(() => {
+        timers.delete(id);
+        fn();
+      }, ms);
+      timers.add(id);
+    };
+    const stopTimers = () => {
+      timers.forEach(clearTimeout);
+      timers.clear();
+    };
+
+    signal.addEventListener('abort', stopTimers);
+
+    const say = (text) => {
+      bubble.textContent = text;
+      bubble.classList.add('is-shown');
+    };
+    const hush = () => bubble.classList.remove('is-shown');
+    const nudgeHint = (text) => {
+      hint.textContent = text;
+      hint.classList.toggle('is-shown', Boolean(text));
+    };
+
+    const remember = () => {
+      try {
+        localStorage.setItem('ptahen-contact-intro-seen', '1');
+      } catch {
+        // Приватный режим: просто не запоминаем.
+      }
+    };
+
+    /** Насколько шагов влево до края ширмы — зависит от ширины экрана. */
+    const measureWalk = () => {
+      const width = curtain.getBoundingClientRect().width;
+      const actorHalf = actor.getBoundingClientRect().width / 2;
+      const distance = Math.max(120, width / 2 - actorHalf - 46);
+      stage.style.setProperty('--ci-walk', `${-Math.round(distance)}px`);
+    };
+
+    /** Контакты открыты: сцена больше не нужна и не должна ловить фокус. */
+    const finish = () => {
+      stopTimers();
+      stage.hidden = true;
+      stage.className = 'ci-stage';
+      setContentInert(false);
+      root.setAttribute('data-contact-intro', 'revealing');
+      later(900, () => root.removeAttribute('data-contact-intro'));
+      remember();
+      showReplay();
+    };
+
+    let phase = 0;
+    let busy = false;
+
+    const start = () => {
+      stopTimers();
+      phase = 0;
+      busy = false;
+      stage.className = 'ci-stage';
+      stage.hidden = false;
+      actor.className = 'ci-actor';
+      label.textContent = 'Связаться';
+      hush();
+      nudgeHint('');
+      measureWalk();
+      root.setAttribute('data-contact-intro', 'pending');
+      setContentInert(true);
+    };
+
+    const run = () => {
+      if (busy || stage.hidden) return;
+
+      if (phase === 0) {
+        phase = 1;
+        say('М-м… ещё пять минут.');
+        nudgeHint('Толкните ещё раз');
+        actor.classList.add('is-nudged');
+        later(620, () => actor.classList.remove('is-nudged'));
+        return;
+      }
+
+      if (phase !== 1) return;
+
+      phase = 2;
+      busy = true;
+      hush();
+      nudgeHint('');
+      stage.classList.add('is-awake');
+      actor.classList.remove('is-nudged');
+      actor.classList.add('is-falling');
+      label.textContent = 'Ай!';
+
+      later(760, () => stage.classList.add('is-grounded'));
+
+      later(820, () => {
+        actor.classList.remove('is-falling');
+        actor.classList.add('is-standing');
+      });
+
+      later(1670, () => {
+        actor.classList.remove('is-standing');
+        actor.classList.add('is-vertical', 'is-awake');
+        say('Ай. Ну ладно, встаю.');
+        label.textContent = 'Ну вот…';
+      });
+
+      later(3050, () => {
+        hush();
+        label.textContent = 'Иду…';
+        measureWalk();
+        stage.classList.add('is-walked');
+        actor.classList.add('is-walking');
+      });
+
+      later(5450, () => {
+        actor.classList.remove('is-walking');
+        actor.classList.add('is-grabbing');
+        say('Сейчас открою.');
+        label.textContent = 'Тяну…';
+      });
+
+      later(6350, () => {
+        hush();
+        stage.classList.add('is-pulling');
+      });
+
+      later(7050, () => {
+        root.setAttribute('data-contact-intro', 'revealing');
+      });
+
+      later(7700, finish);
+    };
+
+    let replay = page.querySelector('.ci-replay');
+
+    function showReplay() {
+      const grid = page.querySelector('.contact-grid');
+      if (!grid || replay) return;
+
+      const row = document.createElement('div');
+      row.className = 'shell ci-replay-row';
+
+      replay = document.createElement('button');
+      replay.type = 'button';
+      replay.className = 'ci-replay';
+      replay.textContent = '↻ Показать анимацию заново';
+      row.appendChild(replay);
+      replay.addEventListener(
+        'click',
+        () => {
+          try {
+            localStorage.removeItem('ptahen-contact-intro-seen');
+          } catch {
+            // Нечего убирать.
+          }
+          start();
+          wake.focus();
+        },
+        { signal },
+      );
+
+      grid.insertAdjacentElement('afterend', row);
+    }
+
+    wake.addEventListener('click', run, { signal });
+    skip.addEventListener('click', finish, { signal });
+    window.addEventListener('resize', measureWalk, { signal });
+
+    // Уход со страницы посреди анимации не должен доигрывать таймеры и
+    // помечать интро просмотренным.
+    document.addEventListener('astro:before-swap', () => controller.abort(), { signal });
+
+    // Побег из сцены по Esc — на случай, если анимация мешает.
+    document.addEventListener(
+      'keydown',
+      (event) => {
+        if (event.key === 'Escape' && !stage.hidden) finish();
+      },
+      { signal },
+    );
+
+    const ready = (fn) => {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', fn, { once: true, signal });
+      } else {
+        fn();
+      }
+    };
+
+    if (root.getAttribute('data-contact-intro') === 'pending') {
+      // Ширму показываем сразу, остальное — когда контакты уже разобраны.
+      stage.hidden = false;
+      ready(start);
+    } else {
+      ready(showReplay);
+    }
+  })();
+</script>

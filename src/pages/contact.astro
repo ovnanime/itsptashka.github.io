@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactIntro from '../components/ContactIntro.astro';
 import { CONTACTS } from '../data/site';
 ---
 
@@ -7,7 +8,9 @@ import { CONTACTS } from '../data/site';
   title="Контакты — Феофилакт Птахен"
   description="Связаться с Феофилактом Птахеном по вопросам озвучивания, дубляжа, звукорежиссуры и локализации."
 >
-  <div class="contact-page">
+  <div class="contact-page" data-contact-page>
+    <ContactIntro />
+
     <section class="shell contact-hero">
       <div class="contact-hero-copy">
         <p class="contact-label">Связаться</p>
@@ -70,6 +73,7 @@ import { CONTACTS } from '../data/site';
     }
 
     .contact-page {
+      position: relative;
       padding: 34px 0 0;
     }
 
