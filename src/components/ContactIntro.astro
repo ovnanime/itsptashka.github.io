@@ -151,6 +151,7 @@
     margin-inline: auto;
     background: var(--line);
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.5s ease;
   }
 
@@ -168,6 +169,7 @@
     border-radius: 50%;
     opacity: 0;
     background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7), transparent 68%);
+    pointer-events: none;
     transition: opacity 0.35s ease;
   }
 
@@ -343,6 +345,7 @@
     text-transform: uppercase;
     text-align: center;
     opacity: 0;
+    pointer-events: none;
     transition: opacity 0.24s ease;
   }
 
@@ -774,12 +777,18 @@
       hint.classList.toggle('is-shown', Boolean(text));
     };
 
-    /** Ширма закрывает сайт целиком, поэтому фокус не должен уходить под неё. */
+    /**
+     * Ширма закрывает сайт целиком, поэтому фокус не должен уходить под неё.
+     * Помечаем именно закрытые куски, а не main: сцена лежит внутри main, и
+     * inert на нём выключил бы её собственные кнопки.
+     */
     const setContentInert = (on) => {
-      document.querySelectorAll('main, header.site-header, footer.site-footer').forEach((el) => {
-        if (on) el.setAttribute('inert', '');
-        else el.removeAttribute('inert');
-      });
+      document
+        .querySelectorAll('header.site-header, footer.site-footer, .contact-hero, .contact-grid, .ci-replay-row')
+        .forEach((el) => {
+          if (on) el.setAttribute('inert', '');
+          else el.removeAttribute('inert');
+        });
     };
 
     const remember = () => {
