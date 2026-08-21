@@ -1,8 +1,8 @@
 ---
 /**
  * Интро страницы контактов: кнопка «Связаться» спит на полке, после двух
- * толчков падает на линию над футером, встаёт, идёт по ней к левому краю и
- * утягивает за собой ширму, открывая сайт.
+ * толчков падает на линию над футером, встаёт, идёт по ней к левому краю,
+ * хватается за ширму и, пятясь вправо, стягивает её с экрана.
  *
  * Сцена — прогрессивное улучшение. Разметка ниже помечена hidden и включается
  * только скриптом, поэтому без JS, при prefers-reduced-motion и у вернувшегося
@@ -107,17 +107,31 @@
     will-change: transform;
   }
 
-  /* Ширму и кнопку тянет одна и та же дистанция: иначе ткань уезжает из руки. */
+  /* Ширма и кнопка идут по одинаковым ключевым кадрам с одинаковой кривой:
+     иначе ткань уезжает из руки. Первые кадры почти без движения — кнопка
+     упирается, ткань поддаётся не сразу, и только потом идёт ход. */
   .ci-stage.is-pulling .ci-curtain {
-    animation: ci-pull 1.45s cubic-bezier(0.36, 0.02, 0.22, 1) forwards;
+    animation: ci-pull 2.9s cubic-bezier(0.42, 0, 0.58, 1) forwards;
   }
 
   @keyframes ci-pull {
-    from {
+    0% {
       transform: translateX(0);
     }
-    to {
-      transform: translateX(calc(-1 * var(--ci-pull, 110vw)));
+    10% {
+      transform: translateX(7px);
+    }
+    20% {
+      transform: translateX(16px);
+    }
+    40% {
+      transform: translateX(calc(var(--ci-pull, 110vw) * 0.17));
+    }
+    72% {
+      transform: translateX(calc(var(--ci-pull, 110vw) * 0.58));
+    }
+    100% {
+      transform: translateX(var(--ci-pull, 110vw));
     }
   }
 
@@ -501,6 +515,7 @@
     height: 264px;
     margin: -132px 0 0 -31px;
     transform: translate(0, var(--ci-rise, 100px));
+    transform-origin: 50% 100%;
   }
 
   .ci-actor.is-vertical .ci-btn {
@@ -616,22 +631,55 @@
     transform: rotate(-46deg);
   }
 
-  /* Ровно то же расстояние и та же кривая, что у ширмы: кнопка держит ткань
-     и уходит за край экрана вместе с ней, а не растворяется. */
+  /* Те же кадры и та же кривая, что у ширмы, плюс наклон корпуса: кнопка
+     упирается, отклоняется от натуги и пятится вправо, волоча ткань за собой.
+     Наклон идёт от ступней, поэтому ноги остаются на линии пола. */
   .ci-stage.is-pulling .ci-actor {
-    animation: ci-drag 1.45s cubic-bezier(0.36, 0.02, 0.22, 1) forwards;
+    animation: ci-drag 2.9s cubic-bezier(0.42, 0, 0.58, 1) forwards;
   }
 
   @keyframes ci-drag {
-    from {
-      transform: translate(var(--ci-walk, -320px), var(--ci-rise, 100px));
+    0% {
+      transform: translate(var(--ci-walk, -320px), var(--ci-rise, 100px)) rotate(0deg);
     }
-    to {
+    10% {
+      transform: translate(calc(var(--ci-walk, -320px) + 7px), var(--ci-rise, 100px))
+        rotate(7deg);
+    }
+    20% {
+      transform: translate(calc(var(--ci-walk, -320px) + 16px), var(--ci-rise, 100px))
+        rotate(9deg);
+    }
+    40% {
       transform: translate(
-        calc(var(--ci-walk, -320px) - var(--ci-pull, 110vw)),
-        var(--ci-rise, 100px)
-      );
+          calc(var(--ci-walk, -320px) + var(--ci-pull, 110vw) * 0.17),
+          var(--ci-rise, 100px)
+        )
+        rotate(6deg);
     }
+    72% {
+      transform: translate(
+          calc(var(--ci-walk, -320px) + var(--ci-pull, 110vw) * 0.58),
+          var(--ci-rise, 100px)
+        )
+        rotate(3deg);
+    }
+    100% {
+      transform: translate(
+          calc(var(--ci-walk, -320px) + var(--ci-pull, 110vw)),
+          var(--ci-rise, 100px)
+        )
+        rotate(0deg);
+    }
+  }
+
+  /* Пятится назад: шаг тяжелее и медленнее, чем при обычной ходьбе. */
+  .ci-stage.is-pulling .ci-leg--l {
+    animation: ci-step-a 0.54s ease-in-out infinite alternate;
+  }
+
+  .ci-stage.is-pulling .ci-leg--r {
+    animation: ci-step-b 0.54s ease-in-out infinite alternate;
   }
 
   /* ---------- ссылка «показать заново» ---------- */
@@ -816,6 +864,10 @@
       const footer = document.querySelector('footer.site-footer');
       const viewport = window.innerHeight;
 
+      // Пока окно не отдало реальные размеры, считать нечего: дистанции
+      // получились бы нулевыми, и рывок выродился бы в дрожание на месте.
+      if (window.innerWidth < 200 || viewport < 200) return;
+
       const footerTop = footer ? footer.getBoundingClientRect().top : viewport - 150;
       const floorY = Math.min(Math.max(footerTop, 320), viewport - 40);
 
@@ -834,7 +886,9 @@
       set('--ci-fall', floorY - sleepY - lyingHeight / 2);
       set('--ci-rise', floorY - sleepY - (lyingWidth / 2 + FEET));
       set('--ci-walk', -(window.innerWidth / 2 - 96));
-      set('--ci-pull', window.innerWidth + 140);
+      // Ширма стартует с напуском в 14px слева, поэтому уводим её на ширину
+      // экрана с запасом — тогда за правым краем скрывается и она, и кнопка.
+      set('--ci-pull', window.innerWidth + 90);
     };
 
     const finish = () => {
@@ -922,7 +976,7 @@
         stage.classList.add('is-pulling');
       });
 
-      later(8250, finish);
+      later(9950, finish);
     };
 
     let replay = page.querySelector('.ci-replay');
