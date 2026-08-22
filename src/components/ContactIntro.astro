@@ -1,8 +1,12 @@
 ---
 /**
- * Интро страницы контактов: кнопка «Связаться» спит на полке, после двух
- * толчков падает на линию над футером, встаёт, идёт по ней к левому краю,
- * хватается за ширму и, пятясь вправо, стягивает её с экрана.
+ * Интро страницы контактов.
+ *
+ * Пока интро не тронули, страница выглядит обычной: меню, футер и ровная
+ * заливка цветом фона между ними, а на ней одна кнопка «Связаться». Никакой
+ * сцены не видно. После двух толчков кнопка падает на границу футера, встаёт,
+ * идёт к левому краю, хватается за заливку и, пятясь вправо, стягивает её —
+ * и только в этот момент заливка проявляется тканью.
  *
  * Сцена — прогрессивное улучшение. Разметка ниже помечена hidden и включается
  * только скриптом, поэтому без JS, при prefers-reduced-motion и у вернувшегося
@@ -29,12 +33,12 @@
 </script>
 
 <div class="ci-stage" data-ci-stage hidden>
+  {/* Пока лежит неподвижно — просто фон страницы. Ткань проявляется в рывке. */}
   <div class="ci-curtain" data-ci-curtain aria-hidden="true">
-    <span class="ci-shelf"></span>
+    <span class="ci-weave"></span>
+    <span class="ci-hem"></span>
   </div>
 
-  {/* Линия пола совпадает с верхней границей футера: по ней кнопка и ходит. */}
-  <span class="ci-floorline" aria-hidden="true"></span>
   <span class="ci-shadow" aria-hidden="true"></span>
 
   <div class="ci-actor" data-ci-actor>
@@ -59,22 +63,21 @@
 </div>
 
 <style>
-  /* Пока висит ширма, страница не прокручивается, а main поднимается над
-     шапкой: main задаёт свой контекст наложения через isolation, иначе
-     шапка с z-index 30 рисовалась бы поверх сцены. */
+  /* Страница на время интро не прокручивается и ужимается по высоте, чтобы
+     шапка, полоса заливки и футер помещались в экран: так она выглядит
+     обычной короткой страницей, а не обрезанной. */
   :global(html[data-contact-intro]) {
     overflow: hidden;
   }
 
-  /* overflow-x: clip на body обрезает даже position: fixed, из-за чего ширма
+  /* overflow-x: clip на body обрезает даже position: fixed, из-за чего заливка
      не доставала до краёв экрана. Прокрутку в это время держит html. */
   :global(html[data-contact-intro] body) {
     overflow-x: visible;
   }
 
-  :global(html[data-contact-intro] main) {
-    position: relative;
-    z-index: 60;
+  :global(html[data-contact-intro] .contact-page) {
+    overflow: hidden;
   }
 
   /* ---------- сцена ---------- */
@@ -84,32 +87,75 @@
     inset: 0;
     z-index: 60;
     font-family: Roboto, Arial, sans-serif;
+    pointer-events: none;
   }
 
   .ci-stage[hidden] {
     display: none;
   }
 
-  /* Напуск за края: у html зарезервирован scrollbar-gutter, из-за которого
-     фиксированный слой не достаёт до физических краёв экрана. Менять сам
-     гаттер нельзя — при открытии контент сместился бы на 10px. */
+  .ci-curtain,
+  .ci-actor,
+  .ci-skip {
+    pointer-events: auto;
+  }
+
+  /* Полоса ровно между низом шапки и верхней границей футера. Цвет — фон
+     страницы, поэтому до рывка она неотличима от пустой страницы.
+     По краям напуск: у html зарезервирован scrollbar-gutter, и без него
+     фиксированный слой не достаёт до физических краёв экрана. */
   .ci-curtain {
     position: absolute;
-    inset: 0 -14px;
+    top: var(--ci-band-top, 88px);
+    right: -14px;
+    left: -14px;
+    height: var(--ci-band-height, 60vh);
+    background: var(--bg);
+    will-change: transform;
+  }
+
+  /* Ткань. Появляется только когда кнопка потащила заливку с места. */
+  .ci-weave {
+    position: absolute;
+    inset: 0;
     background:
       repeating-linear-gradient(
         90deg,
         rgba(255, 255, 255, 0.014) 0 44px,
-        rgba(255, 255, 255, 0.038) 44px 88px
+        rgba(255, 255, 255, 0.04) 44px 88px
       ),
-      radial-gradient(circle at 82% 8%, rgba(255, 255, 255, 0.05), transparent 34%),
-      #0d0d0d;
-    will-change: transform;
+      radial-gradient(circle at 82% 12%, rgba(255, 255, 255, 0.055), transparent 36%);
+    opacity: 0;
+    transition: opacity 0.85s ease;
   }
 
-  /* Ширма и кнопка идут по одинаковым ключевым кадрам с одинаковой кривой:
-     иначе ткань уезжает из руки. Первые кадры почти без движения — кнопка
-     упирается, ткань поддаётся не сразу, и только потом идёт ход. */
+  /* Кромка, за которую держится кнопка: даёт полотну толщину и тень на
+     открывшуюся страницу. */
+  .ci-hem {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 14px;
+    width: 22px;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.12),
+      rgba(255, 255, 255, 0.03) 45%,
+      transparent
+    );
+    box-shadow: -20px 0 44px rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transition: opacity 0.85s ease;
+  }
+
+  .ci-stage.is-pulling .ci-weave,
+  .ci-stage.is-pulling .ci-hem {
+    opacity: 1;
+  }
+
+  /* Ширму и кнопку ведут одинаковые кадры с одинаковой кривой: иначе полотно
+     уезжает из руки. Первые кадры почти без движения — кнопка упирается,
+     заливка поддаётся не сразу, и только потом идёт ход. */
   .ci-stage.is-pulling .ci-curtain {
     animation: ci-pull 2.9s cubic-bezier(0.42, 0, 0.58, 1) forwards;
   }
@@ -135,44 +181,7 @@
     }
   }
 
-  /* Полка, с которой кнопка сваливается. */
-  .ci-shelf {
-    position: absolute;
-    top: var(--ci-sleep-y, 40%);
-    left: 50%;
-    width: 304px;
-    height: 1px;
-    margin: 34px 0 0 -152px;
-    background: rgba(255, 255, 255, 0.24);
-    box-shadow:
-      0 1px 0 rgba(0, 0, 0, 0.9),
-      0 12px 22px rgba(0, 0, 0, 0.55);
-    transition: opacity 0.45s ease;
-  }
-
-  .ci-stage.is-awake .ci-shelf {
-    opacity: 0.3;
-  }
-
-  /* Та же волосяная линия и та же ширина, что у границы футера под ширмой. */
-  .ci-floorline {
-    position: absolute;
-    top: var(--ci-floor-y, 80%);
-    right: 0;
-    left: 0;
-    width: min(var(--max), calc(100% - 64px));
-    height: 1px;
-    margin-inline: auto;
-    background: var(--line);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
-  }
-
-  .ci-stage.is-grounded .ci-floorline {
-    opacity: 1;
-  }
-
+  /* Тень под приземлившейся кнопкой. */
   .ci-shadow {
     position: absolute;
     top: var(--ci-floor-y, 80%);
@@ -354,15 +363,14 @@
     width: max-content;
     max-width: calc(100vw - 48px);
     margin: 92px 0 0;
-    transform: translateX(-50%);
     color: var(--muted);
     font-size: 14px;
     font-weight: 800;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    text-align: center;
     opacity: 0;
     pointer-events: none;
+    transform: translateX(-50%);
     transition: opacity 0.24s ease;
   }
 
@@ -370,9 +378,12 @@
     opacity: 1;
   }
 
+  /* До первого толчка страница должна выглядеть нетронутой, поэтому «Пропустить»
+     появляется только когда стало ясно, что происходит анимация. Уйти можно и
+     раньше — меню сверху живое. */
   .ci-skip {
     position: absolute;
-    top: 26px;
+    top: calc(var(--ci-band-top, 88px) + 20px);
     right: max(32px, calc((100% - var(--max)) / 2 + 32px));
     z-index: 6;
     padding: 8px 2px;
@@ -383,8 +394,14 @@
     font: 700 14px/1 Roboto, Arial, sans-serif;
     cursor: pointer;
     transition:
+      opacity 0.3s ease,
       color 0.18s ease,
       border-color 0.18s ease;
+  }
+
+  .ci-stage:not(.is-poked) .ci-skip {
+    opacity: 0;
+    pointer-events: none;
   }
 
   .ci-skip:hover {
@@ -509,7 +526,8 @@
   }
 
   /* Устойчивая вертикаль: тот же силуэт, но геометрия уже не повёрнута,
-     поэтому руки и ноги живут в обычных координатах. */
+     поэтому руки и ноги живут в обычных координатах. Точка вращения у ступней,
+     иначе наклон в рывке отрывает ноги от пола. */
   .ci-actor.is-vertical {
     width: 62px;
     height: 264px;
@@ -631,9 +649,8 @@
     transform: rotate(-46deg);
   }
 
-  /* Те же кадры и та же кривая, что у ширмы, плюс наклон корпуса: кнопка
-     упирается, отклоняется от натуги и пятится вправо, волоча ткань за собой.
-     Наклон идёт от ступней, поэтому ноги остаются на линии пола. */
+  /* Те же кадры и та же кривая, что у полотна, плюс наклон корпуса: кнопка
+     упирается, отклоняется от натуги и пятится вправо, волоча заливку за собой. */
   .ci-stage.is-pulling .ci-actor {
     animation: ci-drag 2.9s cubic-bezier(0.42, 0, 0.58, 1) forwards;
   }
@@ -714,10 +731,6 @@
   /* ---------- узкие экраны ---------- */
 
   @media (max-width: 900px) {
-    .ci-floorline {
-      width: calc(100% - 36px);
-    }
-
     .ci-skip {
       right: 30px;
     }
@@ -756,11 +769,6 @@
 
     .ci-leg--r {
       right: 10px;
-    }
-
-    .ci-shelf {
-      width: 240px;
-      margin-left: -120px;
     }
 
     .ci-shadow {
@@ -835,17 +843,14 @@
     };
 
     /**
-     * Ширма закрывает сайт целиком, поэтому фокус не должен уходить под неё.
-     * Помечаем именно закрытые куски, а не main: сцена лежит внутри main, и
-     * inert на нём выключил бы её собственные кнопки.
+     * Шапка и футер остаются живыми — уйти со страницы можно в любой момент.
+     * Прячем от фокуса только то, что закрыто заливкой.
      */
     const setContentInert = (on) => {
-      document
-        .querySelectorAll('header.site-header, footer.site-footer, .contact-hero, .contact-grid, .ci-replay-row')
-        .forEach((el) => {
-          if (on) el.setAttribute('inert', '');
-          else el.removeAttribute('inert');
-        });
+      page.querySelectorAll('.contact-hero, .contact-grid, .ci-replay-row').forEach((el) => {
+        if (on) el.setAttribute('inert', '');
+        else el.removeAttribute('inert');
+      });
     };
 
     const remember = () => {
@@ -857,37 +862,47 @@
     };
 
     /**
-     * Пол сцены совпадает с верхней границей футера, чтобы кнопка ходила
-     * ровно по той линии, которая останется на странице после интро.
+     * Заливка занимает полосу между низом шапки и верхней границей футера,
+     * поэтому страница выглядит целой. По этой же границе кнопка потом ходит.
      */
     const measure = () => {
-      const footer = document.querySelector('footer.site-footer');
-      const viewport = window.innerHeight;
-
       // Пока окно не отдало реальные размеры, считать нечего: дистанции
       // получились бы нулевыми, и рывок выродился бы в дрожание на месте.
-      if (window.innerWidth < 200 || viewport < 200) return;
+      if (window.innerWidth < 200 || window.innerHeight < 200) return;
 
-      const footerTop = footer ? footer.getBoundingClientRect().top : viewport - 150;
-      const floorY = Math.min(Math.max(footerTop, 320), viewport - 40);
+      const header = document.querySelector('header.site-header');
+      const footer = document.querySelector('footer.site-footer');
+
+      // Ужимаем страницу так, чтобы футер попал в экран: иначе на узком экране
+      // карточки уходят вниз и футера под заливкой просто не видно.
+      page.style.maxHeight = '';
+      const overflow = document.body.scrollHeight - window.innerHeight;
+      if (overflow > 0) {
+        const height = page.getBoundingClientRect().height;
+        page.style.maxHeight = Math.max(280, Math.round(height - overflow)) + 'px';
+      }
+
+      const bandTop = header ? header.getBoundingClientRect().bottom : 88;
+      const floorY = footer
+        ? footer.getBoundingClientRect().top
+        : window.innerHeight - 120;
+      const bandHeight = Math.max(260, floorY - bandTop);
+      const sleepY = bandTop + bandHeight / 2;
 
       const lyingWidth = actor.offsetWidth || 264;
       const lyingHeight = actor.offsetHeight || 62;
 
-      // Полка висит на фиксированной высоте над полом: падение читается
-      // одинаково и на ноутбуке, и на большом мониторе.
-      const drop = Math.min(230, Math.max(150, floorY * 0.32));
-      const sleepY = floorY - drop;
-
       const set = (name, value) => stage.style.setProperty(name, Math.round(value) + 'px');
 
-      set('--ci-sleep-y', sleepY);
+      set('--ci-band-top', bandTop);
+      set('--ci-band-height', bandHeight);
       set('--ci-floor-y', floorY);
+      set('--ci-sleep-y', sleepY);
       set('--ci-fall', floorY - sleepY - lyingHeight / 2);
       set('--ci-rise', floorY - sleepY - (lyingWidth / 2 + FEET));
       set('--ci-walk', -(window.innerWidth / 2 - 96));
-      // Ширма стартует с напуском в 14px слева, поэтому уводим её на ширину
-      // экрана с запасом — тогда за правым краем скрывается и она, и кнопка.
+      // Полотно стартует с напуском в 14px слева, поэтому уводим его на ширину
+      // экрана с запасом — тогда за правым краем скрывается и оно, и кнопка.
       set('--ci-pull', window.innerWidth + 90);
     };
 
@@ -895,6 +910,7 @@
       stopTimers();
       stage.hidden = true;
       stage.className = 'ci-stage';
+      page.style.maxHeight = '';
       setContentInert(false);
       root.removeAttribute('data-contact-intro');
       remember();
@@ -926,6 +942,7 @@
         phase = 1;
         say('М-м… ещё пять минут.');
         showHint('Толкните ещё раз');
+        stage.classList.add('is-poked');
         actor.classList.add('is-nudged');
         later(620, () => actor.classList.remove('is-nudged'));
         return;
@@ -938,7 +955,6 @@
       hush();
       showHint('');
       measure();
-      stage.classList.add('is-awake');
       actor.classList.remove('is-nudged');
       actor.classList.add('is-falling');
       label.textContent = 'Ай!';
