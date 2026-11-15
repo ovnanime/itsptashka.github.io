@@ -19,7 +19,6 @@ export const GET: APIRoute = async () => {
   const entries: Entry[] = [
     { path: '/' },
     { path: '/works/' },
-    { path: '/approach/' },
     { path: '/about/' },
     { path: '/journal/' },
     { path: '/contact/' },

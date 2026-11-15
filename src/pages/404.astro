@@ -87,27 +87,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       text-align: center;
     }
 
-    .error-mark {
-      display: grid;
-      place-items: center;
-      width: min(250px, 88%);
-      aspect-ratio: 1;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at center, rgba(255,255,255,0.045), transparent 64%);
-      box-sizing: border-box;
-    }
-
-    .error-mark span {
-      font-family: Roboto, Arial, sans-serif;
-      font-size: clamp(104px, 11vw, 184px);
-      line-height: 1;
-      font-weight: 900;
-      color: rgba(255,255,255,0.12);
-      transform: translateY(-2px);
-    }
-
     .error-content {
       min-width: 0;
       width: 100%;
@@ -156,10 +135,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         gap: 38px;
       }
 
-      .error-mark {
-        width: min(220px, 90%);
-      }
-
       .error-content h1 {
         font-size: clamp(36px, 5.6vw, 56px);
       }
@@ -184,10 +159,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         width: auto;
         font-size: clamp(96px, 34vw, 176px);
         text-align: left;
-      }
-
-      .error-mark {
-        width: min(180px, 50vw);
       }
 
       .error-content h1 {

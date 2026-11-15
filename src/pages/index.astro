@@ -242,7 +242,7 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
           А опыт звукорежиссера позволяет свести этот исходник так, 
           чтобы голос стал абсолютно естественной частью видеоряда.
         </p>
-        <a class="text-link" href="/approach/">
+        <a class="text-link" href="/about/#approach">
           Как я строю персонажа ↗
         </a>
       </div>
@@ -367,8 +367,12 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
       paintBars();
 
       if (wasPlaying) {
-        await activeAudio.play();
-        setPlayingState(true);
+        try {
+          await activeAudio.play();
+          setPlayingState(true);
+        } catch {
+          setPlayingState(false);
+        }
       }
     };
 
@@ -392,8 +396,12 @@ const journalPlaceholders = Array.from({ length: journalPlaceholderCount });
 
     playButton?.addEventListener('click', async () => {
       if (activeAudio.paused) {
-        await activeAudio.play();
-        setPlayingState(true);
+        try {
+          await activeAudio.play();
+          setPlayingState(true);
+        } catch {
+          setPlayingState(false);
+        }
       } else {
         activeAudio.pause();
         setPlayingState(false);

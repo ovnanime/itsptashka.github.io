@@ -36,6 +36,9 @@ const localTargetExists = (value) => {
 for (const file of htmlFiles) {
   const html = readFileSync(file, 'utf8');
 
+  // Страницы-редиректы (astro redirects) — служебные заглушки без разметки сайта.
+  if (/<meta\b[^>]*http-equiv=["']refresh["']/i.test(html)) continue;
+
   if (!/<html\b[^>]*\blang=["']ru["']/i.test(html)) report(file, 'missing html lang="ru"');
   if (!/<title>\s*[^<]+\s*<\/title>/i.test(html)) report(file, 'missing non-empty title');
   if (!/<meta\b[^>]*\bname=["']description["'][^>]*\bcontent=["'][^"']+["']/i.test(html)) {

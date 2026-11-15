@@ -5,6 +5,8 @@ import Seo from '../components/Seo.astro';
 import type { Props as SeoProps } from '../components/Seo.astro';
 import { CONTACTS, NAV_ITEMS, SITE } from '../data/site';
 import { canonicalPath } from '../data/seo';
+import robotoCyrillic from '../assets/fonts/roboto-cyrillic-wght-normal.woff2?url';
+import robotoLatin from '../assets/fonts/roboto-latin-wght-normal.woff2?url';
 
 export interface Props extends Partial<SeoProps> {}
 
@@ -27,12 +29,10 @@ const currentYear = new Date().getFullYear();
     <Seo title={title} description={description} {...seo} />
     <ClientRouter fallback="animate" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700;800;900&display=optional"
-      rel="stylesheet"
-    />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <link rel="preload" href={robotoCyrillic} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={robotoLatin} as="font" type="font/woff2" crossorigin />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon.png" />
@@ -41,6 +41,8 @@ const currentYear = new Date().getFullYear();
   </head>
 
   <body>
+    <a class="skip-link" href="#main">Перейти к содержимому</a>
+
     <header class="site-header">
       <a class="brand" href="/" aria-label="На главную">
         {SITE.name}
@@ -74,7 +76,7 @@ const currentYear = new Date().getFullYear();
       </nav>
     </header>
 
-    <main>
+    <main id="main" tabindex="-1">
       <slot />
     </main>
 
@@ -184,13 +186,8 @@ const currentYear = new Date().getFullYear();
           '[data-no-image-viewer]',
           '.coming-card',
           '.coming-banner',
-          '.movie-poster-link',
-          '.project-card',
-          '.project-image',
           '.release-card-redesign',
-          '.demo-card',
-          '.demo-thumb',
-          '.demo-video-card'
+          '.demo-card'
         ].join(',');
 
         const images = Array.from(document.querySelectorAll('img:not([data-image-viewer-image])'));
@@ -203,7 +200,7 @@ const currentYear = new Date().getFullYear();
 
           const target =
             image.closest(
-              'figure, .journal-shot, .journal-image-placeholder, .portrait-frame, ' +
+              'figure, .journal-shot, .portrait-frame, ' +
               '.abv4-photo, .abv4-image-slot, .abv4-timeline-photo'
             ) || image.parentElement;
 

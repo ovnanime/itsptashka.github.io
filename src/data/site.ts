@@ -9,7 +9,6 @@ export const SITE = {
 export const NAV_ITEMS = [
   { href: '/', label: 'Главная' },
   { href: '/works/', label: 'Работы' },
-  { href: '/approach/', label: 'Подход' },
   { href: '/about/', label: 'Обо мне' },
   { href: '/journal/', label: 'Публикации' },
   { href: '/contact/', label: 'Контакты' },
