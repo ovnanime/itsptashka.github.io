@@ -1,0 +1,81 @@
+/* Карточка-превью демо: серая обложка и кнопка запуска. Общая для «Работ» и главной. */
+
+.demo-card.has-video {
+  min-width: 0;
+}
+
+.demo-video-launch {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-height: 210px;
+  padding: 0;
+  border: 1px solid var(--line);
+  background: #050505;
+  color: #fff;
+  cursor: pointer;
+  overflow: hidden;
+  text-align: left;
+}
+
+.demo-video-preview,
+.demo-video-preview img,
+.demo-video-shade {
+  position: absolute;
+  inset: 0;
+}
+
+.demo-video-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.68;
+  filter: grayscale(1) contrast(1.05);
+}
+
+.demo-video-shade {
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255,255,255,0.13), transparent 26%),
+    linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.72));
+}
+
+.demo-video-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  width: 72px;
+  height: 72px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.58);
+  backdrop-filter: blur(10px);
+  transform: translate(-50%, -50%);
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.demo-video-play svg {
+  width: 32px;
+  height: 32px;
+  fill: #fff;
+}
+
+.demo-video-open {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.demo-video-launch:hover .demo-video-play {
+  transform: translate(-50%, -50%) scale(1.06);
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.34);
+}

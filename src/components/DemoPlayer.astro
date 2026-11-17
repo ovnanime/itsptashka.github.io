@@ -1,0 +1,269 @@
+---
+/**
+ * Полноэкранный плеер демо. Открывается любой кнопкой с data-demo-video
+ * (data-demo-title, data-demo-text — заголовок и подпись в плеере).
+ * Подключается один раз на страницу.
+ */
+import VideoPlayer from './VideoPlayer.astro';
+---
+
+<div class="demo-player-overlay" data-demo-player hidden aria-hidden="true">
+  <VideoPlayer />
+</div>
+
+<script is:inline data-astro-rerun>
+  (() => {
+  const pageController = new AbortController();
+  const { signal: pageSignal } = pageController;
+  document.addEventListener('astro:before-swap', () => {
+    document.querySelector('[data-demo-player-video]')?.pause?.();
+    pageController.abort();
+  }, {
+    once: true,
+    signal: pageSignal,
+  });
+
+  (() => {
+    const overlay = document.querySelector('[data-demo-player]');
+    if (overlay && overlay.parentElement !== document.body) {
+      document.body.appendChild(overlay);
+    }
+
+    const shell = overlay?.querySelector('.demo-player-shell');
+    const video = overlay?.querySelector('[data-demo-player-video]');
+    const title = overlay?.querySelector('[data-demo-player-title]');
+    const subtitle = overlay?.querySelector('[data-demo-player-subtitle]');
+    const currentTime = overlay?.querySelector('[data-demo-current]');
+    const durationTime = overlay?.querySelector('[data-demo-duration]');
+    const progress = overlay?.querySelector('[data-demo-progress]');
+    const volume = overlay?.querySelector('[data-demo-volume]');
+    const settingsPanel = overlay?.querySelector('[data-demo-settings-panel]');
+    const download = overlay?.querySelector('[data-video-download]');
+    const openButtons = document.querySelectorAll('[data-demo-video]');
+
+    if (!overlay || !shell || !video) return;
+
+    const formatTime = (seconds) => {
+      if (!Number.isFinite(seconds)) return '0:00';
+
+      const total = Math.max(0, Math.floor(seconds));
+      const minutes = Math.floor(total / 60);
+      const rest = String(total % 60).padStart(2, '0');
+
+      return `${minutes}:${rest}`;
+    };
+
+    const updatePlayingState = () => {
+      shell.classList.toggle('is-playing', !video.paused && !video.ended);
+      shell.classList.toggle('is-paused', video.paused || video.ended);
+    };
+
+    const updateProgress = () => {
+      if (progress && video.duration) {
+        progress.value = String((video.currentTime / video.duration) * 1000);
+      }
+
+      if (currentTime) currentTime.textContent = formatTime(video.currentTime);
+      if (durationTime) durationTime.textContent = formatTime(video.duration);
+    };
+
+    const openPlayer = (button) => {
+      const src = button.dataset.demoVideo;
+      if (!src) return;
+
+      video.src = src;
+      video.currentTime = 0;
+
+      if (download) {
+        download.href = src;
+        download.setAttribute('download', src.split('/').pop() || 'video');
+      }
+      video.playbackRate = 1;
+
+      if (title) title.textContent = button.dataset.demoTitle || 'Демо';
+      if (subtitle) subtitle.textContent = button.dataset.demoText || 'Фрагмент работы';
+
+      overlay.hidden = false;
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('demo-player-open');
+      document.documentElement.classList.add('demo-player-open-root');
+      settingsPanel?.setAttribute('hidden', '');
+
+      updatePlayingState();
+      video.play().catch(() => updatePlayingState());
+    };
+
+    const closePlayer = async () => {
+      video.pause();
+
+      if (document.fullscreenElement) {
+        try {
+          await document.exitFullscreen();
+        } catch {}
+      }
+
+      overlay.hidden = true;
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('demo-player-open');
+      document.documentElement.classList.remove('demo-player-open-root');
+      settingsPanel?.setAttribute('hidden', '');
+    };
+
+    const togglePlay = () => {
+      if (video.paused || video.ended) {
+        video.play().catch(() => updatePlayingState());
+      } else {
+        video.pause();
+      }
+    };
+
+    openButtons.forEach((button) => {
+      button.addEventListener('click', () => openPlayer(button));
+    });
+
+    overlay.querySelectorAll('[data-demo-close]').forEach((button) => {
+      button.addEventListener('click', closePlayer);
+    });
+
+    overlay.querySelectorAll('[data-demo-toggle]').forEach((button) => {
+      button.addEventListener('click', togglePlay);
+    });
+
+    overlay.querySelectorAll('[data-demo-seek]').forEach((button) => {
+      button.addEventListener('click', () => {
+        video.currentTime = Math.min(
+          Math.max(0, video.currentTime + Number(button.dataset.demoSeek || 0)),
+          video.duration || video.currentTime
+        );
+      });
+    });
+
+    overlay.querySelector('[data-demo-mute]')?.addEventListener('click', () => {
+      video.muted = !video.muted;
+    });
+
+    overlay.querySelector('[data-demo-settings]')?.addEventListener('click', () => {
+      if (!settingsPanel) return;
+      settingsPanel.hidden = !settingsPanel.hidden;
+    });
+
+    overlay.querySelectorAll('[data-demo-speed]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const speed = Number(button.dataset.demoSpeed || 1);
+        video.playbackRate = speed;
+
+        overlay.querySelectorAll('[data-demo-speed]').forEach((item) => {
+          item.classList.toggle('active', item === button);
+        });
+
+        settingsPanel?.setAttribute('hidden', '');
+      });
+    });
+
+    overlay.querySelector('[data-demo-pip]')?.addEventListener('click', async () => {
+      if (!document.pictureInPictureEnabled || !video.requestPictureInPicture) return;
+
+      try {
+        if (document.pictureInPictureElement) {
+          await document.exitPictureInPicture();
+        } else {
+          await video.requestPictureInPicture();
+        }
+      } catch {}
+    });
+
+    overlay.querySelector('[data-demo-fullscreen]')?.addEventListener('click', async () => {
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
+        } else {
+          await shell.requestFullscreen();
+        }
+      } catch {}
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      if (overlay.hidden) return;
+      updatePlayingState();
+    }, { signal: pageSignal });
+
+    progress?.addEventListener('input', () => {
+      if (!video.duration) return;
+      video.currentTime = (Number(progress.value) / 1000) * video.duration;
+    });
+
+    volume?.addEventListener('input', () => {
+      video.volume = Number(volume.value);
+      video.muted = video.volume === 0;
+    });
+
+    video.addEventListener('click', togglePlay);
+    video.addEventListener('loadedmetadata', updateProgress);
+    video.addEventListener('timeupdate', updateProgress);
+    video.addEventListener('play', updatePlayingState);
+    video.addEventListener('pause', updatePlayingState);
+    video.addEventListener('ended', updatePlayingState);
+
+    overlay.addEventListener('click', (event) => {
+      if (event.target === overlay) closePlayer();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (overlay.hidden) return;
+
+      if (event.key === 'Escape') closePlayer();
+      if (event.key === ' ') {
+        event.preventDefault();
+        togglePlay();
+      }
+      if (event.key === 'ArrowLeft') video.currentTime = Math.max(0, video.currentTime - 10);
+      if (event.key === 'ArrowRight') video.currentTime = Math.min(video.duration || video.currentTime, video.currentTime + 10);
+    }, { signal: pageSignal });
+
+    updatePlayingState();
+    updateProgress();
+  })();
+  })();
+
+</script>
+
+<style>
+  .demo-player-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483647;
+    display: grid;
+    place-items: center;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #000;
+    transform: none;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .demo-player-overlay[hidden] {
+    display: none;
+  }
+
+  :global(html.demo-player-open-root),
+  :global(html:has(body.demo-player-open)),
+  :global(body.demo-player-open) {
+    overflow: hidden !important;
+    scrollbar-width: none !important;
+  }
+
+  :global(body.demo-player-open::-webkit-scrollbar) {
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  @media (max-width: 760px) {
+    .demo-player-overlay {
+      padding: 10px;
+    }
+  }
+</style>

@@ -1,0 +1,451 @@
+---
+/** Видеоплеер сайта (оболочка с управлением). Используется внутри DemoPlayer. */
+---
+
+<div class="demo-player-shell" role="dialog" aria-modal="true" aria-label="Видео демо">
+  <video class="demo-player-video" data-demo-player-video playsinline preload="metadata"></video>
+
+  <div class="demo-player-gradient demo-player-gradient-top" aria-hidden="true"></div>
+  <div class="demo-player-gradient demo-player-gradient-bottom" aria-hidden="true"></div>
+
+  <div class="demo-player-top">
+    <button class="demo-player-btn demo-player-back" type="button" data-demo-close aria-label="Вернуться">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15 5 8 12l7 7"></path>
+      </svg>
+    </button>
+    <a class="video-player-download" href="#" download data-video-download>Скачать</a>
+
+    <div class="demo-player-title">
+      <b data-demo-player-title>Демо</b>
+      <span data-demo-player-subtitle>Фрагмент работы</span>
+    </div>
+  </div>
+
+  <button class="demo-player-center" type="button" data-demo-toggle aria-label="Воспроизвести или поставить на паузу">
+    <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M9 7.5v9l7-4.5-7-4.5Z"></path>
+    </svg>
+    <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M8 6.5h3v11H8zM13 6.5h3v11h-3z"></path>
+    </svg>
+  </button>
+
+  <div class="demo-player-controls" data-demo-controls>
+    <div class="demo-player-progress-row">
+      <input
+        class="demo-player-progress"
+        type="range"
+        min="0"
+        max="1000"
+        value="0"
+        step="1"
+        data-demo-progress
+        aria-label="Позиция видео"
+      />
+    </div>
+
+    <div class="demo-player-bar">
+      <div class="demo-player-left">
+        <button class="demo-player-btn" type="button" data-demo-toggle aria-label="Пауза или воспроизведение">
+          <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 7.5v9l7-4.5-7-4.5Z"></path>
+          </svg>
+          <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 6.5h3v11H8zM13 6.5h3v11h-3z"></path>
+          </svg>
+        </button>
+
+        <button class="demo-player-btn" type="button" data-demo-seek="-10" aria-label="Назад на 10 секунд">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7 7v5h5"></path>
+            <path d="M7.6 12A5.9 5.9 0 1 0 10 7.4"></path>
+          </svg>
+        </button>
+
+        <button class="demo-player-btn" type="button" data-demo-seek="10" aria-label="Вперёд на 10 секунд">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M17 7v5h-5"></path>
+            <path d="M16.4 12A5.9 5.9 0 1 1 14 7.4"></path>
+          </svg>
+        </button>
+
+        <span class="demo-player-time">
+          <span data-demo-current>0:00</span>
+          <span>/</span>
+          <span data-demo-duration>0:00</span>
+        </span>
+      </div>
+
+      <div class="demo-player-right">
+        <button class="demo-player-btn" type="button" data-demo-mute aria-label="Выключить звук">
+          <svg class="icon-volume" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 9v6h4l5 4V5L8 9H4Z"></path>
+            <path d="M16 8a5 5 0 0 1 0 8"></path>
+          </svg>
+        </button>
+
+        <input
+          class="demo-player-volume"
+          type="range"
+          min="0"
+          max="1"
+          value="1"
+          step="0.01"
+          data-demo-volume
+          aria-label="Громкость"
+        />
+
+        <button class="demo-player-btn" type="button" data-demo-settings aria-label="Настройки">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"></path>
+            <path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04a2 2 0 0 1-2.82 2.82l-.04-.04a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.08 1.65V21a2 2 0 0 1-4 0v-.06A1.8 1.8 0 0 0 8.8 19.3a1.8 1.8 0 0 0-1.98.36l-.04.04a2 2 0 0 1-2.82-2.82l.04-.04A1.8 1.8 0 0 0 4.36 15a1.8 1.8 0 0 0-1.65-1.08H2.65a2 2 0 0 1 0-4h.06A1.8 1.8 0 0 0 4.36 8.8a1.8 1.8 0 0 0-.36-1.98l-.04-.04a2 2 0 0 1 2.82-2.82l.04.04a1.8 1.8 0 0 0 1.98.36h.01A1.8 1.8 0 0 0 9.88 2.7V2.65a2 2 0 0 1 4 0v.06a1.8 1.8 0 0 0 1.08 1.65 1.8 1.8 0 0 0 1.98-.36l.04-.04a2 2 0 0 1 2.82 2.82l-.04.04a1.8 1.8 0 0 0-.36 1.98v.01a1.8 1.8 0 0 0 1.65 1.08h.06a2 2 0 0 1 0 4h-.06A1.8 1.8 0 0 0 19.4 15Z"></path>
+          </svg>
+        </button>
+
+        <button class="demo-player-btn" type="button" data-demo-pip aria-label="Картинка в картинке">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6h16v12H4z"></path>
+            <path d="M13 12h5v4h-5z"></path>
+          </svg>
+        </button>
+
+        <button class="demo-player-btn" type="button" data-demo-fullscreen aria-label="Во весь экран">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M8 4H4v4"></path>
+            <path d="M16 4h4v4"></path>
+            <path d="M8 20H4v-4"></path>
+            <path d="M16 20h4v-4"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-player-settings" data-demo-settings-panel hidden>
+    <button type="button" data-demo-speed="0.75">0.75×</button>
+    <button type="button" data-demo-speed="1" class="active">1×</button>
+    <button type="button" data-demo-speed="1.25">1.25×</button>
+    <button type="button" data-demo-speed="1.5">1.5×</button>
+  </div>
+</div>
+
+<style>
+  .demo-player-shell {
+    position: relative;
+    width: calc(100vw - 20px);
+    max-width: none;
+    height: calc(100vh - 20px);
+    height: calc(100dvh - 20px);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 20px;
+    background: #000;
+    box-shadow: 0 22px 70px rgba(0, 0, 0, 0.58);
+  }
+
+  .demo-player-video {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
+  }
+
+  .demo-player-gradient {
+    position: absolute;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+  }
+
+  .demo-player-gradient-top {
+    top: 0;
+    height: 32%;
+    background: linear-gradient(180deg, rgba(0,0,0,0.78), transparent);
+  }
+
+  .demo-player-gradient-bottom {
+    bottom: 0;
+    height: 38%;
+    background: linear-gradient(0deg, rgba(0,0,0,0.86), transparent);
+  }
+
+  .demo-player-top {
+    position: absolute;
+    top: 28px;
+    left: 28px;
+    right: 28px;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    pointer-events: none;
+  }
+
+  .demo-player-title {
+    display: grid;
+    gap: 5px;
+    min-width: 0;
+    color: #fff;
+    pointer-events: auto;
+  }
+
+  .demo-player-title b {
+    font-size: 22px;
+    line-height: 1.1;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+  }
+
+  .demo-player-title span {
+    color: rgba(255, 255, 255, 0.66);
+    font-size: 14px;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  .demo-player-center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 4;
+    display: grid;
+    width: 96px;
+    height: 96px;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.58);
+    color: #fff;
+    cursor: pointer;
+    backdrop-filter: blur(12px);
+    transform: translate(-50%, -50%);
+    transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
+  }
+
+  .demo-player-center:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+
+  .demo-player-shell.is-playing .demo-player-center {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+
+  .demo-player-shell.is-paused .demo-player-center {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .demo-player-center svg {
+    width: 42px;
+    height: 42px;
+    fill: currentColor;
+  }
+
+  .demo-player-shell.is-playing .icon-play,
+  .demo-player-shell.is-paused .icon-pause {
+    display: none;
+  }
+
+  .demo-player-controls {
+    position: absolute;
+    left: 28px;
+    right: 28px;
+    bottom: 24px;
+    z-index: 5;
+    display: grid;
+    gap: 12px;
+  }
+
+  .demo-player-progress-row {
+    display: grid;
+  }
+
+  .demo-player-progress,
+  .demo-player-volume {
+    width: 100%;
+    accent-color: #fff;
+    cursor: pointer;
+  }
+
+  .demo-player-progress {
+    height: 18px;
+  }
+
+  .demo-player-volume {
+    width: 130px;
+    height: 18px;
+  }
+
+  .demo-player-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 54px;
+    padding: 0 2px;
+  }
+
+  .demo-player-left,
+  .demo-player-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .demo-player-btn {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.42);
+    color: #fff;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+    pointer-events: auto;
+  }
+
+  .demo-player-btn:hover {
+    border-color: rgba(255, 255, 255, 0.28);
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-1px);
+  }
+
+  .demo-player-btn svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .demo-player-btn .icon-play,
+  .demo-player-btn .icon-pause {
+    fill: currentColor;
+    stroke: none;
+  }
+
+  .demo-player-btn span {
+    font-size: 13px;
+    line-height: 1;
+    font-weight: 900;
+  }
+
+  .demo-player-back {
+    flex: 0 0 auto;
+  }
+
+  .demo-player-time {
+    display: inline-flex;
+    gap: 7px;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 16px;
+    line-height: 1;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  .demo-player-time span:nth-child(2),
+  .demo-player-time span:nth-child(3) {
+    color: rgba(255, 255, 255, 0.48);
+  }
+
+  .demo-player-settings {
+    position: absolute;
+    right: 124px;
+    bottom: 92px;
+    z-index: 7;
+    display: grid;
+    gap: 6px;
+    min-width: 120px;
+    padding: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    background: rgba(8, 8, 8, 0.92);
+    backdrop-filter: blur(14px);
+  }
+
+  .demo-player-settings[hidden] {
+    display: none;
+  }
+
+  .demo-player-settings button {
+    height: 34px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.72);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    text-align: left;
+    padding: 0 10px;
+  }
+
+  .demo-player-settings button:hover,
+  .demo-player-settings button.active {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+  }
+
+  @media (max-width: 760px) {
+    .demo-player-shell {
+      width: calc(100vw - 12px);
+      height: calc(100vh - 12px);
+      height: calc(100dvh - 12px);
+      border-radius: 14px;
+    }
+
+    .demo-player-top {
+      top: 14px;
+      left: 14px;
+      right: 14px;
+    }
+
+    .demo-player-title b {
+      font-size: 18px;
+    }
+
+    .demo-player-controls {
+      left: 14px;
+      right: 14px;
+      bottom: 14px;
+    }
+
+    .demo-player-bar {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .demo-player-right {
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    .demo-player-volume {
+      width: min(36vw, 130px);
+    }
+
+    .demo-player-center {
+      width: 76px;
+      height: 76px;
+    }
+
+    .demo-player-center svg {
+      width: 34px;
+      height: 34px;
+    }
+  }
+
+</style>

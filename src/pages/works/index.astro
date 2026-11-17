@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PartnerBadge from '../../components/PartnerBadge.astro';
+import DemoPlayer from '../../components/DemoPlayer.astro';
+import '../../styles/demo-card.css';
 import { getCollection } from 'astro:content';
 
 interface Project {
@@ -8,6 +10,8 @@ interface Project {
   img: string;
   roles: ('voice' | 'sound' | 'dub')[];
   partner?: 'tvoe' | 'deep';
+  /** Куда ведёт постер: плейлист Rutube или страница в кинотеатре. Без ссылки постер не кликается. */
+  href?: string;
 }
 
 interface ProgramProject {
@@ -77,66 +81,93 @@ const demoCards = [
   },
 ];
 
+const soundCards = [
+  {
+    title: 'Сцена 1',
+    text: 'Саунд-дизайн с нуля: шумы, эффекты, атмосфера и сведение.',
+    video: '/assets/video/sound-design-01.mp4',
+    poster: '/assets/images/demo/sound-design-01.webp',
+  },
+  {
+    title: 'Сцена 2',
+    text: 'Саунд-дизайн с нуля: шумы, эффекты, атмосфера и сведение.',
+    video: '/assets/video/sound-design-02.mp4',
+    poster: '/assets/images/demo/sound-design-02.webp',
+  },
+];
+
 const mdaProjects: Project[] = [
   {
     title: 'Чаша снега',
     img: '/assets/images/posters/mda/Чаша снега.webp',
     roles: ['voice'],
+    href: 'https://rutube.ru/video/15225a767c1e34ee8321981e11d399cc/',
   },
   {
     title: 'Рассекая небосвод',
     img: '/assets/images/posters/mda/Рассекая небосвод.webp',
     roles: ['voice', 'sound'],
+    href: 'https://rutube.ru/plst/1743304/',
   },
   {
     title: 'День моего вознесения',
     img: '/assets/images/posters/mda/День моего вознесения.webp',
     roles: ['voice', 'sound'],
+    href: 'https://rutube.ru/plst/1729276/',
   },
   {
     title: 'Повелитель тайн: Добыча',
     img: '/assets/images/posters/mda/Повелитель тайн Добыча.webp',
     roles: ['voice', 'sound'],
+    href: 'https://rutube.ru/video/f6853e187b7c34a1aa1f12c952934d4b/',
   },
   {
     title: 'Освободите эту ведьму',
     img: '/assets/images/posters/mda/Освободите эту ведьму.webp',
     roles: ['voice', 'sound'],
+    href: 'https://rutube.ru/plst/1516802/',
   },
   {
     title: 'Путь выбора 2026',
     img: '/assets/images/posters/mda/Путь Выбора 2026.webp',
     roles: ['voice', 'sound'],
+    href: 'https://rutube.ru/plst/1451714/',
   },
   {
     title: 'Очерки приключений',
     img: '/assets/images/posters/mda/Очерки приключений во времена династии Тан.webp',
     roles: ['voice', 'sound'],
+    href: 'https://rutube.ru/plst/1282652/',
   },
   {
     title: 'Повелитель тайн: Клоун',
     img: '/assets/images/posters/mda/Повелитель тайн Клоун.webp',
     roles: ['voice', 'sound'],
+    href: 'https://rutube.ru/plst/1282668/',
   },
   {
     title: 'Повесть о герое меча 3',
     img: '/assets/images/posters/mda/Повесть о герое меча 3.webp',
     roles: ['voice', 'sound'],
+    href: 'https://rutube.ru/plst/1389728/',
   },
   {
     title: 'Под тремя реками',
     img: '/assets/images/posters/mda/Под тремя реками.webp',
     roles: ['voice', 'sound'],
+    href: 'https://rutube.ru/plst/1346511/',
   },
   {
     title: 'Воинственный бог',
     img: '/assets/images/posters/mda/Воинственный бог девяти солнц.webp',
     roles: ['voice'],
+    href: 'https://rutube.ru/plst/1313756/',
   },
   {
     title: 'Я из секты меча',
     img: '/assets/images/posters/mda/Я из секты меча.webp',
     roles: ['voice'],
+    href: 'https://rutube.ru/plst/1282658/',
   },
 ];
 
@@ -147,121 +178,142 @@ const edProjects: Project[] = [
     img: '/assets/images/posters/tvoe/Идеальная работа.webp',
     roles: ['sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/idealnaya-rabota',
   },
   {
     title: 'Настоящие мужчины 2',
     img: '/assets/images/posters/tvoe/Настоящие мужчины 2.webp',
     roles: ['voice'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/nastoyaschie-muzhchiny',
   },
   {
     title: 'Список смертников',
     img: '/assets/images/posters/tvoe/Список смертников.webp',
     roles: ['sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/spisok-smertnikov',
   },
   {
     title: 'Новый Стэнфордский тюремный эксперимент',
     img: '/assets/images/posters/tvoe/Новый Стэнфордский тюремный эксперимент.webp',
     roles: ['sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/novyy-stenfordskiy-tyuremnyy-eksperiment',
   },
   {
     title: 'Любой ценой',
     img: '/assets/images/posters/tvoe/Любой ценой.webp',
     roles: ['sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/lyuboy-cenoy',
   },
   {
     title: 'Поздняя слава',
     img: '/assets/images/posters/tvoe/Поздняя слава.webp',
     roles: ['voice', 'sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/pozdnyaya-slava',
   },
   {
     title: 'Американская история ужасов 13 сезон',
     img: '/assets/images/posters/tvoe/Американская история ужасов 13 сезон.webp',
     roles: ['sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/amerikanskaya-istoriya-uzhasov',
   },
   {
     title: 'Вонка: Золотой билет',
     img: '/assets/images/posters/tvoe/Вонка Золотой билет.webp',
     roles: ['sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/vonka-zolotoy-bilet',
   },
   {
     title: 'Взрослые',
     img: '/assets/images/posters/tvoe/Взрослые.webp',
     roles: ['sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/vzroslye',
   },
   {
     title: 'Женщины в синем 2 сезон',
     img: '/assets/images/posters/tvoe/Женщины в синем 2 сезон.webp',
     roles: ['voice', 'sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/zhenschiny-v-sinem',
   },
   {
     title: 'В Филадельфии всегда солнечно 18 сезон',
     img: '/assets/images/posters/tvoe/В Филадельфии всегда солнечно 18 сезон.webp',
     roles: ['voice', 'sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/v-filadelfii-vsegda-solnechno',
   },
   {
     title: 'Чудаки: Лучшее и последнее',
     img: '/assets/images/posters/tvoe/Чудаки Лучшее и последнее.webp',
     roles: ['sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/chudaki-luchshee-i-poslednee',
   },
   {
     title: 'Молодой Вашингтон',
     img: '/assets/images/posters/tvoe/Молодой Вашингтон.webp',
     roles: ['sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/molodoy-vashington',
   },
   {
     title: 'Владение',
     img: '/assets/images/posters/tvoe/Владение.webp',
     roles: ['sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/vladenie',
   },
   {
     title: 'Липкая любовь',
     img: '/assets/images/posters/tvoe/Липкая любовь.webp',
     roles: ['sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/lipkaya-lyubov',
   },
   {
     title: 'Стойкий доктор',
     img: '/assets/images/posters/tvoe/Стойкий доктор.webp',
     roles: ['sound'],
     partner: 'tvoe',
+    href: 'https://tvoe.live/p/stoykiy-doktor',
   },
   {
     title: 'Аватар: Семь пристанищ',
     img: '/assets/images/posters/ed/Аватар Семь пристанищ.webp',
-    roles: ['voice', 'sound'],
+    roles: ['voice', 'sound', 'dub'],
+    href: 'https://rutube.ru/plst/1860310/',
   },
   {
     title: 'Время приключений: Побочные квесты 2 сезон',
     img: '/assets/images/posters/ed/Время приключений Побочные квесты 2 сезон.webp',
     roles: ['voice', 'sound', 'dub'],
+    href: 'https://rutube.ru/plst/1864299/',
   },
   {
     title: 'Отель с привидениями 2 сезон',
     img: '/assets/images/posters/ed/Отель с привидениями 2 сезон.webp',
     roles: ['sound', 'dub'],
+    href: 'https://rutube.ru/plst/1864297/',
   },
   {
     title: 'Время приключений: Побочные квесты',
     img: '/assets/images/posters/ed/Время приключений Побочные квесты.webp',
     roles: ['voice', 'sound', 'dub'],
+    href: 'https://rutube.ru/plst/1701313/',
   },
   {
     title: 'Тайная битва за престол невзрачного принца',
     img: '/assets/images/posters/ed/Тайная битва за престол невзрачного принца.webp',
     roles: ['voice', 'sound', 'dub'],
+    href: 'https://rutube.ru/plst/1711546/',
   },
 ];
 
@@ -459,6 +511,7 @@ const poetryCount = poetryEntries.length;
     </nav>
 
     <div class="portfolio-panel active" data-panel="demo">
+      <p class="demo-group-label">Озвучивание</p>
       <div class="demo-grid">
         {
           demoCards.map((card) => (
@@ -497,6 +550,39 @@ const poetryCount = poetryEntries.length;
                   </div>
                 )
               }
+              <div class="demo-card-meta">
+                <h3>{card.title}</h3>
+                <p>{card.text}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <p class="demo-group-label demo-group-label--next">Звукорежиссура и саунд-дизайн</p>
+      <div class="demo-grid">
+        {
+          soundCards.map((card) => (
+            <article class="demo-card has-video">
+              <button
+                class="demo-video-launch"
+                type="button"
+                data-demo-video={card.video}
+                data-demo-title={card.title}
+                data-demo-text={card.text}
+                aria-label={`Открыть демо: ${card.title}`}
+              >
+                <span class="demo-video-preview">
+                  <img src={card.poster} alt="" width="640" height="360" loading="lazy" decoding="async" />
+                  <span class="demo-video-shade"></span>
+                  <span class="demo-video-play" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M9 7.5v9l7-4.5-7-4.5Z"></path>
+                    </svg>
+                  </span>
+                </span>
+                <span class="demo-video-open">Смотреть демо</span>
+              </button>
               <div class="demo-card-meta">
                 <h3>{card.title}</h3>
                 <p>{card.text}</p>
@@ -575,9 +661,20 @@ const poetryCount = poetryEntries.length;
                   )
                 }
 
-                <div class="release-poster-redesign">
+                <button
+                  class="release-poster-redesign release-poster-open"
+                  type="button"
+                  data-release-open
+                  data-title={project.title}
+                  data-img={project.img}
+                  data-href={project.href}
+                  data-partner={project.partner}
+                  aria-haspopup="dialog"
+                  aria-label={`${project.title} — подробнее`}
+                >
                   <img src={project.img} alt={project.title} width="400" height="600" loading="lazy" decoding="async" />
-                </div>
+                  <span class="release-poster-go" aria-hidden="true">i</span>
+                </button>
 
                 <h3>{project.title}</h3>
               </article>
@@ -631,9 +728,20 @@ const poetryCount = poetryEntries.length;
                   )
                 }
 
-                <div class="release-poster-redesign">
+                <button
+                  class="release-poster-redesign release-poster-open"
+                  type="button"
+                  data-release-open
+                  data-title={project.title}
+                  data-img={project.img}
+                  data-href={project.href}
+                  data-partner={project.partner}
+                  aria-haspopup="dialog"
+                  aria-label={`${project.title} — подробнее`}
+                >
                   <img src={project.img} alt={project.title} width="400" height="600" loading="lazy" decoding="async" />
-                </div>
+                  <span class="release-poster-go" aria-hidden="true">i</span>
+                </button>
 
                 <h3>{project.title}</h3>
               </article>
@@ -674,9 +782,20 @@ const poetryCount = poetryEntries.length;
                   )
                 }
 
-                <div class="release-poster-redesign">
+                <button
+                  class="release-poster-redesign release-poster-open"
+                  type="button"
+                  data-release-open
+                  data-title={project.title}
+                  data-img={project.img}
+                  data-href={project.href}
+                  data-partner={project.partner}
+                  aria-haspopup="dialog"
+                  aria-label={`${project.title} — подробнее`}
+                >
                   <img src={project.img} alt={project.title} width="400" height="600" loading="lazy" decoding="async" />
-                </div>
+                  <span class="release-poster-go" aria-hidden="true">i</span>
+                </button>
 
                 <h3>{project.title}</h3>
               </article>
@@ -705,9 +824,20 @@ const poetryCount = poetryEntries.length;
                   )
                 }
 
-                <div class="release-poster-redesign">
+                <button
+                  class="release-poster-redesign release-poster-open"
+                  type="button"
+                  data-release-open
+                  data-title={project.title}
+                  data-img={project.img}
+                  data-href={project.href}
+                  data-partner={project.partner}
+                  aria-haspopup="dialog"
+                  aria-label={`${project.title} — подробнее`}
+                >
                   <img src={project.img} alt={project.title} width="400" height="600" loading="lazy" decoding="async" />
-                </div>
+                  <span class="release-poster-go" aria-hidden="true">i</span>
+                </button>
 
                 <h3>{project.title}</h3>
               </article>
@@ -856,135 +986,27 @@ const poetryCount = poetryEntries.length;
       </div>
     </div>
 
-    <div class="demo-player-overlay" data-demo-player hidden aria-hidden="true">
-      <div class="demo-player-shell" role="dialog" aria-modal="true" aria-label="Видео демо">
-        <video class="demo-player-video" data-demo-player-video playsinline preload="metadata"></video>
+    <dialog class="release-dialog" data-release-dialog data-no-image-viewer aria-labelledby="release-dialog-title">
+      <div class="release-dialog-body">
+        <button class="release-dialog-close" type="button" data-release-close aria-label="Закрыть">×</button>
+        <img class="release-dialog-poster" data-release-poster src="" alt="" width="400" height="600" />
+        <div class="release-dialog-info">
+          <p class="release-dialog-studio" data-release-studio></p>
+          <h2 id="release-dialog-title" data-release-title></h2>
+          <span class="release-dialog-dub" data-release-dub hidden>Дубляж</span>
+          <p class="release-dialog-label">Должность</p>
+          <ul class="release-dialog-roles" data-release-roles></ul>
 
-        <div class="demo-player-gradient demo-player-gradient-top" aria-hidden="true"></div>
-        <div class="demo-player-gradient demo-player-gradient-bottom" aria-hidden="true"></div>
-
-        <div class="demo-player-top">
-          <button class="demo-player-btn demo-player-back" type="button" data-demo-close aria-label="Вернуться">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M15 5 8 12l7 7"></path>
-            </svg>
-          </button>
-        <a class="video-player-download" href="#" download data-video-download>Скачать</a>
-
-          <div class="demo-player-title">
-            <b data-demo-player-title>Демо</b>
-            <span data-demo-player-subtitle>Фрагмент работы</span>
-          </div>
-        </div>
-
-        <button class="demo-player-center" type="button" data-demo-toggle aria-label="Воспроизвести или поставить на паузу">
-          <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M9 7.5v9l7-4.5-7-4.5Z"></path>
-          </svg>
-          <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M8 6.5h3v11H8zM13 6.5h3v11h-3z"></path>
-          </svg>
-        </button>
-
-        <div class="demo-player-controls" data-demo-controls>
-          <div class="demo-player-progress-row">
-            <input
-              class="demo-player-progress"
-              type="range"
-              min="0"
-              max="1000"
-              value="0"
-              step="1"
-              data-demo-progress
-              aria-label="Позиция видео"
-            />
-          </div>
-
-          <div class="demo-player-bar">
-            <div class="demo-player-left">
-              <button class="demo-player-btn" type="button" data-demo-toggle aria-label="Пауза или воспроизведение">
-                <svg class="icon-play" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M9 7.5v9l7-4.5-7-4.5Z"></path>
-                </svg>
-                <svg class="icon-pause" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M8 6.5h3v11H8zM13 6.5h3v11h-3z"></path>
-                </svg>
-              </button>
-
-              <button class="demo-player-btn" type="button" data-demo-seek="-10" aria-label="Назад на 10 секунд">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M7 7v5h5"></path>
-                  <path d="M7.6 12A5.9 5.9 0 1 0 10 7.4"></path>
-                </svg>
-              </button>
-
-              <button class="demo-player-btn" type="button" data-demo-seek="10" aria-label="Вперёд на 10 секунд">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M17 7v5h-5"></path>
-                  <path d="M16.4 12A5.9 5.9 0 1 1 14 7.4"></path>
-                </svg>
-              </button>
-
-              <span class="demo-player-time">
-                <span data-demo-current>0:00</span>
-                <span>/</span>
-                <span data-demo-duration>0:00</span>
-              </span>
-            </div>
-
-            <div class="demo-player-right">
-              <button class="demo-player-btn" type="button" data-demo-mute aria-label="Выключить звук">
-                <svg class="icon-volume" viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M4 9v6h4l5 4V5L8 9H4Z"></path>
-                  <path d="M16 8a5 5 0 0 1 0 8"></path>
-                </svg>
-              </button>
-
-              <input
-                class="demo-player-volume"
-                type="range"
-                min="0"
-                max="1"
-                value="1"
-                step="0.01"
-                data-demo-volume
-                aria-label="Громкость"
-              />
-
-              <button class="demo-player-btn" type="button" data-demo-settings aria-label="Настройки">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z"></path>
-                  <path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.04.04a2 2 0 0 1-2.82 2.82l-.04-.04a1.8 1.8 0 0 0-1.98-.36 1.8 1.8 0 0 0-1.08 1.65V21a2 2 0 0 1-4 0v-.06A1.8 1.8 0 0 0 8.8 19.3a1.8 1.8 0 0 0-1.98.36l-.04.04a2 2 0 0 1-2.82-2.82l.04-.04A1.8 1.8 0 0 0 4.36 15a1.8 1.8 0 0 0-1.65-1.08H2.65a2 2 0 0 1 0-4h.06A1.8 1.8 0 0 0 4.36 8.8a1.8 1.8 0 0 0-.36-1.98l-.04-.04a2 2 0 0 1 2.82-2.82l.04.04a1.8 1.8 0 0 0 1.98.36h.01A1.8 1.8 0 0 0 9.88 2.7V2.65a2 2 0 0 1 4 0v.06a1.8 1.8 0 0 0 1.08 1.65 1.8 1.8 0 0 0 1.98-.36l.04-.04a2 2 0 0 1 2.82 2.82l-.04.04a1.8 1.8 0 0 0-.36 1.98v.01a1.8 1.8 0 0 0 1.65 1.08h.06a2 2 0 0 1 0 4h-.06A1.8 1.8 0 0 0 19.4 15Z"></path>
-                </svg>
-              </button>
-
-              <button class="demo-player-btn" type="button" data-demo-pip aria-label="Картинка в картинке">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M4 6h16v12H4z"></path>
-                  <path d="M13 12h5v4h-5z"></path>
-                </svg>
-              </button>
-
-              <button class="demo-player-btn" type="button" data-demo-fullscreen aria-label="Во весь экран">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M8 4H4v4"></path>
-                  <path d="M16 4h4v4"></path>
-                  <path d="M8 20H4v-4"></path>
-                  <path d="M16 20h4v-4"></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="demo-player-settings" data-demo-settings-panel hidden>
-          <button type="button" data-demo-speed="0.75">0.75×</button>
-          <button type="button" data-demo-speed="1" class="active">1×</button>
-          <button type="button" data-demo-speed="1.25">1.25×</button>
-          <button type="button" data-demo-speed="1.5">1.5×</button>
+          <a class="release-dialog-watch" data-release-watch href="#" target="_blank" rel="noopener noreferrer" hidden>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5L8 5.5Z" /></svg>
+            <span data-release-watch-label>Смотреть</span>
+            <svg class="release-dialog-watch-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7" /><path d="M9 7h8v8" /></svg>
+          </a>
         </div>
       </div>
-    </div>
+    </dialog>
+
+    <DemoPlayer />
 
   </section>
 
@@ -2205,440 +2227,8 @@ const poetryCount = poetryEntries.length;
     }
 
 
-    /* Demo custom video player: black / white, no accent color */
-    .demo-card.has-video {
-      min-width: 0;
-    }
 
-    .demo-video-launch {
-      position: relative;
-      display: block;
-      width: 100%;
-      min-height: 210px;
-      padding: 0;
-      border: 1px solid var(--line);
-      background: #050505;
-      color: #fff;
-      cursor: pointer;
-      overflow: hidden;
-      text-align: left;
-    }
 
-    .demo-video-preview,
-    .demo-video-preview img,
-    .demo-video-shade {
-      position: absolute;
-      inset: 0;
-    }
-
-    .demo-video-preview img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.68;
-      filter: grayscale(1) contrast(1.05);
-    }
-
-    .demo-video-shade {
-      background:
-        radial-gradient(circle at 50% 48%, rgba(255,255,255,0.13), transparent 26%),
-        linear-gradient(180deg, rgba(0,0,0,0.1), rgba(0,0,0,0.72));
-    }
-
-    .demo-video-play {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      display: grid;
-      width: 72px;
-      height: 72px;
-      place-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.58);
-      backdrop-filter: blur(10px);
-      transform: translate(-50%, -50%);
-      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
-    }
-
-    .demo-video-play svg {
-      width: 32px;
-      height: 32px;
-      fill: #fff;
-    }
-
-    .demo-video-open {
-      position: absolute;
-      left: 14px;
-      bottom: 14px;
-      z-index: 2;
-      color: rgba(255, 255, 255, 0.84);
-      font-size: 13px;
-      line-height: 1;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .demo-video-launch:hover .demo-video-play {
-      transform: translate(-50%, -50%) scale(1.06);
-      background: rgba(255, 255, 255, 0.14);
-      border-color: rgba(255, 255, 255, 0.34);
-    }
-
-    .demo-player-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 2147483647;
-      display: grid;
-      place-items: center;
-      width: 100vw;
-      height: 100vh;
-      height: 100dvh;
-      padding: 10px;
-      box-sizing: border-box;
-      background: #000;
-      transform: none;
-      isolation: isolate;
-      overflow: hidden;
-    }
-
-    .demo-player-overlay[hidden] {
-      display: none;
-    }
-
-    .demo-player-shell {
-      position: relative;
-      width: calc(100vw - 20px);
-      max-width: none;
-      height: calc(100vh - 20px);
-      height: calc(100dvh - 20px);
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 20px;
-      background: #000;
-      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.58);
-    }
-
-    .demo-player-video {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      background: #000;
-    }
-
-    .demo-player-gradient {
-      position: absolute;
-      left: 0;
-      right: 0;
-      pointer-events: none;
-    }
-
-    .demo-player-gradient-top {
-      top: 0;
-      height: 32%;
-      background: linear-gradient(180deg, rgba(0,0,0,0.78), transparent);
-    }
-
-    .demo-player-gradient-bottom {
-      bottom: 0;
-      height: 38%;
-      background: linear-gradient(0deg, rgba(0,0,0,0.86), transparent);
-    }
-
-    .demo-player-top {
-      position: absolute;
-      top: 28px;
-      left: 28px;
-      right: 28px;
-      z-index: 4;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      pointer-events: none;
-    }
-
-    .demo-player-title {
-      display: grid;
-      gap: 5px;
-      min-width: 0;
-      color: #fff;
-      pointer-events: auto;
-    }
-
-    .demo-player-title b {
-      font-size: 22px;
-      line-height: 1.1;
-      font-weight: 900;
-      letter-spacing: -0.03em;
-    }
-
-    .demo-player-title span {
-      color: rgba(255, 255, 255, 0.66);
-      font-size: 14px;
-      line-height: 1.2;
-      font-weight: 600;
-    }
-
-    .demo-player-center {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      z-index: 4;
-      display: grid;
-      width: 96px;
-      height: 96px;
-      place-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      border-radius: 999px;
-      background: rgba(0, 0, 0, 0.58);
-      color: #fff;
-      cursor: pointer;
-      backdrop-filter: blur(12px);
-      transform: translate(-50%, -50%);
-      transition: opacity 0.18s ease, transform 0.18s ease, background 0.18s ease;
-    }
-
-    .demo-player-center:hover {
-      background: rgba(255, 255, 255, 0.12);
-      transform: translate(-50%, -50%) scale(1.04);
-    }
-
-    .demo-player-shell.is-playing .demo-player-center {
-      opacity: 0;
-      pointer-events: none;
-      transform: translate(-50%, -50%) scale(0.96);
-    }
-
-    .demo-player-shell.is-paused .demo-player-center {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .demo-player-center svg {
-      width: 42px;
-      height: 42px;
-      fill: currentColor;
-    }
-
-    .demo-player-shell.is-playing .icon-play,
-    .demo-player-shell.is-paused .icon-pause {
-      display: none;
-    }
-
-    .demo-player-controls {
-      position: absolute;
-      left: 28px;
-      right: 28px;
-      bottom: 24px;
-      z-index: 5;
-      display: grid;
-      gap: 12px;
-    }
-
-    .demo-player-progress-row {
-      display: grid;
-    }
-
-    .demo-player-progress,
-    .demo-player-volume {
-      width: 100%;
-      accent-color: #fff;
-      cursor: pointer;
-    }
-
-    .demo-player-progress {
-      height: 18px;
-    }
-
-    .demo-player-volume {
-      width: 130px;
-      height: 18px;
-    }
-
-    .demo-player-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      min-height: 54px;
-      padding: 0 2px;
-    }
-
-    .demo-player-left,
-    .demo-player-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .demo-player-btn {
-      display: grid;
-      width: 44px;
-      height: 44px;
-      place-items: center;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 12px;
-      background: rgba(0, 0, 0, 0.42);
-      color: #fff;
-      cursor: pointer;
-      backdrop-filter: blur(10px);
-      transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
-      pointer-events: auto;
-    }
-
-    .demo-player-btn:hover {
-      border-color: rgba(255, 255, 255, 0.28);
-      background: rgba(255, 255, 255, 0.1);
-      transform: translateY(-1px);
-    }
-
-    .demo-player-btn svg {
-      width: 22px;
-      height: 22px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .demo-player-btn .icon-play,
-    .demo-player-btn .icon-pause {
-      fill: currentColor;
-      stroke: none;
-    }
-
-    .demo-player-btn span {
-      font-size: 13px;
-      line-height: 1;
-      font-weight: 900;
-    }
-
-    .demo-player-back {
-      flex: 0 0 auto;
-    }
-
-    .demo-player-time {
-      display: inline-flex;
-      gap: 7px;
-      color: rgba(255, 255, 255, 0.92);
-      font-size: 16px;
-      line-height: 1;
-      font-weight: 800;
-      white-space: nowrap;
-    }
-
-    .demo-player-time span:nth-child(2),
-    .demo-player-time span:nth-child(3) {
-      color: rgba(255, 255, 255, 0.48);
-    }
-
-    .demo-player-settings {
-      position: absolute;
-      right: 124px;
-      bottom: 92px;
-      z-index: 7;
-      display: grid;
-      gap: 6px;
-      min-width: 120px;
-      padding: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 12px;
-      background: rgba(8, 8, 8, 0.92);
-      backdrop-filter: blur(14px);
-    }
-
-    .demo-player-settings[hidden] {
-      display: none;
-    }
-
-    .demo-player-settings button {
-      height: 34px;
-      border: 0;
-      border-radius: 8px;
-      background: transparent;
-      color: rgba(255, 255, 255, 0.72);
-      font: inherit;
-      font-size: 13px;
-      font-weight: 800;
-      cursor: pointer;
-      text-align: left;
-      padding: 0 10px;
-    }
-
-    .demo-player-settings button:hover,
-    .demo-player-settings button.active {
-      background: rgba(255, 255, 255, 0.12);
-      color: #fff;
-    }
-
-    html.demo-player-open-root,
-    html:has(body.demo-player-open),
-    body.demo-player-open {
-      overflow: hidden !important;
-      scrollbar-width: none !important;
-    }
-
-    body.demo-player-open::-webkit-scrollbar {
-      width: 0 !important;
-      height: 0 !important;
-    }
-
-    @media (max-width: 760px) {
-      .demo-player-overlay {
-        padding: 10px;
-      }
-
-      .demo-player-shell {
-        width: calc(100vw - 12px);
-        height: calc(100vh - 12px);
-        height: calc(100dvh - 12px);
-        border-radius: 14px;
-      }
-
-      .demo-player-top {
-        top: 14px;
-        left: 14px;
-        right: 14px;
-      }
-
-      .demo-player-title b {
-        font-size: 18px;
-      }
-
-      .demo-player-controls {
-        left: 14px;
-        right: 14px;
-        bottom: 14px;
-      }
-
-      .demo-player-bar {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .demo-player-right {
-        width: 100%;
-        justify-content: flex-start;
-      }
-
-      .demo-player-volume {
-        width: min(36vw, 130px);
-      }
-
-      .demo-player-center {
-        width: 76px;
-        height: 76px;
-      }
-
-      .demo-player-center svg {
-        width: 34px;
-        height: 34px;
-      }
-    }
 
 
     /* Author corner: compact searchable list */
@@ -3967,6 +3557,295 @@ const poetryCount = poetryEntries.length;
       }
     }
 
+
+    /* Постер открывает карточку релиза */
+    .release-poster-open {
+      width: 100%;
+      padding: 0;
+      border: 0;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .release-poster-open img {
+      transition: filter 0.2s ease;
+    }
+
+    .release-poster-go {
+      position: absolute;
+      right: 7px;
+      bottom: 7px;
+      z-index: 4;
+      display: grid;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(10, 10, 10, 0.78);
+      color: #fff;
+      font-family: Georgia, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: 700;
+      line-height: 1;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .release-poster-open:hover,
+    .release-poster-open:focus-visible {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.5);
+    }
+
+    .release-poster-open:hover img,
+    .release-poster-open:focus-visible img {
+      filter: brightness(1.08);
+    }
+
+    .release-poster-open:hover .release-poster-go,
+    .release-poster-open:focus-visible .release-poster-go {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (hover: none) {
+      .release-poster-go {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* Карточка релиза */
+    .release-dialog {
+      width: min(640px, calc(100% - 32px));
+      max-height: calc(100dvh - 32px);
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: #101010;
+      color: var(--text);
+      overflow: auto;
+    }
+
+    .release-dialog::backdrop {
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(6px);
+    }
+
+    .release-dialog-body {
+      position: relative;
+      display: grid;
+      grid-template-columns: 200px minmax(0, 1fr);
+      gap: 24px;
+      padding: 24px;
+    }
+
+    .release-dialog-poster {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #111;
+    }
+
+    .release-dialog-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
+      padding: 8px 8px 8px 0;
+    }
+
+    .release-dialog-studio {
+      padding-right: 44px;
+    }
+
+    .release-dialog-studio,
+    .release-dialog-label {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .release-dialog-info h2 {
+      margin: 0 0 24px;
+      padding-right: 40px;
+      font-size: clamp(24px, 3vw, 30px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .release-dialog-roles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    /* Бейдж «Дубляж» — как на постере */
+    .release-dialog-dub {
+      align-self: flex-start;
+      margin: -12px 0 22px;
+      padding: 5px 9px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.92);
+      color: #050505;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .release-dialog-dub[hidden] {
+      display: none;
+    }
+
+    .release-dialog-roles :global(li) {
+      display: block !important;
+      margin: 0 !important;
+      padding: 7px 12px !important;
+      border: 1px solid rgba(255, 255, 255, 0.22) !important;
+      border-radius: 999px;
+      color: var(--text) !important;
+      font-size: 14px !important;
+      font-weight: 700;
+      line-height: 1.2 !important;
+    }
+
+    .release-dialog-watch {
+      display: inline-flex;
+      align-self: center;
+      align-items: center;
+      gap: 10px;
+      min-height: 48px;
+      margin-top: 28px;
+      padding: 0 18px 0 16px;
+      border: 1px solid #fff;
+      border-radius: 12px;
+      background: #fff;
+      color: #050505;
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .release-dialog-watch:hover,
+    .release-dialog-watch:focus-visible {
+      background: transparent;
+      color: #fff;
+    }
+
+    .release-dialog-watch[hidden] {
+      display: none;
+    }
+
+    .release-dialog-watch svg {
+      width: 18px;
+      height: 18px;
+      fill: currentColor;
+    }
+
+    .release-dialog-watch-arrow {
+      fill: none !important;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.6;
+    }
+
+    .release-dialog-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: grid;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: transparent;
+      color: var(--text);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .release-dialog-close:hover {
+      background: #1c1c1c;
+    }
+
+    @media (max-width: 560px) {
+      /* На телефоне — в одну колонку: постер сверху, кнопка во всю ширину окна. */
+      .release-dialog-body {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        padding: 18px;
+      }
+
+      .release-dialog-poster {
+        width: 132px;
+      }
+
+      .release-dialog-info {
+        padding: 0;
+      }
+
+      .release-dialog-info h2 {
+        font-size: 22px;
+      }
+    }
+
+    /* Деморил: две группы — озвучивание и звук. Разделены воздухом, без линий. */
+    .demo-group-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .demo-group-label::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.7;
+    }
+
+    .demo-group-label--next {
+      margin-top: 44px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .release-poster-open,
+      .release-poster-open img,
+      .release-poster-go {
+        transition: none;
+      }
+    }
+
   </style>
 
   <script is:inline data-astro-rerun>
@@ -4045,218 +3924,59 @@ const poetryCount = poetryEntries.length;
 
   <script is:inline data-astro-rerun>
     (() => {
-    const pageController = new AbortController();
-    const { signal: pageSignal } = pageController;
-    document.addEventListener('astro:before-swap', () => {
-      document.querySelector('[data-demo-player-video]')?.pause?.();
-      pageController.abort();
-    }, {
-      once: true,
-      signal: pageSignal,
-    });
+      const dialog = document.querySelector('[data-release-dialog]');
+      if (!dialog) return;
 
-    (() => {
-      const overlay = document.querySelector('[data-demo-player]');
-      if (overlay && overlay.parentElement !== document.body) {
-        document.body.appendChild(overlay);
-      }
+      const ROLE_NAMES = { voice: 'Актёр озвучивания', sound: 'Звукорежиссёр' };
+      const poster = dialog.querySelector('[data-release-poster]');
+      const studio = dialog.querySelector('[data-release-studio]');
+      const title = dialog.querySelector('[data-release-title]');
+      const roles = dialog.querySelector('[data-release-roles]');
+      const watch = dialog.querySelector('[data-release-watch]');
+      const watchLabel = dialog.querySelector('[data-release-watch-label]');
+      const dubBadge = dialog.querySelector('[data-release-dub]');
+      let opener = null;
 
-      const shell = overlay?.querySelector('.demo-player-shell');
-      const video = overlay?.querySelector('[data-demo-player-video]');
-      const title = overlay?.querySelector('[data-demo-player-title]');
-      const subtitle = overlay?.querySelector('[data-demo-player-subtitle]');
-      const currentTime = overlay?.querySelector('[data-demo-current]');
-      const durationTime = overlay?.querySelector('[data-demo-duration]');
-      const progress = overlay?.querySelector('[data-demo-progress]');
-      const volume = overlay?.querySelector('[data-demo-volume]');
-      const settingsPanel = overlay?.querySelector('[data-demo-settings-panel]');
-      const download = overlay?.querySelector('[data-video-download]');
-      const openButtons = document.querySelectorAll('[data-demo-video]');
-
-      if (!overlay || !shell || !video) return;
-
-      const formatTime = (seconds) => {
-        if (!Number.isFinite(seconds)) return '0:00';
-
-        const total = Math.max(0, Math.floor(seconds));
-        const minutes = Math.floor(total / 60);
-        const rest = String(total % 60).padStart(2, '0');
-
-        return `${minutes}:${rest}`;
-      };
-
-      const updatePlayingState = () => {
-        shell.classList.toggle('is-playing', !video.paused && !video.ended);
-        shell.classList.toggle('is-paused', video.paused || video.ended);
-      };
-
-      const updateProgress = () => {
-        if (progress && video.duration) {
-          progress.value = String((video.currentTime / video.duration) * 1000);
-        }
-
-        if (currentTime) currentTime.textContent = formatTime(video.currentTime);
-        if (durationTime) durationTime.textContent = formatTime(video.duration);
-      };
-
-      const openPlayer = (button) => {
-        const src = button.dataset.demoVideo;
-        if (!src) return;
-
-        video.src = src;
-        video.currentTime = 0;
-
-        if (download) {
-          download.href = src;
-          download.setAttribute('download', src.split('/').pop() || 'video');
-        }
-        video.playbackRate = 1;
-
-        if (title) title.textContent = button.dataset.demoTitle || 'Демо';
-        if (subtitle) subtitle.textContent = button.dataset.demoText || 'Фрагмент работы';
-
-        overlay.hidden = false;
-        overlay.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('demo-player-open');
-        document.documentElement.classList.add('demo-player-open-root');
-        settingsPanel?.setAttribute('hidden', '');
-
-        updatePlayingState();
-        video.play().catch(() => updatePlayingState());
-      };
-
-      const closePlayer = async () => {
-        video.pause();
-
-        if (document.fullscreenElement) {
-          try {
-            await document.exitFullscreen();
-          } catch {}
-        }
-
-        overlay.hidden = true;
-        overlay.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('demo-player-open');
-        document.documentElement.classList.remove('demo-player-open-root');
-        settingsPanel?.setAttribute('hidden', '');
-      };
-
-      const togglePlay = () => {
-        if (video.paused || video.ended) {
-          video.play().catch(() => updatePlayingState());
-        } else {
-          video.pause();
-        }
-      };
-
-      openButtons.forEach((button) => {
-        button.addEventListener('click', () => openPlayer(button));
-      });
-
-      overlay.querySelectorAll('[data-demo-close]').forEach((button) => {
-        button.addEventListener('click', closePlayer);
-      });
-
-      overlay.querySelectorAll('[data-demo-toggle]').forEach((button) => {
-        button.addEventListener('click', togglePlay);
-      });
-
-      overlay.querySelectorAll('[data-demo-seek]').forEach((button) => {
+      document.querySelectorAll('[data-release-open]').forEach((button) => {
         button.addEventListener('click', () => {
-          video.currentTime = Math.min(
-            Math.max(0, video.currentTime + Number(button.dataset.demoSeek || 0)),
-            video.duration || video.currentTime
-          );
+          const card = button.closest('[data-release-card]');
+          const href = button.dataset.href || '';
+          const partner = button.dataset.partner === 'tvoe' ? ' · для TVOË' : '';
+
+          poster.src = button.dataset.img || '';
+          poster.alt = button.dataset.title || '';
+          title.textContent = button.dataset.title || '';
+          const roleList = (card?.dataset.roles || '').split(' ').filter(Boolean);
+          studio.textContent = (button.closest('[data-studio-section]')?.querySelector('h2')?.textContent || '') + partner;
+          // Дубляж — формат сведения релиза, а не должность: бейдж под названием.
+          dubBadge.hidden = !roleList.includes('dub');
+          roles.replaceChildren(...roleList.filter((role) => ROLE_NAMES[role]).map((role) => {
+            const item = document.createElement('li');
+            item.textContent = ROLE_NAMES[role];
+            return item;
+          }));
+
+          watch.hidden = !href;
+          if (href) {
+            watch.href = href;
+            watchLabel.textContent = href.includes('tvoe.live') ? 'Смотреть в TVOË' : 'Смотреть на Rutube';
+          }
+
+          opener = button;
+          dialog.showModal();
         });
       });
 
-      overlay.querySelector('[data-demo-mute]')?.addEventListener('click', () => {
-        video.muted = !video.muted;
+      dialog.querySelector('[data-release-close]')?.addEventListener('click', () => dialog.close());
+      dialog.addEventListener('click', (event) => {
+        if (event.target === dialog) dialog.close();
       });
-
-      overlay.querySelector('[data-demo-settings]')?.addEventListener('click', () => {
-        if (!settingsPanel) return;
-        settingsPanel.hidden = !settingsPanel.hidden;
+      dialog.addEventListener('close', () => {
+        opener?.focus();
+        opener = null;
       });
-
-      overlay.querySelectorAll('[data-demo-speed]').forEach((button) => {
-        button.addEventListener('click', () => {
-          const speed = Number(button.dataset.demoSpeed || 1);
-          video.playbackRate = speed;
-
-          overlay.querySelectorAll('[data-demo-speed]').forEach((item) => {
-            item.classList.toggle('active', item === button);
-          });
-
-          settingsPanel?.setAttribute('hidden', '');
-        });
-      });
-
-      overlay.querySelector('[data-demo-pip]')?.addEventListener('click', async () => {
-        if (!document.pictureInPictureEnabled || !video.requestPictureInPicture) return;
-
-        try {
-          if (document.pictureInPictureElement) {
-            await document.exitPictureInPicture();
-          } else {
-            await video.requestPictureInPicture();
-          }
-        } catch {}
-      });
-
-      overlay.querySelector('[data-demo-fullscreen]')?.addEventListener('click', async () => {
-        try {
-          if (document.fullscreenElement) {
-            await document.exitFullscreen();
-          } else {
-            await shell.requestFullscreen();
-          }
-        } catch {}
-      });
-
-      document.addEventListener('fullscreenchange', () => {
-        if (overlay.hidden) return;
-        updatePlayingState();
-      }, { signal: pageSignal });
-
-      progress?.addEventListener('input', () => {
-        if (!video.duration) return;
-        video.currentTime = (Number(progress.value) / 1000) * video.duration;
-      });
-
-      volume?.addEventListener('input', () => {
-        video.volume = Number(volume.value);
-        video.muted = video.volume === 0;
-      });
-
-      video.addEventListener('click', togglePlay);
-      video.addEventListener('loadedmetadata', updateProgress);
-      video.addEventListener('timeupdate', updateProgress);
-      video.addEventListener('play', updatePlayingState);
-      video.addEventListener('pause', updatePlayingState);
-      video.addEventListener('ended', updatePlayingState);
-
-      overlay.addEventListener('click', (event) => {
-        if (event.target === overlay) closePlayer();
-      });
-
-      document.addEventListener('keydown', (event) => {
-        if (overlay.hidden) return;
-
-        if (event.key === 'Escape') closePlayer();
-        if (event.key === ' ') {
-          event.preventDefault();
-          togglePlay();
-        }
-        if (event.key === 'ArrowLeft') video.currentTime = Math.max(0, video.currentTime - 10);
-        if (event.key === 'ArrowRight') video.currentTime = Math.min(video.duration || video.currentTime, video.currentTime + 10);
-      }, { signal: pageSignal });
-
-      updatePlayingState();
-      updateProgress();
     })();
-    })();
-
   </script>
+
 
 </BaseLayout>
