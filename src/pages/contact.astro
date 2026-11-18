@@ -21,6 +21,12 @@ import { CONTACTS } from '../data/site';
           связи.
         </p>
       </div>
+
+      <a class="contact-resume" href="/resume-ilya-pushkin.pdf" download="Резюме — Илья Пушкин.pdf">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11" /><path d="m7 10 5 5 5-5" /><path d="M5 20h14" /></svg>
+        Скачать резюме
+        <small>PDF</small>
+      </a>
     </section>
 
     <section class="shell contact-grid" aria-label="Способы связи">
@@ -338,6 +344,71 @@ import { CONTACTS } from '../data/site';
     .contact-card {
       --accent: 255, 255, 255;
       cursor: default;
+    }
+
+    /* Кнопка резюме справа, в пустом месте шапки */
+    @media (min-width: 901px) {
+      .contact-hero {
+        grid-template-columns: minmax(0, 1fr) auto !important;
+        align-items: center !important;
+        column-gap: 40px;
+      }
+
+      .contact-hero .contact-resume {
+        justify-self: end;
+      }
+    }
+
+    /* Ссылка на резюме */    /* Ссылка на резюме рядом с заголовком */
+    .contact-resume {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      justify-self: start;
+      padding: 14px 22px;
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--text);
+      font-size: 17px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .contact-resume:hover,
+    .contact-resume:focus-visible {
+      border-color: rgba(255, 255, 255, 0.6);
+      background: rgba(255, 255, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .contact-resume svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .contact-resume small {
+      padding: 3px 7px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    /* Карточки повыше: текст сверху, кнопки внизу */
+    @media (min-width: 901px) {
+      .contact-grid .contact-card {
+        min-height: 300px !important;
+        padding: 28px !important;
+      }
     }
 
     .contact-card--tg {
