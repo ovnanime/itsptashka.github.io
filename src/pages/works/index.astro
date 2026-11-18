@@ -486,6 +486,9 @@ const poetryEntries = (await getCollection('poetry'))
 
 const poetryCount = poetryEntries.length;
 
+const releaseCount = [mdaProjects, edProjects, goltfilmProjects, animauntProjects].reduce((sum, list) => sum + list.length, 0);
+const demoCount = demoCards.filter((card) => card.video).length + soundCards.length;
+
 ---
 
 <BaseLayout
@@ -494,24 +497,26 @@ const poetryCount = poetryEntries.length;
   pageType="CollectionPage"
 >
   <section class="shell portfolio-redesign">
+    <div class="portfolio-top">
     <header class="portfolio-head">
       <p class="portfolio-kicker">Работы</p>
       <h1>Портфолио</h1>
       <p>
-        Деморил по направлениям, релизы по студиям, авторский уголок и программы. <br />
-        Всё компактно: без лишней витрины, дублей и перегруженных кейсов.
+        Голос и звук в реальных проектах: демо по жанрам и саунд-дизайн,
+        релизы для студий озвучки, авторские тексты и собственные программы.
       </p>
     </header>
 
     <nav class="portfolio-tabs" aria-label="Разделы портфолио">
-      <button class="active" type="button" data-tab="demo">Деморил</button>
-      <button type="button" data-tab="releases">Релизы</button>
-      <button type="button" data-tab="author">Авторский уголок</button>
-      <button type="button" data-tab="programs">Программы</button>
+      <button class="active" type="button" data-tab="demo">Деморил <span>{demoCount}</span></button>
+      <button type="button" data-tab="releases">Релизы <span>{releaseCount}</span></button>
+      <button type="button" data-tab="author">Авторский уголок <span>{poetryCount}</span></button>
+      <button type="button" data-tab="programs">Программы <span>{programProjects.length}</span></button>
     </nav>
+    </div>
 
     <div class="portfolio-panel active" data-panel="demo">
-      <p class="demo-group-label">Озвучивание</p>
+      <h2 class="demo-group-label">Озвучивание <span>{demoCards.filter((card) => card.video).length}</span></h2>
       <div class="demo-grid">
         {
           demoCards.map((card) => (
@@ -559,7 +564,7 @@ const poetryCount = poetryEntries.length;
         }
       </div>
 
-      <p class="demo-group-label demo-group-label--next">Звукорежиссура и саунд-дизайн</p>
+      <h2 class="demo-group-label demo-group-label--next">Звукорежиссура и саунд-дизайн <span>{soundCards.length}</span></h2>
       <div class="demo-grid">
         {
           soundCards.map((card) => (
@@ -905,7 +910,6 @@ const poetryCount = poetryEntries.length;
                   <time datetime={entry.data.date.toISOString()}>
                     {entry.data.date.toLocaleDateString('ru-RU')}
                   </time>
-                  <span>Читать</span>
                 </div>
               </a>
             ))
@@ -1024,6 +1028,8 @@ const poetryCount = poetryEntries.length;
       const stored = sessionStorage.getItem(WORKS_TAB_KEY);
       sessionStorage.removeItem(WORKS_TAB_KEY);
 
+      const hashTab = location.hash.replace('#', '');
+      if (availableTabs.includes(hashTab)) return hashTab;
       if (availableTabs.includes(historyTab)) return historyTab;
       return availableTabs.includes(stored) ? stored : 'demo';
     };
@@ -1979,32 +1985,6 @@ const poetryCount = poetryEntries.length;
       white-space: nowrap !important;
     }
 
-    .author-row-meta span {
-      display: inline-flex !important;
-      min-width: 82px !important;
-      height: 38px !important;
-      align-items: center !important;
-      justify-content: center !important;
-      padding: 0 14px !important;
-      border: 1px solid rgba(255, 255, 255, 0.13) !important;
-      border-radius: 999px !important;
-      background: rgba(255, 255, 255, 0.04) !important;
-      color: #fff !important;
-      font-size: 14px !important;
-      line-height: 1 !important;
-      font-weight: 900 !important;
-      transition:
-        background 0.16s ease,
-        border-color 0.16s ease,
-        color 0.16s ease !important;
-    }
-
-    .author-row:hover .author-row-meta span {
-      border-color: rgba(255, 255, 255, 0.28) !important;
-      background: #fff !important;
-      color: #050505 !important;
-    }
-
     .author-tools {
       margin-bottom: 20px !important;
     }
@@ -2246,7 +2226,6 @@ const poetryCount = poetryEntries.length;
     .author-row h3 { margin: 0; color: var(--text); font-size: 18px; line-height: 1.15; font-weight: 900; letter-spacing: -0.025em; transition: color 0.18s ease; }
     .author-row p { max-width: 700px; margin: 7px 0 0; color: var(--muted); font-size: 14px; line-height: 1.45; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .author-row-meta { display: grid; justify-items: end; gap: 7px; color: var(--muted); font-size: 13px; font-weight: 700; white-space: nowrap; }
-    .author-row-meta span { color: var(--text); }
     .author-empty { margin: 24px 0 0; color: var(--muted); font-size: 15px; }
     @media (max-width: 820px) {
       .author-tools { grid-template-columns: 1fr; }
@@ -2362,14 +2341,6 @@ const poetryCount = poetryEntries.length;
     .author-row-meta {
       align-content: space-between !important;
       min-height: 74px !important;
-    }
-
-    .author-row-meta span {
-      display: inline-flex;
-      padding: 6px 9px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 999px;
-      font-size: 12px;
     }
 
     .author-empty {
@@ -2493,14 +2464,6 @@ const poetryCount = poetryEntries.length;
     .author-row-meta time {
       color: rgba(255, 255, 255, 0.58) !important;
       font-size: 12px !important;
-    }
-
-    .author-row-meta span {
-      padding: 5px 8px !important;
-      border-color: rgba(255, 255, 255, 0.10) !important;
-      border-radius: 999px !important;
-      font-size: 12px !important;
-      font-weight: 800 !important;
     }
 
     @media (max-width: 820px) {
@@ -2734,15 +2697,6 @@ const poetryCount = poetryEntries.length;
       opacity: 1 !important;
     }
 
-    .author-corner-redesign .author-row-meta span {
-      min-width: 104px !important;
-      height: 44px !important;
-      padding: 0 18px !important;
-      border-radius: 999px !important;
-      font-size: 16px !important;
-      font-weight: 900 !important;
-    }
-
     .author-corner-redesign .author-tools label > span,
     .author-corner-redesign .author-search > span,
     .author-corner-redesign .author-filter > span {
@@ -2800,15 +2754,6 @@ const poetryCount = poetryEntries.length;
       min-width: 0 !important;
     }
 
-    .author-corner-redesign .author-row-meta span {
-      min-width: 78px !important;
-      height: 34px !important;
-      padding: 0 12px !important;
-      border-radius: 999px !important;
-      font-size: 13px !important;
-      font-weight: 900 !important;
-    }
-
     .author-corner-redesign .author-row-meta {
       min-width: 118px !important;
       gap: 14px !important;
@@ -2847,15 +2792,6 @@ const poetryCount = poetryEntries.length;
       border-radius: 6px !important;
       font-size: 10px !important;
       font-weight: 800 !important;
-    }
-
-    .author-corner-redesign .author-row-meta span {
-      min-width: 64px !important;
-      height: 28px !important;
-      padding: 0 10px !important;
-      border-radius: 999px !important;
-      font-size: 12px !important;
-      font-weight: 900 !important;
     }
 
     .author-corner-redesign .author-row-meta {
@@ -2942,15 +2878,6 @@ const poetryCount = poetryEntries.length;
       letter-spacing: 0 !important;
       text-transform: none !important;
       opacity: 1 !important;
-    }
-
-    .author-corner-redesign .author-row-meta span {
-      min-width: 78px !important;
-      height: 34px !important;
-      padding: 0 14px !important;
-      border-radius: 999px !important;
-      font-size: 13px !important;
-      font-weight: 900 !important;
     }
 
     .author-corner-redesign .author-row-meta {
@@ -3270,15 +3197,6 @@ const poetryCount = poetryEntries.length;
         text-align: center !important;
         white-space: nowrap !important;
       }
-
-      .author-row-meta span {
-        width: 100% !important;
-        min-width: 0 !important;
-        height: 36px !important;
-        padding: 0 8px !important;
-        font-size: 13px !important;
-        box-sizing: border-box !important;
-      }
     }
 
     @media (max-width: 390px) {
@@ -3304,11 +3222,6 @@ const poetryCount = poetryEntries.length;
       .author-row-meta time {
         font-size: 11px !important;
       }
-
-      .author-row-meta span {
-        height: 34px !important;
-        font-size: 12px !important;
-      }
     }
 
   
@@ -3321,7 +3234,6 @@ const poetryCount = poetryEntries.length;
         align-items: flex-end !important;
       }
 
-      .author-row-meta span,
       .author-row-meta a {
         width: auto !important;
         min-width: 72px !important;
@@ -3335,7 +3247,6 @@ const poetryCount = poetryEntries.length;
     }
 
     @media (max-width: 390px) {
-      .author-row-meta span,
       .author-row-meta a {
         min-width: 68px !important;
         height: 32px !important;
@@ -3363,7 +3274,6 @@ const poetryCount = poetryEntries.length;
         text-align: center !important;
       }
 
-      .author-row-meta span,
       .author-row-meta a {
         width: auto !important;
         min-width: 0 !important;
@@ -3388,7 +3298,6 @@ const poetryCount = poetryEntries.length;
         min-width: 78px !important;
       }
 
-      .author-row-meta span,
       .author-row-meta a {
         max-width: 72px !important;
         height: 32px !important;
@@ -3402,7 +3311,6 @@ const poetryCount = poetryEntries.length;
        ====================================================================== */
 
     @media (max-width: 720px) {
-      .author-row-meta span,
       .author-row-meta a {
         width: auto !important;
         min-width: 0 !important;
@@ -3415,7 +3323,6 @@ const poetryCount = poetryEntries.length;
     }
 
     @media (max-width: 390px) {
-      .author-row-meta span,
       .author-row-meta a {
         height: 26px !important;
         padding-inline: 7px !important;
@@ -3495,7 +3402,6 @@ const poetryCount = poetryEntries.length;
         text-align: right !important;
       }
 
-      .author-row-meta span,
       .author-row-meta a {
         width: auto !important;
         min-width: 0 !important;
@@ -3512,7 +3418,6 @@ const poetryCount = poetryEntries.length;
        ====================================================================== */
 
     @media (max-width: 720px) {
-      .author-row-meta span,
       .author-row-meta a {
         height: 26px !important;
         min-height: 26px !important;
@@ -3523,7 +3428,6 @@ const poetryCount = poetryEntries.length;
     }
 
     @media (max-width: 390px) {
-      .author-row-meta span,
       .author-row-meta a {
         height: 24px !important;
         min-height: 24px !important;
@@ -3812,30 +3716,36 @@ const poetryCount = poetryEntries.length;
     }
 
     /* Деморил: две группы — озвучивание и звук. Разделены воздухом, без линий. */
+    /* Подписи групп деморила: читаемые, но спокойнее заголовков студий */
     .demo-group-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0 0 16px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 800;
-      line-height: 1.2;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
+      display: block;
+      margin: 30px 0 18px;
+      hyphens: manual !important;
+      text-wrap: balance;
+      color: #fff;
+      font-size: 21px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
     }
 
-    .demo-group-label::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: currentColor;
-      opacity: 0.7;
+    .demo-group-label span {
+      display: inline-grid;
+      margin-left: 8px;
+      vertical-align: 3px;
+      place-items: center;
+      min-width: 26px;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: #222;
+      color: #cfcfcf;
+      font-size: 13px;
+      font-weight: 800;
     }
 
     .demo-group-label--next {
-      margin-top: 44px;
+      margin-top: 48px;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -3843,6 +3753,83 @@ const poetryCount = poetryEntries.length;
       .release-poster-open img,
       .release-poster-go {
         transition: none;
+      }
+    }
+
+
+    /* Низ страницы: дальше подвал со своим отступом 64 px — лишний воздух не нужен */
+    .portfolio-redesign {
+      padding-bottom: 0 !important;
+    }
+
+    /* Шапка: заголовок, описание, линия, под ней вкладки */
+    .portfolio-top {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 28px;
+      margin-bottom: 30px;
+    }
+
+    .portfolio-redesign .portfolio-head {
+      align-self: stretch;
+      max-width: none !important;
+      padding-bottom: 24px !important;
+      border-bottom: 1px solid var(--line) !important;
+    }
+
+    .portfolio-redesign .portfolio-head p {
+      max-width: 760px;
+    }
+
+    .portfolio-redesign .portfolio-tabs {
+      align-self: stretch;
+      margin: 0 !important;
+    }
+
+    /* ---------- Вкладки разделов: крупнее и контрастнее, без рамок ---------- */
+    .portfolio-redesign .portfolio-tabs {
+      gap: 28px !important;
+    }
+
+    .portfolio-redesign .portfolio-tabs button {
+      display: inline-flex !important;
+      align-items: flex-start;
+      gap: 5px;
+      padding: 0 0 8px !important;
+      border: 0 !important;
+      border-bottom: 2px solid transparent !important;
+      background: transparent !important;
+      color: #8a8a8a !important;
+      font-size: 18px !important;
+      font-weight: 800 !important;
+      line-height: 1.1;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .portfolio-redesign .portfolio-tabs button span {
+      color: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      opacity: 0.75;
+    }
+
+    .portfolio-redesign .portfolio-tabs button:hover {
+      color: #d6d6d6 !important;
+    }
+
+    .portfolio-redesign .portfolio-tabs button.active {
+      border-bottom-color: #fff !important;
+      color: #fff !important;
+    }
+
+    @media (max-width: 760px) {
+      .portfolio-redesign .portfolio-tabs {
+        gap: 24px !important;
+      }
+
+      .portfolio-redesign .portfolio-tabs button {
+        font-size: 18px !important;
       }
     }
 

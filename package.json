@@ -11,14 +11,14 @@
     "check": "astro check",
     "build": "astro build",
     "audit": "node scripts/audit-build.mjs",
-    "audit:deps": "npm audit --omit=dev --audit-level=high",
+    "audit:deps": "node scripts/audit-deps.mjs",
     "verify": "npm run check && npm run build && npm run audit",
     "preview": "astro preview --host 0.0.0.0"
   },
   "dependencies": {
-    "@astrojs/check": "0.9.10",
-    "@astrojs/mdx": "7.0.5",
-    "astro": "7.4.2",
+    "@astrojs/check": "0.9.12",
+    "@astrojs/mdx": "7.0.8",
+    "astro": "7.4.12",
     "typescript": "6.0.3"
   }
 }
