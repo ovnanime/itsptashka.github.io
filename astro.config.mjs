@@ -7,9 +7,9 @@ export default defineConfig({
   site: 'https://ptahen.ru',
   base: '/',
   trailingSlash: 'always',
-  // «Подход» переехал в «Обо мне»: старый адрес остаётся рабочим.
+  // Старой страницы «Подход» больше нет: адрес ведёт на «Обо мне».
   redirects: {
-    '/approach': '/about/#approach',
+    '/approach': '/about/',
   },
   integrations: [mdx()],
   vite: {
