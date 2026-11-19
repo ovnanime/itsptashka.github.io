@@ -23,6 +23,3 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
-
-# Окружение Python для телефонной вёрстки книги (npm run book:pages)
-.book-venv/

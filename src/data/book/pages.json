@@ -2,21 +2,11 @@
   "ch01": {
     "pages": 7,
     "width": 1400,
-    "height": 1980,
-    "mobile": {
-      "pages": 30,
-      "width": 760,
-      "height": 1320
-    }
+    "height": 1980
   },
   "ch02": {
     "pages": 6,
     "width": 1400,
-    "height": 1980,
-    "mobile": {
-      "pages": 23,
-      "width": 760,
-      "height": 1320
-    }
+    "height": 1980
   }
 }

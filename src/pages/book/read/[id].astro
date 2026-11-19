@@ -9,8 +9,7 @@ import pagesManifest from '../../../data/book/pages.json';
  * Чтение главы на сайте: страницы PDF, заранее отрисованные в WebP
  * (npm run book:pages). Страница создаётся для каждой готовой главы.
  */
-type PageSet = { pages: number; width: number; height: number };
-type PageInfo = PageSet & { mobile?: PageSet };
+type PageInfo = { pages: number; width: number; height: number };
 const manifest = pagesManifest as Record<string, PageInfo>;
 
 export async function getStaticPaths() {
@@ -35,13 +34,7 @@ if (!info) {
   );
 }
 
-// Две вёрстки: обычная (A4, две колонки) и телефонная (узкая страница, одна колонка).
-const pageSrc = (dir: string, i: number) => `/book/pages/${dir}/${String(i + 1).padStart(3, '0')}.webp`;
-const sets = [
-  { key: 'desktop', set: info as PageSet, dir: chapter.id },
-  ...(info.mobile ? [{ key: 'mobile', set: info.mobile, dir: `${chapter.id}/m` }] : []),
-];
-const hasMobile = sets.length > 1;
+const pages = Array.from({ length: info.pages }, (_, i) => `/book/pages/${chapter.id}/${String(i + 1).padStart(3, '0')}.webp`);
 const chapterName = nameOf(ch);
 const pdfName = `${BOOK.title} — ${chapterName}.pdf`;
 const updated = ch.updated!;
@@ -89,25 +82,23 @@ const chapterSchema = {
       <!-- Название и часть уже есть на первой странице главы — здесь только для поиска и экранных читалок -->
       <h1 class="visually-hidden">{chapterName}</h1>
 
-      {
-        sets.map(({ key, set, dir }) => (
-          <div class:list={['reader-pages', hasMobile && `reader-pages--${key}`]}>
-            {Array.from({ length: set.pages }, (_, i) => (
-              <img
-                class="reader-sheet"
-                src={pageSrc(dir, i)}
-                width={set.width}
-                height={set.height}
-                alt={`${chapterName}, страница ${i + 1} из ${set.pages}`}
-                loading={i === 0 ? 'eager' : 'lazy'}
-                fetchpriority={i === 0 && key === 'desktop' ? 'high' : undefined}
-                decoding="async"
-                data-no-image-viewer
-              />
-            ))}
-          </div>
-        ))
-      }
+      <div class="reader-pages">
+        {
+          pages.map((src, i) => (
+            <img
+              class="reader-sheet"
+              src={src}
+              width={info.width}
+              height={info.height}
+              alt={`${chapterName}, страница ${i + 1} из ${info.pages}`}
+              loading={i < 2 ? 'eager' : 'lazy'}
+              fetchpriority={i === 0 ? 'high' : undefined}
+              decoding="async"
+              data-no-image-viewer
+            />
+          ))
+        }
+      </div>
 
       <div class="reader-end">
         <nav class="reader-nav" aria-label="Главы книги">
@@ -251,11 +242,6 @@ const chapterSchema = {
       gap: 22px;
     }
 
-    /* Телефонная вёрстка видна только на узком экране, обычная — только на широком */
-    .reader-pages--mobile {
-      display: none;
-    }
-
     .reader-sheet {
       width: 100%;
       height: auto;
@@ -346,15 +332,7 @@ const chapterSchema = {
       }
 
       .reader-pages {
-        gap: 10px;
-      }
-
-      .reader-pages--desktop {
-        display: none;
-      }
-
-      .reader-pages--mobile {
-        display: grid;
+        gap: 14px;
       }
 
       .reader-nav {
