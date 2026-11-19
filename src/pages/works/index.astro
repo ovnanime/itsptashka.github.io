@@ -4,6 +4,7 @@ import PartnerBadge from '../../components/PartnerBadge.astro';
 import DemoPlayer from '../../components/DemoPlayer.astro';
 import '../../styles/demo-card.css';
 import { getCollection } from 'astro:content';
+import { BOOK } from '../../data/book';
 
 interface Project {
   title: string;
@@ -486,6 +487,10 @@ const poetryEntries = (await getCollection('poetry'))
 
 const poetryCount = poetryEntries.length;
 
+// Закреплённая карточка книги в «Авторском уголке» — из тех же данных, что и /book/.
+const bookChapterList = (await getCollection('bookChapters')).filter((entry) => entry.data.kind === 'chapter');
+const bookReadyCount = bookChapterList.filter((entry) => entry.data.status === 'ready').length;
+
 const releaseCount = [mdaProjects, edProjects, goltfilmProjects, animauntProjects].reduce((sum, list) => sum + list.length, 0);
 const demoCount = demoCards.filter((card) => card.video).length + soundCards.length;
 
@@ -857,6 +862,26 @@ const demoCount = demoCards.filter((card) => card.video).length + soundCards.len
         <div class="author-corner-top">
           <span class="author-count">{poetryCount} текстов</span>
         </div>
+
+        <a class="author-book" href="/book/">
+          <img
+            src={BOOK.cover.url}
+            width={BOOK.cover.width}
+            height={BOOK.cover.height}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            data-no-image-viewer
+          />
+          <span class="author-book-body">
+            <span class="author-book-label">Книга · в работе</span>
+            <b>{BOOK.title}</b>
+            <span class="author-book-meta">
+              Готово {bookReadyCount} из {bookChapterList.length} глав · читать на сайте или скачать PDF
+            </span>
+          </span>
+          <span class="author-book-go">Открыть <span aria-hidden="true">→</span></span>
+        </a>
 
         <div class="author-tools" aria-label="Фильтр авторских текстов">
           <label class="author-search">
@@ -3833,6 +3858,103 @@ const demoCount = demoCards.filter((card) => card.video).length + soundCards.len
       }
     }
 
+  
+    /* ---------- Книга: закреплённая карточка в «Авторском уголке» ---------- */
+    .author-book {
+      display: grid;
+      grid-template-columns: 64px minmax(0, 1fr) auto;
+      gap: 20px;
+      align-items: center;
+      margin: 0 0 22px;
+      padding: 14px 18px 14px 14px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #101010;
+      color: inherit;
+      text-decoration: none;
+      transition: border-color 0.18s ease;
+    }
+
+    .author-book:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .author-book img {
+      width: 64px;
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+    }
+
+    .author-book-body {
+      display: grid;
+      min-width: 0;
+      gap: 4px;
+    }
+
+    .author-book-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .author-book b {
+      color: #fff;
+      font-size: 22px;
+      line-height: 1.15;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    .author-book-meta {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .author-book-go {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 40px;
+      padding: 0 16px;
+      border: 1px solid #fff;
+      border-radius: 11px;
+      background: #fff;
+      color: #050505;
+      font-size: 14px;
+      font-weight: 800;
+      white-space: nowrap;
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+
+    .author-book:hover .author-book-go {
+      background: transparent;
+      color: #fff;
+    }
+
+    @media (max-width: 620px) {
+      .author-book {
+        grid-template-columns: 56px minmax(0, 1fr);
+        gap: 14px;
+      }
+
+      .author-book img {
+        width: 56px;
+      }
+
+      .author-book b {
+        font-size: 19px;
+      }
+
+      .author-book-go {
+        grid-column: 2;
+        justify-self: start;
+        height: 36px;
+      }
+    }
   </style>
 
   <script is:inline data-astro-rerun>

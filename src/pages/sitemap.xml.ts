@@ -16,12 +16,24 @@ export const GET: APIRoute = async () => {
   const journal = (await getCollection('journal')).filter((entry) => !entry.data.draft);
   const poetry = (await getCollection('poetry')).filter((entry) => !entry.data.draft);
 
+  // Дата раздела книги — самое свежее обновление главы.
+  const bookReady = (await getCollection('bookChapters')).filter((entry) => entry.data.status === 'ready');
+  const bookUpdated = bookReady
+    .map((entry) => entry.data.updated)
+    .filter((date): date is Date => Boolean(date))
+    .sort((a, b) => b.getTime() - a.getTime())[0];
+
   const entries: Entry[] = [
     { path: '/' },
     { path: '/works/' },
     { path: '/about/' },
     { path: '/journal/' },
+    { path: '/book/', lastmod: bookUpdated },
     { path: '/contact/' },
+    ...bookReady.map((entry) => ({
+      path: `/book/read/${entry.id}/`,
+      lastmod: entry.data.updated,
+    })),
     ...journal.map((entry) => ({
       path: `/journal/${entry.id}/`,
       lastmod: entry.data.updated ?? entry.data.date,

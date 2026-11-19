@@ -2,6 +2,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import DemoPlayer from '../components/DemoPlayer.astro';
 import '../styles/demo-card.css';
+import { getCollection } from 'astro:content';
+import { BOOK } from '../data/book';
+
+// Блок книги: прогресс и первая готовая глава — из тех же данных, что и /book/.
+const bookChapters = (await getCollection('bookChapters'))
+  .filter((entry) => entry.data.kind === 'chapter')
+  .sort((a, b) => a.data.number - b.data.number);
+const bookReady = bookChapters.filter((entry) => entry.data.status === 'ready');
+const bookFirst = bookReady[0];
+const bookProgress = Math.round((bookReady.length / bookChapters.length) * 100);
 
 const soundScenes = [
   {
@@ -210,6 +220,45 @@ const soundScenes = [
             ))
           }
         </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="shell section home-book" aria-labelledby="home-book-title">
+    <a class="home-book-cover" href="/book/" tabindex="-1" aria-hidden="true">
+      <img
+        src={BOOK.cover.url}
+        width={BOOK.cover.width}
+        height={BOOK.cover.height}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        data-no-image-viewer
+      />
+    </a>
+
+    <div class="home-book-intro">
+      <p class="eyebrow">Книга</p>
+      <h2 id="home-book-title">Монтаж звука<br />в кино</h2>
+    </div>
+
+    <div class="home-book-summary">
+      <p>
+        Пишу книгу о звуке в кинопроизводстве — простым языком, для начинающих
+        звукорежиссёров и монтажёров. Выкладываю по главам: читать можно прямо
+        на сайте или скачать PDF.
+      </p>
+
+      <div class="home-book-progress" aria-label={`Готово ${bookReady.length} глав из ${bookChapters.length}`}>
+        <span>Готово {bookReady.length} из {bookChapters.length} глав</span>
+        <i aria-hidden="true"><b style={`width: ${bookProgress}%`}></b></i>
+      </div>
+
+      <div class="home-book-actions">
+        <a class="button light" href="/book/">Открыть книгу</a>
+        {bookFirst && (
+          <a class="text-link" href={`/book/read/${bookFirst.id}/`}>Читать главу {bookFirst.data.number} ↗</a>
+        )}
       </div>
     </div>
   </section>
@@ -948,6 +997,138 @@ const soundScenes = [
 
       .turnkey-release-steps span {
         margin-bottom: 14px;
+      }
+    }
+
+    /* ---------- Книга: в стиле «Полного цикла» ---------- */
+    .home-book {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 200px minmax(0, 0.85fr) minmax(320px, 1.15fr);
+      gap: 56px;
+      align-items: center;
+      border-top: 1px solid var(--line);
+    }
+
+    .home-book::before {
+      content: "КНИГА";
+      position: absolute;
+      top: 40px;
+      right: -8px;
+      color: rgba(255, 255, 255, 0.025);
+      font-size: clamp(72px, 11vw, 164px);
+      line-height: 0.8;
+      font-weight: 900;
+      letter-spacing: -0.08em;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .home-book > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .home-book-cover img {
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      transition: border-color 0.2s ease;
+    }
+
+    .home-book-cover:hover img {
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .home-book h2 {
+      margin: 24px 0 0;
+      font-size: clamp(36px, 4.6vw, 62px);
+      line-height: 0.96;
+      letter-spacing: -0.065em;
+    }
+
+    .home-book-summary > p {
+      max-width: 560px;
+      margin: 0;
+      color: #d4d4d4;
+      font-size: clamp(17px, 1.6vw, 20px);
+      line-height: 1.45;
+    }
+
+    .home-book-progress {
+      max-width: 420px;
+      margin-top: 24px;
+    }
+
+    .home-book-progress span {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .home-book-progress i {
+      display: block;
+      height: 4px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #1e1e1e;
+    }
+
+    .home-book-progress b {
+      display: block;
+      height: 100%;
+      min-width: 4px;
+      border-radius: inherit;
+      background: #fff;
+    }
+
+    .home-book-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 24px;
+      margin-top: 28px;
+    }
+
+    @media (max-width: 980px) {
+      .home-book {
+        grid-template-columns: 160px minmax(0, 1fr);
+        gap: 24px 36px;
+      }
+
+      .home-book-summary {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .home-book {
+        grid-template-columns: 110px minmax(0, 1fr);
+        gap: 20px;
+      }
+
+      .home-book h2 {
+        margin-top: 14px;
+        font-size: clamp(30px, 9vw, 40px);
+      }
+
+      .home-book-summary > p {
+        font-size: 17px;
+      }
+
+      .home-book-actions {
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .home-book-actions .button,
+      .home-book-actions .text-link {
+        white-space: nowrap;
+        font-size: 14px;
       }
     }
 

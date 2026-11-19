@@ -1,0 +1,989 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { BOOK, chapterKind, chapterMark, chapterName } from '../data/book';
+import { PERSON_ID, absoluteUrl } from '../data/seo';
+
+// Данные — в src/data/book/chapters.json; разметку при добавлении глав не трогать.
+const entries = (await getCollection('bookChapters')).sort((a, b) => a.data.number - b.data.number);
+// Счётчики и прогресс — только по главам; приложения и источники в оглавлении, но не в «N из 17».
+const chapters = entries.filter((ch) => ch.data.kind === 'chapter');
+
+const ready = entries.filter((ch) => ch.data.status === 'ready');
+const readyChapters = chapters.filter((ch) => ch.data.status === 'ready');
+const firstReady = ready[0];
+const progress = Math.round((readyChapters.length / chapters.length) * 100);
+const parts = BOOK.parts
+  .map((part) => ({ ...part, items: entries.filter((ch) => ch.data.part === part.id) }))
+  .filter((part) => part.items.length > 0);
+const formatDate = (date: Date) => date.toLocaleDateString('ru-RU');
+const isoDate = (date: Date) => date.toISOString().slice(0, 10);
+const readHref = (id: string) => `/book/read/${id}/`;
+
+const lastUpdated = ready
+  .map((ch) => ch.data.updated)
+  .filter((date): date is Date => Boolean(date))
+  .sort((a, b) => b.getTime() - a.getTime())[0];
+
+const pageTitle = `${BOOK.title} — книга ${BOOK.author.genitive}`;
+const pageDescription = `${BOOK.title}: книга о звуке в кинопроизводстве для начинающих звукорежиссёров и монтажёров. Публикуется по главам — читать на сайте или скачать PDF бесплатно.`;
+
+const bookSchema = {
+  '@type': 'Book',
+  '@id': `${absoluteUrl('/book/')}#book`,
+  name: BOOK.title,
+  description: BOOK.description,
+  inLanguage: 'ru-RU',
+  image: absoluteUrl(BOOK.cover.url),
+  author: { '@id': PERSON_ID },
+  license: BOOK.license.url,
+  isAccessibleForFree: true,
+  creativeWorkStatus: 'Draft',
+  ...(lastUpdated ? { dateModified: isoDate(lastUpdated) } : {}),
+  hasPart: ready.map((ch) => ({
+    '@type': 'Chapter',
+    name: chapterName(ch.data),
+    position: ch.data.number,
+    url: absoluteUrl(readHref(ch.id)),
+    version: ch.data.version,
+  })),
+};
+
+const { feedback } = BOOK;
+const fullPdf: string = BOOK.fullPdf;
+---
+
+<BaseLayout
+  title={pageTitle}
+  description={pageDescription}
+  pageType="CollectionPage"
+  image={BOOK.cover.url}
+  imageWidth={BOOK.cover.width}
+  imageHeight={BOOK.cover.height}
+  imageAlt={`Обложка книги «${BOOK.title}»`}
+  modifiedTime={lastUpdated?.toISOString()}
+  schema={[bookSchema]}
+>
+  <div class="book-page">
+    <section class="shell book-shell">
+      <a class="book-back" href="/works/#author"><span aria-hidden="true">←</span> Все работы</a>
+
+      <!-- ---------- Постер и главное ---------- -->
+      <header class="book-hero">
+        <div class="book-cover">
+          <img
+            src={BOOK.cover.url}
+            width={BOOK.cover.width}
+            height={BOOK.cover.height}
+            alt={`Обложка книги «${BOOK.title}»: звуковые дорожки диалога, музыки, эффектов и фонов, сведённые в одну`}
+            fetchpriority="high"
+            decoding="async"
+            data-no-image-viewer
+          />
+        </div>
+
+        <div class="book-hero-copy">
+          <p class="book-kicker">Книга · {BOOK.author.name}</p>
+          <h1>{BOOK.title}</h1>
+          <p class="book-lead">{BOOK.description}</p>
+
+          <div class="book-progress" aria-label={`Готово ${readyChapters.length} глав из ${chapters.length}`}>
+            <div class="book-progress-row">
+              <span><i class="book-dot" aria-hidden="true"></i>{BOOK.status}</span>
+              <b>{readyChapters.length} из {chapters.length}</b>
+            </div>
+            <div class="book-progress-bar" aria-hidden="true">
+              <span style={`width: ${progress}%`}></span>
+            </div>
+          </div>
+
+          <div class="book-actions">
+            {
+              firstReady && (
+                <a class="book-btn book-btn--primary" href={readHref(firstReady.id)}>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C5.5 4 9 4 12 6c3-2 6.5-2 9-.5V19c-2.5-1.5-6-1.5-9 .5-3-2-6.5-2-9-.5Z" /><path d="M12 6v13.5" /></svg>
+                  Читать с главы {firstReady.data.number}
+                </a>
+              )
+            }
+            {
+              fullPdf ? (
+                <a class="book-btn" href={fullPdf} download={`${BOOK.title}.pdf`}>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11" /><path d="m7 10 5 5 5-5" /><path d="M5 20h14" /></svg>
+                  Скачать книгу
+                </a>
+              ) : (
+                <span class="book-btn book-btn--off" aria-disabled="true" title="Полная версия появится, когда будут готовы все главы">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11" /><path d="m7 10 5 5 5-5" /><path d="M5 20h14" /></svg>
+                  Скачать книгу
+                  <small>скоро</small>
+                </span>
+              )
+            }
+          </div>
+        </div>
+      </header>
+
+      <!-- ---------- Готовые главы и оглавление ---------- -->
+      <section class="book-section" aria-labelledby="book-toc-title">
+        <h2 class="book-section-title" id="book-toc-title">Уже можно читать</h2>
+
+        <ol class="book-ready">
+          {
+            ready.map(({ id, data: ch }) => (
+              <li class="ready-card">
+                <a class="ready-card-link" href={readHref(id)}>
+                  <span class="ready-card-num" aria-hidden="true">{chapterMark(ch)}</span>
+                  <span class="ready-card-body">
+                    <span class="ready-card-label">{chapterKind(ch) || 'Литература'}</span>
+                    <h3>{ch.title}</h3>
+                    <p>{ch.description}</p>
+                    <span class="ready-card-meta">
+                      {ch.version} · обновлено <time datetime={isoDate(ch.updated!)}>{formatDate(ch.updated!)}</time>
+                    </span>
+                  </span>
+                  <span class="ready-card-go">Читать <span aria-hidden="true">→</span></span>
+                </a>
+                <a
+                  class="ready-card-pdf"
+                  href={ch.pdf}
+                  download={`${BOOK.title} — ${chapterName(ch)}.pdf`}
+                  aria-label={`Скачать PDF: ${chapterName(ch)}`}
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11" /><path d="m7 10 5 5 5-5" /><path d="M5 20h14" /></svg>
+                  PDF
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+
+        <details class="book-toc">
+          <summary>
+            <span>Всё оглавление</span>
+            <small>{chapters.length} глав · готово {readyChapters.length}</small>
+            <svg class="book-toc-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
+          </summary>
+
+          <div class="toc-list">
+            {
+              parts.map((part) => (
+                <section class="toc-part" aria-label={`Часть ${part.numeral}. ${part.title}`}>
+                  <h3 class="toc-part-title">
+                    <span class="toc-part-label">Часть {part.numeral}</span>
+                    <span class="toc-part-dot" aria-hidden="true">·</span>
+                    <span class="toc-part-name">{part.title}</span>
+                  </h3>
+                  <ol>
+                    {part.items.map(({ id, data: ch }) =>
+                      ch.status === 'ready' ? (
+                        <li class="toc-item toc-item--ready">
+                          <a href={readHref(id)} aria-label={`${chapterName(ch)} — читать`}>
+                            <span class="toc-num">{ch.kind === 'chapter' ? ch.number : chapterMark(ch)}</span>
+                            <span class="toc-title">{ch.title}</span>
+                            <span class="toc-leader" aria-hidden="true"></span>
+                            <span class="toc-state">Читать</span>
+                          </a>
+                        </li>
+                      ) : (
+                        <li class="toc-item">
+                          <span class="toc-num">{ch.kind === 'chapter' ? ch.number : chapterMark(ch)}</span>
+                          <span class="toc-title">{ch.title}</span>
+                          <span class="toc-leader" aria-hidden="true"></span>
+                          <span class="toc-state">скоро</span>
+                        </li>
+                      ),
+                    )}
+                  </ol>
+                </section>
+              ))
+            }
+          </div>
+        </details>
+      </section>
+
+      <!-- ---------- Нашли ошибку? ---------- -->
+      <section class="book-section book-feedback" aria-labelledby="book-feedback-title">
+        <div class="book-feedback-copy">
+          <h2 class="book-section-title" id="book-feedback-title">Нашли ошибку?</h2>
+          <p>
+            Напишите, пожалуйста, — так книга станет точнее. Укажите главу и
+            страницу, а если можно, процитируйте фразу целиком.
+          </p>
+        </div>
+
+        <div class="book-feedback-actions">
+          <a class="book-action book-action--primary" href={feedback.telegram.href} target="_blank" rel="noopener noreferrer">
+            Telegram {feedback.telegram.label}
+            <span aria-hidden="true">↗</span>
+          </a>
+          <a class="book-action" href={feedback.email.href}>{feedback.email.label}</a>
+          {
+            feedback.formUrl ? (
+              <a class="book-action" href={feedback.formUrl} target="_blank" rel="noopener noreferrer">
+                Форма обратной связи <span aria-hidden="true">↗</span>
+              </a>
+            ) : (
+              <span class="book-action book-action--disabled" aria-disabled="true">
+                Форма обратной связи — скоро
+              </span>
+            )
+          }
+        </div>
+      </section>
+
+      <div class="book-foot">
+        <p>
+          Лицензия{' '}
+          <a href={BOOK.license.url} target="_blank" rel="license noopener noreferrer">{BOOK.license.name}</a>{' '}
+          — можно делиться с указанием автора, без коммерческого использования и переделок.
+        </p>
+        <p>Источники указаны в каждой главе.</p>
+      </div>
+    </section>
+  </div>
+
+  <style>
+    .book-page {
+      padding: 34px 0 24px;
+    }
+
+    /* Подвал ближе к содержимому: у сайта по умолчанию 64 px сверху */
+    :global(body > footer.site-footer) {
+      margin-top: 24px !important;
+    }
+
+    .book-page,
+    .book-page * {
+      font-family: Roboto, Arial, sans-serif;
+    }
+
+    .book-page svg {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    .book-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      transition: color 0.16s ease;
+    }
+
+    .book-back:hover {
+      color: #fff;
+    }
+
+    /* ---------- Постер и главное ---------- */
+    .book-hero {
+      display: grid;
+      grid-template-columns: minmax(220px, 360px) minmax(0, 1fr);
+      gap: 56px;
+      align-items: center;
+      padding: 28px 0 40px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .book-cover img {
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+
+    .book-hero-copy {
+      min-width: 0;
+    }
+
+    .book-kicker {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .book-hero h1 {
+      margin: 0;
+      color: #fff;
+      font-size: 40px;
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.045em;
+      text-wrap: balance;
+    }
+
+    .book-lead {
+      max-width: none;
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .book-progress {
+      max-width: none;
+      margin-top: 26px;
+    }
+
+    .book-progress-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .book-progress-row span {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .book-progress-row b {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .book-dot {
+      width: 8px;
+      height: 8px;
+      flex: none;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .book-progress-bar {
+      height: 4px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #1e1e1e;
+    }
+
+    .book-progress-bar span {
+      display: block;
+      height: 100%;
+      min-width: 4px;
+      border-radius: inherit;
+      background: #fff;
+    }
+
+    .book-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .book-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      height: 50px;
+      padding: 0 22px;
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      border-radius: 12px;
+      background: transparent;
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 800;
+      white-space: nowrap;
+      transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .book-btn svg {
+      width: 20px;
+      height: 20px;
+      flex: none;
+    }
+
+    .book-btn--primary {
+      border-color: #fff;
+      background: #fff;
+      color: #050505;
+    }
+
+    a.book-btn--primary:hover,
+    a.book-btn--primary:focus-visible {
+      background: transparent;
+      color: #fff;
+    }
+
+    .book-btn--off {
+      border-style: dashed;
+      border-color: rgba(255, 255, 255, 0.18);
+      color: var(--muted);
+      cursor: default;
+    }
+
+    .book-btn small {
+      padding: 3px 7px;
+      border-radius: 6px;
+      background: #1a1a1a;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* ---------- Секции ---------- */
+    .book-section {
+      margin-top: 40px;
+    }
+
+    .book-section-title {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    /* ---------- Готовые главы: карточки ---------- */
+    .book-ready {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .ready-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #101010;
+      transition: border-color 0.18s ease;
+    }
+
+    .ready-card:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .ready-card-link {
+      display: flex;
+      flex-direction: column;
+      padding: 18px 20px;
+      color: inherit;
+    }
+
+    /* Крупный номер главы на фоне — как знаки на карточках «Контактов» */
+    .ready-card-num {
+      position: absolute;
+      top: -10px;
+      right: 8px;
+      color: rgba(255, 255, 255, 0.05);
+      font-size: 104px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      pointer-events: none;
+      transition: color 0.3s ease;
+    }
+
+    .ready-card:hover .ready-card-num {
+      color: rgba(255, 255, 255, 0.1);
+    }
+
+    .ready-card-body {
+      position: relative;
+      display: block;
+      flex: 1;
+    }
+
+    .ready-card-label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .ready-card h3 {
+      margin: 0 0 6px;
+      color: #fff;
+      font-size: 22px;
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      text-align: left;
+    }
+
+    .ready-card p {
+      display: -webkit-box;
+      max-width: 460px;
+      margin: 0;
+      overflow: hidden;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .ready-card-meta {
+      display: block;
+      margin-top: 8px;
+      color: #b8c0c8;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .ready-card-go {
+      position: relative;
+      display: inline-flex;
+      align-self: flex-start;
+      align-items: center;
+      gap: 8px;
+      height: 36px;
+      margin-top: 14px;
+      padding: 0 14px;
+      border: 1px solid #fff;
+      border-radius: 11px;
+      background: #fff;
+      color: #050505;
+      font-size: 14px;
+      font-weight: 800;
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+
+    .ready-card:hover .ready-card-go {
+      background: transparent;
+      color: #fff;
+    }
+
+    /* Скачивание — отдельная тихая кнопка, для тех, кому нужен файл */
+    .ready-card-pdf {
+      position: absolute;
+      right: 20px;
+      bottom: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 36px;
+      padding: 0 14px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 11px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 800;
+      transition: border-color 0.18s ease;
+    }
+
+    .ready-card-pdf svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .ready-card-pdf:hover,
+    .ready-card-pdf:focus-visible {
+      border-color: rgba(255, 255, 255, 0.45);
+    }
+
+    /* ---------- Всё оглавление: раскрывающийся список ---------- */
+    .book-toc {
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #0d0d0d;
+    }
+
+    .book-toc summary {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 20px 24px;
+      cursor: pointer;
+      list-style: none;
+      color: #fff;
+      font-size: 19px;
+      font-weight: 800;
+    }
+
+    .book-toc summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .book-toc summary small {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .book-toc-chevron {
+      width: 22px;
+      height: 22px;
+      margin-left: auto;
+      color: var(--muted);
+      transition: transform 0.2s ease;
+    }
+
+    .book-toc[open] .book-toc-chevron {
+      transform: rotate(180deg);
+    }
+
+    .book-toc summary:hover .book-toc-chevron {
+      color: #fff;
+    }
+
+    /* Классическое оглавление в два столбца: части I–II слева, III–IV справа */
+    .toc-list {
+      columns: 2;
+      column-gap: 72px;
+      padding: 8px 32px 34px;
+      border-top: 1px solid var(--line);
+    }
+
+    .toc-part {
+      break-inside: avoid;
+      padding-top: 30px;
+    }
+
+    .toc-part ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .toc-part-title {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 4px 10px;
+      margin: 0 0 10px;
+      text-align: left;
+    }
+
+    .toc-part-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .toc-part-dot {
+      color: var(--muted);
+    }
+
+    .toc-part-name {
+      color: #d4d4d4;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .toc-item,
+    .toc-item a {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+    }
+
+    .toc-item {
+      padding: 7px 0;
+      color: #7a7a76;
+      font-size: 16.5px;
+      font-weight: 500;
+      text-align: left;
+    }
+
+    .toc-item--ready a {
+      width: 100%;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .toc-num {
+      flex: none;
+      min-width: 22px;
+      font-size: 14px;
+      font-variant-numeric: tabular-nums;
+      text-align: right;
+    }
+
+    .toc-leader {
+      flex: 1;
+      min-width: 24px;
+      border-bottom: 1px dotted rgba(255, 255, 255, 0.28);
+      transform: translateY(-4px);
+    }
+
+    .toc-state {
+      flex: none;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* У неготовых глав то же отточие, но тише, и «скоро» вместо «Читать» */
+    .toc-item:not(.toc-item--ready) .toc-leader {
+      border-bottom-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .toc-item:not(.toc-item--ready) .toc-state {
+      color: #5f5f5b;
+      font-weight: 600;
+    }
+
+    .toc-item--ready a:hover .toc-title,
+    .toc-item--ready a:hover .toc-state {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* ---------- «Нашли ошибку?» ---------- */
+    .book-feedback {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 24px;
+      align-items: center;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #101010;
+    }
+
+    .book-feedback .book-section-title {
+      margin-bottom: 10px;
+      color: #fff;
+      font-size: 24px;
+      letter-spacing: -0.035em;
+      text-transform: none;
+      font-weight: 900;
+    }
+
+    .book-feedback-copy p {
+      max-width: 620px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    .book-feedback-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    .book-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-radius: 11px;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    }
+
+    a.book-action:hover,
+    a.book-action:focus-visible {
+      border-color: rgba(255, 255, 255, 0.45);
+    }
+
+    .book-action--primary {
+      border-color: #fff;
+      background: #fff;
+      color: #050505;
+    }
+
+    a.book-action--primary:hover,
+    a.book-action--primary:focus-visible {
+      border-color: #fff;
+      background: transparent;
+      color: #fff;
+    }
+
+    .book-action--disabled {
+      border-style: dashed;
+      color: var(--muted);
+      cursor: default;
+    }
+
+    /* ---------- Низ страницы ---------- */
+    .book-foot {
+      margin-top: 28px;
+    }
+
+    .book-foot p {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .book-foot a {
+      color: var(--text);
+      font-weight: 800;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 255, 255, 0.3);
+      text-underline-offset: 3px;
+    }
+
+    .book-foot a:hover {
+      text-decoration-color: #fff;
+    }
+
+    /* ---------- Планшет и телефон ---------- */
+    @media (max-width: 900px) {
+      .book-hero {
+        grid-template-columns: 200px minmax(0, 1fr);
+        gap: 32px;
+      }
+
+      .book-hero h1 {
+        font-size: 36px;
+      }
+
+      .book-ready {
+        grid-template-columns: 1fr;
+      }
+
+      .book-feedback {
+        grid-template-columns: 1fr;
+      }
+
+      .book-feedback-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .book-page {
+        padding-top: 22px;
+      }
+
+      .book-hero {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding-top: 8px;
+      }
+
+      .book-cover {
+        width: min(62vw, 240px);
+        margin: 0 auto;
+      }
+
+      .book-hero h1 {
+        font-size: 32px;
+      }
+
+      .book-lead {
+        font-size: 17px;
+      }
+
+      .book-actions {
+        flex-direction: column;
+      }
+
+      .book-btn {
+        justify-content: center;
+      }
+
+      .ready-card-link {
+        padding: 16px 18px;
+      }
+
+      .ready-card h3 {
+        font-size: 21px;
+      }
+
+      .ready-card-num {
+        font-size: 90px;
+      }
+
+      .ready-card-pdf {
+        right: 18px;
+        bottom: 16px;
+      }
+
+      .toc-list {
+        columns: 1;
+        padding: 4px 18px 24px;
+      }
+
+      .toc-part {
+        padding-top: 24px;
+      }
+
+      .toc-part-title {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .toc-part-dot {
+        display: none;
+      }
+
+      .toc-item {
+        font-size: 16px;
+      }
+
+      .book-toc summary {
+        flex-wrap: wrap;
+        padding: 18px;
+        row-gap: 4px;
+        font-size: 18px;
+      }
+
+      .book-toc summary small {
+        order: 3;
+        width: 100%;
+      }
+
+      .book-feedback {
+        padding: 18px;
+      }
+
+      .book-feedback-actions {
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ready-card,
+      .ready-card-num {
+        transition: none;
+      }
+    }
+  </style>
+</BaseLayout>

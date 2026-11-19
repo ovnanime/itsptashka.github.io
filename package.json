@@ -12,6 +12,7 @@
     "build": "astro build",
     "audit": "node scripts/audit-build.mjs",
     "audit:deps": "node scripts/audit-deps.mjs",
+    "book:pages": "node scripts/book-pages.mjs",
     "verify": "npm run check && npm run build && npm run audit",
     "preview": "astro preview --host 0.0.0.0"
   },
