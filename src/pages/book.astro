@@ -11,6 +11,10 @@ const chapters = entries.filter((ch) => ch.data.kind === 'chapter');
 
 const ready = entries.filter((ch) => ch.data.status === 'ready');
 const readyChapters = chapters.filter((ch) => ch.data.status === 'ready');
+// «Новое в книге»: самая свежая глава — по дате обновления, при равной дате — с бо́льшим номером.
+const latest = [...ready].sort(
+  (a, b) => (b.data.updated?.getTime() ?? 0) - (a.data.updated?.getTime() ?? 0) || b.data.number - a.data.number,
+)[0];
 const firstReady = ready[0];
 const progress = Math.round((readyChapters.length / chapters.length) * 100);
 const parts = BOOK.parts
@@ -126,11 +130,11 @@ const fullPdf: string = BOOK.fullPdf;
 
       <!-- ---------- Готовые главы и оглавление ---------- -->
       <section class="book-section" aria-labelledby="book-toc-title">
-        <h2 class="book-section-title" id="book-toc-title">Уже можно читать</h2>
+        <h2 class="book-section-title" id="book-toc-title">Новое в книге</h2>
 
         <ol class="book-ready">
           {
-            ready.map(({ id, data: ch }) => (
+            [latest].filter(Boolean).map(({ id, data: ch }) => (
               <li class="ready-card">
                 <a class="ready-card-link" href={readHref(id)}>
                   <span class="ready-card-num" aria-hidden="true">{chapterMark(ch)}</span>
@@ -178,12 +182,18 @@ const fullPdf: string = BOOK.fullPdf;
                     {part.items.map(({ id, data: ch }) =>
                       ch.status === 'ready' ? (
                         <li class="toc-item toc-item--ready">
-                          <a href={readHref(id)} aria-label={`${chapterName(ch)} — читать`}>
+                          <a class="toc-read" href={readHref(id)} aria-label={`${chapterName(ch)} — читать`}>
                             <span class="toc-num">{ch.kind === 'chapter' ? ch.number : chapterMark(ch)}</span>
                             <span class="toc-title">{ch.title}</span>
                             <span class="toc-leader" aria-hidden="true"></span>
-                            <span class="toc-state">Читать</span>
+                            <span class="toc-state"><span class="toc-state-long">Читать</span><span class="toc-state-short" aria-hidden="true">→</span></span>
                           </a>
+                          <a
+                            class="toc-pdf"
+                            href={ch.pdf}
+                            download={`${BOOK.title} — ${chapterName(ch)}.pdf`}
+                            aria-label={`Скачать PDF: ${chapterName(ch)}`}
+                          >PDF</a>
                         </li>
                       ) : (
                         <li class="toc-item">
@@ -492,7 +502,7 @@ const fullPdf: string = BOOK.fullPdf;
     /* ---------- Готовые главы: карточки ---------- */
     .book-ready {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1fr);
       gap: 14px;
       margin: 0;
       padding: 0;
@@ -565,7 +575,7 @@ const fullPdf: string = BOOK.fullPdf;
 
     .ready-card p {
       display: -webkit-box;
-      max-width: 460px;
+      max-width: 640px;
       margin: 0;
       overflow: hidden;
       -webkit-box-orient: vertical;
@@ -742,10 +752,31 @@ const fullPdf: string = BOOK.fullPdf;
       text-align: left;
     }
 
-    .toc-item--ready a {
-      width: 100%;
+    .toc-item--ready .toc-read {
+      flex: 1;
+      min-width: 0;
       color: #fff;
       font-weight: 600;
+    }
+
+    /* Скачивание главы прямо из оглавления — тихая ссылка после «Читать» */
+    .toc-item--ready .toc-pdf {
+      flex: none;
+      padding-left: 12px;
+      border-left: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      transition: color 0.16s ease;
+    }
+
+    .toc-state-short {
+      display: none;
+    }
+
+    .toc-item--ready .toc-pdf:hover,
+    .toc-item--ready .toc-pdf:focus-visible {
+      color: #fff;
     }
 
     .toc-num {
@@ -1049,6 +1080,30 @@ const fullPdf: string = BOOK.fullPdf;
 
       .toc-item {
         font-size: 16px;
+      }
+
+      /* Готовые строки на узком экране: стрелка вместо «Читать», без отточия — название в одну строку */
+      .toc-item,
+      .toc-item a {
+        gap: 10px;
+      }
+
+      .toc-item--ready .toc-leader {
+        flex: 1;
+        min-width: 0;
+        border-bottom-color: transparent;
+      }
+
+      .toc-item--ready .toc-state-long {
+        display: none;
+      }
+
+      .toc-item--ready .toc-state-short {
+        display: inline;
+      }
+
+      .toc-item--ready .toc-pdf {
+        padding-left: 10px;
       }
 
       .book-toc summary {
