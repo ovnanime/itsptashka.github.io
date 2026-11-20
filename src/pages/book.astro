@@ -252,6 +252,47 @@ const fullPdf: string = BOOK.fullPdf;
     </section>
   </div>
 
+  <!--
+    Оглавление помнит, открыто оно или нет, пока читатель ходит между страницей
+    книги и главами (/book/…). Пришёл на страницу книги из другого раздела сайта
+    или по прямой ссылке — состояние сбрасывается, оглавление снова свёрнуто.
+    Хранится только в этой вкладке (sessionStorage).
+  -->
+  <script is:inline data-astro-rerun>
+    (() => {
+      const KEY = 'ptahen-book-toc-open';
+      const toc = document.querySelector('.book-toc');
+      if (!toc) return;
+
+      // Откуда пришли: свежая запись переходов сайта (ClientRouter) или referrer при обычной загрузке.
+      let from = '';
+      try {
+        const nav = JSON.parse(sessionStorage.getItem('ptahen-router-navigation') || 'null');
+        const fresh = nav && nav.at && Date.now() - nav.at < 15000;
+        if (fresh && nav.to && nav.to.split(/[?#]/)[0] === location.pathname) {
+          from = nav.from.split(/[?#]/)[0];
+        }
+      } catch {}
+      if (!from && document.referrer) {
+        try {
+          const ref = new URL(document.referrer);
+          if (ref.origin === location.origin) from = ref.pathname;
+        } catch {}
+      }
+
+      try {
+        if (from.startsWith('/book/')) {
+          toc.open = sessionStorage.getItem(KEY) === '1';
+        } else {
+          sessionStorage.removeItem(KEY);
+        }
+        toc.addEventListener('toggle', () => {
+          sessionStorage.setItem(KEY, toc.open ? '1' : '0');
+        });
+      } catch {}
+    })();
+  </script>
+
   <!-- «Назад»: если пришли с другой страницы сайта — вернуться туда, иначе на главную -->
   <script is:inline data-astro-rerun>
     (() => {

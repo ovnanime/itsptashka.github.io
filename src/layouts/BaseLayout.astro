@@ -127,6 +127,7 @@ const currentYear = new Date().getFullYear();
         sessionStorage.setItem('ptahen-router-navigation', JSON.stringify({
           from: `${from.pathname}${from.search}${from.hash}`,
           to: to ? `${to.pathname}${to.search}${to.hash}` : '',
+          at: Date.now(),
         }));
       }, { signal });
       })();
