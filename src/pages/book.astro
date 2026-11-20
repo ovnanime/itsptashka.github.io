@@ -66,7 +66,7 @@ const fullPdf: string = BOOK.fullPdf;
 >
   <div class="book-page">
     <section class="shell book-shell">
-      <a class="book-back" href="/works/#author"><span aria-hidden="true">←</span> Все работы</a>
+      <a class="book-back" href="/" data-book-back><span aria-hidden="true">←</span> Назад</a>
 
       <!-- ---------- Постер и главное ---------- -->
       <header class="book-hero">
@@ -75,7 +75,7 @@ const fullPdf: string = BOOK.fullPdf;
             src={BOOK.cover.url}
             width={BOOK.cover.width}
             height={BOOK.cover.height}
-            alt={`Обложка книги «${BOOK.title}»: звуковые дорожки диалога, музыки, эффектов и фонов, сведённые в одну`}
+            alt={`Обложка книги «${BOOK.title}», автор И. С. Пушкин: пустая комната, стул и стол в луче света из окна`}
             fetchpriority="high"
             decoding="async"
             data-no-image-viewer
@@ -102,7 +102,7 @@ const fullPdf: string = BOOK.fullPdf;
               firstReady && (
                 <a class="book-btn book-btn--primary" href={readHref(firstReady.id)}>
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5C5.5 4 9 4 12 6c3-2 6.5-2 9-.5V19c-2.5-1.5-6-1.5-9 .5-3-2-6.5-2-9-.5Z" /><path d="M12 6v13.5" /></svg>
-                  Читать с главы {firstReady.data.number}
+                  Читать<span class="book-btn-long"> с главы {firstReady.data.number}</span>
                 </a>
               )
             }
@@ -115,7 +115,7 @@ const fullPdf: string = BOOK.fullPdf;
               ) : (
                 <span class="book-btn book-btn--off" aria-disabled="true" title="Полная версия появится, когда будут готовы все главы">
                   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11" /><path d="m7 10 5 5 5-5" /><path d="M5 20h14" /></svg>
-                  Скачать книгу
+                  Скачать<span class="book-btn-long"> книгу</span>
                   <small>скоро</small>
                 </span>
               )
@@ -242,6 +242,30 @@ const fullPdf: string = BOOK.fullPdf;
       </div>
     </section>
   </div>
+
+  <!-- «Назад»: если пришли с другой страницы сайта — вернуться туда, иначе на главную -->
+  <script is:inline data-astro-rerun>
+    (() => {
+      const link = document.querySelector('[data-book-back]');
+      if (!link) return;
+      link.addEventListener('click', (event) => {
+        let cameFromSite = false;
+        try {
+          const nav = JSON.parse(sessionStorage.getItem('ptahen-router-navigation') || 'null');
+          cameFromSite = Boolean(nav && nav.from && nav.to && nav.to.split(/[?#]/)[0] === location.pathname);
+        } catch {}
+        if (!cameFromSite && document.referrer) {
+          try {
+            cameFromSite = new URL(document.referrer).origin === location.origin;
+          } catch {}
+        }
+        if (cameFromSite && history.length > 1) {
+          event.preventDefault();
+          history.back();
+        }
+      });
+    })();
+  </script>
 
   <style>
     .book-page {
@@ -892,48 +916,117 @@ const fullPdf: string = BOOK.fullPdf;
         padding-top: 22px;
       }
 
+      /* Обложка слева от заголовка: на первом экране видны и книга, и описание */
       .book-hero {
-        grid-template-columns: 1fr;
-        gap: 28px;
-        padding-top: 8px;
+        grid-template-columns: 108px minmax(0, 1fr);
+        column-gap: 16px;
+        row-gap: 0;
+        align-items: end;
+        padding: 14px 0 28px;
+      }
+
+      .book-hero-copy {
+        display: contents;
       }
 
       .book-cover {
-        width: min(62vw, 240px);
-        margin: 0 auto;
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        align-self: start;
+        width: 108px;
+      }
+
+      .book-kicker {
+        grid-column: 2;
+        grid-row: 1;
+        align-self: end;
+        margin-bottom: 8px;
+        font-size: 12px;
       }
 
       .book-hero h1 {
-        font-size: 32px;
+        grid-column: 2;
+        grid-row: 2;
+        align-self: start;
+        font-size: 30px;
       }
 
-      .book-lead {
-        font-size: 17px;
-      }
-
+      .book-lead,
+      .book-progress,
       .book-actions {
-        flex-direction: column;
+        grid-column: 1 / -1;
+      }
+
+      .book-page .book-lead {
+        margin-top: 18px;
+        font-size: 17px;
+        text-align: left !important;
+        hyphens: manual !important;
+      }
+
+      .book-progress {
+        margin-top: 20px;
+      }
+
+      /* Две кнопки в один ряд, короткие подписи */
+      .book-actions {
+        flex-wrap: nowrap;
+        gap: 10px;
+        margin-top: 20px;
       }
 
       .book-btn {
+        flex: 1 1 0;
         justify-content: center;
+        min-width: 0;
+        height: 46px;
+        padding: 0 12px;
+        gap: 8px;
       }
 
+      .book-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .book-btn-long {
+        display: none;
+      }
+
+      /* Карточки глав ниже: поля, отступы, описание в одну строку; шрифт тот же */
       .ready-card-link {
-        padding: 16px 18px;
+        padding: 14px 16px;
+      }
+
+      .ready-card-label {
+        margin-bottom: 4px;
       }
 
       .ready-card h3 {
         font-size: 21px;
+        margin-bottom: 4px;
+      }
+
+      .ready-card p {
+        -webkit-line-clamp: 1;
+      }
+
+      .ready-card-meta {
+        margin-top: 6px;
+      }
+
+      .ready-card-go {
+        margin-top: 12px;
       }
 
       .ready-card-num {
-        font-size: 90px;
+        top: -6px;
+        font-size: 72px;
       }
 
       .ready-card-pdf {
-        right: 18px;
-        bottom: 16px;
+        right: 16px;
+        bottom: 14px;
       }
 
       .toc-list {

@@ -335,9 +335,16 @@ const chapterSchema = {
         gap: 14px;
       }
 
+      /* «Назад» и «Дальше» — ровно в один ряд, длинные названия переносятся */
       .reader-nav {
-        flex-direction: column;
-        gap: 18px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 16px;
+        align-items: start;
+      }
+
+      .reader-nav-link--next {
+        grid-column: 2;
       }
 
       .reader-nav-link b {
