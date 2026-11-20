@@ -1,0 +1,157 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { ANALYTICS, CONTACTS } from '../data/site';
+
+const email = CONTACTS.find((item) => item.href.startsWith('mailto:'));
+const services = [
+  ANALYTICS.yandexMetrika && 'Яндекс Метрика (ООО «Яндекс»)',
+  (ANALYTICS.googleTagManager || ANALYTICS.googleAnalytics) && 'сервисы Google — Tag Manager и Analytics (Google LLC)',
+].filter(Boolean) as string[];
+---
+
+<BaseLayout
+  title="Конфиденциальность и cookie — Феофилакт Птахен"
+  description="Какие данные собирает сайт ptahen.ru, зачем нужны cookie и веб-аналитика и как изменить своё согласие."
+>
+  <div class="privacy-page">
+    <section class="shell privacy-shell">
+      <header class="privacy-head">
+        <p class="privacy-kicker">Сайт</p>
+        <h1>Конфиденциальность и cookie</h1>
+      </header>
+
+      <div class="privacy-body">
+        <p>
+          Сайт ptahen.ru — персональный сайт Ильи Сергеевича Пушкина. На сайте нет
+          регистрации и форм: имя, телефон или почту здесь не вводят.
+        </p>
+
+        <h2>Веб-аналитика</h2>
+        <p>
+          Чтобы понимать, сколько людей заходит на сайт и какие страницы читают,
+          {services.length > 1 ? 'используются' : 'используется'} {services.join(' и ')}. Сервисы получают обезличенные данные
+          о посещении: адрес страницы, источник перехода, тип устройства и браузера,
+          примерное местоположение по IP-адресу, действия на странице. Яндекс
+          Метрика может записывать действия на странице (Вебвизор) — без данных,
+          которые вы вводите в поля.
+        </p>
+        <p>
+          Аналитика и её cookie включаются только после того, как вы нажмёте
+          «Согласен» в плашке внизу сайта. Если отказаться, сайт работает так же,
+          просто визит не учитывается.
+        </p>
+
+        <h2>Что хранится в вашем браузере</h2>
+        <p>
+          Ваш выбор в плашке и мелкие настройки интерфейса (например, открыто ли
+          оглавление книги) хранятся в самом браузере и никуда не передаются.
+        </p>
+
+        <h2>Как изменить выбор</h2>
+        <p>
+          Нажмите кнопку ниже — плашка появится снова. Уже сохранённые cookie
+          аналитики можно удалить в настройках браузера.
+        </p>
+        <button class="privacy-reset" type="button" data-consent-reset>Изменить выбор</button>
+
+        <h2>Связь</h2>
+        <p>
+          Вопросы о данных — на почту
+          {email && <a href={email.href}>{email.value}</a>}.
+        </p>
+      </div>
+    </section>
+  </div>
+
+  <script is:inline data-astro-rerun>
+    document.querySelector('[data-consent-reset]')?.addEventListener('click', () => {
+      try { localStorage.removeItem('ptahen-consent'); } catch {}
+      location.reload();
+    });
+  </script>
+
+  <style>
+    .privacy-page {
+      padding: 34px 0 24px;
+    }
+
+    .privacy-page,
+    .privacy-page * {
+      font-family: Roboto, Arial, sans-serif;
+    }
+
+    .privacy-head {
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .privacy-kicker {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .privacy-head h1 {
+      margin: 0;
+      color: #fff;
+      font-size: 36px;
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.045em;
+    }
+
+    .privacy-body {
+      max-width: 720px;
+      padding-top: 8px;
+    }
+
+    .privacy-body h2 {
+      margin: 30px 0 10px;
+      color: #fff;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .privacy-body p {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .privacy-body a {
+      color: var(--text);
+      font-weight: 700;
+      text-decoration: underline;
+      text-decoration-color: rgba(255, 255, 255, 0.3);
+      text-underline-offset: 3px;
+    }
+
+    .privacy-reset {
+      height: 42px;
+      margin-top: 16px;
+      padding: 0 16px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 11px;
+      background: transparent;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .privacy-reset:hover {
+      border-color: #fff;
+    }
+
+    :global(body > footer.site-footer) {
+      margin-top: 24px !important;
+    }
+  </style>
+</BaseLayout>

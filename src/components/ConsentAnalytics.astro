@@ -1,0 +1,215 @@
+---
+/**
+ * Плашка согласия на cookie и подключение счётчиков (Яндекс Метрика, Google Tag Manager / Analytics).
+ * - Счётчики загружаются только после «Согласен»; выбор хранится в localStorage.
+ * - Только на ptahen.ru: на локальной копии счётчики не включаются.
+ * - Переходы без перезагрузки (ClientRouter) отправляются как просмотры страниц.
+ * Изменить выбор можно на странице /privacy/.
+ */
+import { ANALYTICS } from '../data/site';
+
+const config = {
+  ym: ANALYTICS.yandexMetrika || 0,
+  gtm: ANALYTICS.googleTagManager || '',
+  ga: ANALYTICS.googleAnalytics || '',
+};
+const enabled = Boolean(config.ym || config.gtm || config.ga);
+---
+
+{
+  enabled && (
+    <div class="consent" data-consent hidden role="region" aria-label="Согласие на cookie">
+      <p>
+        Сайт использует cookie и сервисы веб-аналитики, чтобы считать посещения.{' '}
+        <a href="/privacy/">Подробнее</a>
+      </p>
+      <div class="consent-actions">
+        <button type="button" class="consent-accept" data-consent-accept>Согласен</button>
+        <button type="button" class="consent-decline" data-consent-decline>Отказаться</button>
+      </div>
+    </div>
+  )
+}
+
+{
+  enabled && (
+    <script is:inline data-astro-rerun define:vars={{ config }}>
+      (() => {
+        const KEY = 'ptahen-consent';
+        const isProd = /(^|\.)ptahen\.ru$/.test(location.hostname);
+
+        const read = () => {
+          try { return localStorage.getItem(KEY); } catch { return null; }
+        };
+        const write = (value) => {
+          try { localStorage.setItem(KEY, value); } catch {}
+        };
+
+        const loadAnalytics = () => {
+          if (!isProd || window.__ptahenAnalytics) return;
+          window.__ptahenAnalytics = true;
+
+          if (config.ym) {
+            (function (m, e, t, r, i, k, a) {
+              m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); };
+              m[i].l = 1 * new Date();
+              for (let j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) return; }
+              k = e.createElement(t); a = e.getElementsByTagName(t)[0]; k.async = 1; k.src = r; a.parentNode.insertBefore(k, a);
+            })(window, document, 'script', `https://mc.yandex.ru/metrika/tag.js?id=${config.ym}`, 'ym');
+
+            window.ym(config.ym, 'init', {
+              ssr: true,
+              webvisor: true,
+              clickmap: true,
+              ecommerce: 'dataLayer',
+              referrer: document.referrer,
+              url: location.href,
+              accurateTrackBounce: true,
+              trackLinks: true,
+            });
+          }
+
+          if (config.gtm) {
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({ 'gtm.start': Date.now(), event: 'gtm.js' });
+            const g = document.createElement('script');
+            g.async = true;
+            g.src = `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(config.gtm)}`;
+            document.head.appendChild(g);
+          }
+
+          if (config.ga) {
+            const s = document.createElement('script');
+            s.async = true;
+            s.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(config.ga)}`;
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', config.ga);
+          }
+
+          // Просмотры при переходах без перезагрузки страницы.
+          let last = location.href;
+          document.addEventListener('astro:page-load', () => {
+            if (location.href === last) return;
+            const previous = last;
+            last = location.href;
+            if (config.ym && window.ym) {
+              window.ym(config.ym, 'hit', location.href, { title: document.title, referer: previous });
+            }
+            if (config.ga && window.gtag) {
+              window.gtag('event', 'page_view', { page_location: location.href, page_title: document.title });
+            }
+            // Для GTM: событие перехода (в контейнере можно повесить на него тег просмотра;
+            // встроенный триггер «Изменение в истории» тоже срабатывает).
+            if (config.gtm && window.dataLayer) {
+              window.dataLayer.push({ event: 'virtual_page_view', page_location: location.href, page_title: document.title, page_referrer: previous });
+            }
+          });
+        };
+
+        const choice = read();
+        if (choice === 'granted') loadAnalytics();
+
+        const banner = document.querySelector('[data-consent]');
+        if (!banner) return;
+        banner.hidden = choice === 'granted' || choice === 'denied';
+
+        banner.querySelector('[data-consent-accept]')?.addEventListener('click', () => {
+          write('granted');
+          banner.hidden = true;
+          loadAnalytics();
+        });
+        banner.querySelector('[data-consent-decline]')?.addEventListener('click', () => {
+          write('denied');
+          banner.hidden = true;
+        });
+      })();
+    </script>
+  )
+}
+
+<style>
+  .consent {
+    position: fixed;
+    left: 50%;
+    bottom: 16px;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: min(620px, calc(100% - 32px));
+    padding: 14px 16px 14px 18px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #101010;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    transform: translateX(-50%);
+    font-family: Roboto, Arial, sans-serif;
+  }
+
+  .consent[hidden] {
+    display: none;
+  }
+
+  .consent p {
+    flex: 1;
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.45;
+    text-align: left;
+  }
+
+  .consent a {
+    color: var(--text);
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.3);
+    text-underline-offset: 3px;
+  }
+
+  .consent-actions {
+    display: flex;
+    flex: none;
+    gap: 8px;
+  }
+
+  .consent button {
+    height: 38px;
+    padding: 0 14px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+
+  .consent .consent-accept {
+    border-color: #fff;
+    background: #fff;
+    color: #050505;
+  }
+
+  .consent button:hover {
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  @media (max-width: 620px) {
+    .consent {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      bottom: 12px;
+      width: calc(100% - 24px);
+    }
+
+    .consent-actions button {
+      flex: 1;
+    }
+  }
+</style>

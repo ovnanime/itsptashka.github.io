@@ -30,6 +30,7 @@ export const GET: APIRoute = async () => {
     { path: '/journal/' },
     { path: '/book/', lastmod: bookUpdated },
     { path: '/contact/' },
+    { path: '/privacy/' },
     ...bookReady.map((entry) => ({
       path: `/book/read/${entry.id}/`,
       lastmod: entry.data.updated,

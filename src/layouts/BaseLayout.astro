@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import Seo from '../components/Seo.astro';
+import ConsentAnalytics from '../components/ConsentAnalytics.astro';
 import type { Props as SeoProps } from '../components/Seo.astro';
 import { CONTACTS, NAV_ITEMS, SITE } from '../data/site';
 import { canonicalPath } from '../data/seo';
@@ -90,6 +91,8 @@ const currentYear = new Date().getFullYear();
         <span class="footer-copy">© {SITE.copyrightStartYear}–{currentYear}</span>
       </div>
     </footer>
+
+    <ConsentAnalytics />
 
     <script is:inline data-astro-rerun>
       (() => {

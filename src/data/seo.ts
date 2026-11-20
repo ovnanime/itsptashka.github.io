@@ -7,12 +7,22 @@ import { SITE } from './site';
 export const PERSON_ID = `${SITE.url}/#person`;
 export const WEBSITE_ID = `${SITE.url}/#website`;
 
-/** Единое дефолтное изображение для соцсетей. Реальный файл из public/. */
+/**
+ * Превью ссылок в мессенджерах и соцсетях: JPG 1200×630 (WebP показывают не везде).
+ * Собирается скриптом scripts/og-images.mjs.
+ */
 export const DEFAULT_OG_IMAGE = {
+  url: '/assets/images/og/site.jpg',
+  width: 1200,
+  height: 630,
+  alt: 'Феофилакт Птахен — актёр озвучивания и звукорежиссёр',
+} as const;
+
+/** Фото для разметки Person в JSON-LD (портрет, не карточка превью). */
+const PERSON_IMAGE = {
   url: '/assets/images/avatar_ptaxen.webp',
   width: 1308,
   height: 1086,
-  alt: 'Феофилакт Птахен',
 } as const;
 
 /**
@@ -81,9 +91,9 @@ export const personSchema = {
   mainEntityOfPage: `${SITE.url}/about/`,
   image: {
     '@type': 'ImageObject',
-    url: absoluteUrl(DEFAULT_OG_IMAGE.url),
-    width: DEFAULT_OG_IMAGE.width,
-    height: DEFAULT_OG_IMAGE.height,
+    url: absoluteUrl(PERSON_IMAGE.url),
+    width: PERSON_IMAGE.width,
+    height: PERSON_IMAGE.height,
   },
   sameAs: SAME_AS,
 } as const;

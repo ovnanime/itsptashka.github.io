@@ -36,3 +36,17 @@ export const CONTACTS = [
     footerLabel: 'Email',
   },
 ] as const;
+
+/**
+ * Счётчики аналитики. Загружаются только после согласия в плашке cookie
+ * (src/components/ConsentAnalytics.astro) и только на боевом домене.
+ * Пустое значение — счётчик не подключается.
+ */
+export const ANALYTICS = {
+  /** Номер счётчика Яндекс Метрики. */
+  yandexMetrika: 114414164,
+  /** Контейнер Google Tag Manager (GA4 и другие теги настраиваются внутри контейнера). */
+  googleTagManager: 'GTM-KWHDF5HM',
+  /** Идентификатор Google Analytics 4 вида G-XXXXXXXXXX — если подключать GA напрямую, без GTM. */
+  googleAnalytics: '',
+} as const;
