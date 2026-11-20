@@ -1,11 +1,21 @@
 {
   "ch01": {
-    "pages": 7,
+    "pages": 8,
     "width": 1400,
     "height": 1980
   },
   "ch02": {
     "pages": 6,
+    "width": 1400,
+    "height": 1980
+  },
+  "ch03": {
+    "pages": 5,
+    "width": 1400,
+    "height": 1980
+  },
+  "ch04": {
+    "pages": 5,
     "width": 1400,
     "height": 1980
   }
