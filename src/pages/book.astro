@@ -82,7 +82,6 @@ const fullPdf: string = BOOK.fullPdf;
             alt={`Обложка книги «${BOOK.title}», автор И. С. Пушкин: пустая комната, стул и стол в луче света из окна`}
             fetchpriority="high"
             decoding="async"
-            data-no-image-viewer
           />
         </div>
 
@@ -949,7 +948,7 @@ const fullPdf: string = BOOK.fullPdf;
 
       /* Обложка слева от заголовка: на первом экране видны и книга, и описание */
       .book-hero {
-        grid-template-columns: 108px minmax(0, 1fr);
+        grid-template-columns: 128px minmax(0, 1fr);
         column-gap: 16px;
         row-gap: 0;
         align-items: end;
@@ -964,7 +963,7 @@ const fullPdf: string = BOOK.fullPdf;
         grid-column: 1;
         grid-row: 1 / span 2;
         align-self: start;
-        width: 108px;
+        width: 128px;
       }
 
       .book-kicker {
@@ -979,7 +978,7 @@ const fullPdf: string = BOOK.fullPdf;
         grid-column: 2;
         grid-row: 2;
         align-self: start;
-        font-size: 30px;
+        font-size: 34px;
       }
 
       .book-lead,
@@ -989,10 +988,8 @@ const fullPdf: string = BOOK.fullPdf;
       }
 
       .book-page .book-lead {
-        margin-top: 18px;
-        font-size: 17px;
-        text-align: left !important;
-        hyphens: manual !important;
+        margin-top: 20px;
+        font-size: 18px;
       }
 
       .book-progress {
