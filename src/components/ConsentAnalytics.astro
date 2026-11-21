@@ -110,7 +110,10 @@ const enabled = Boolean(config.ym || config.gtm || config.ga);
         };
 
         const choice = read();
-        if (choice === 'granted') loadAnalytics();
+        // Проверка установки из кабинета Метрики (ссылка с меткой _ym_status-check / _ym_debug):
+        // владелец проверяет счётчик — загружаем без плашки, выбор не сохраняем.
+        const metrikaCheck = /[?&]_ym_(status-check|debug)=/.test(location.search);
+        if (choice === 'granted' || metrikaCheck) loadAnalytics();
 
         const banner = document.querySelector('[data-consent]');
         if (!banner) return;
